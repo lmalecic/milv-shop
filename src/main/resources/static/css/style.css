@@ -1,0 +1,144 @@
+* {
+    --page-margin-right: 7rem;
+    --page-margin: 0 var(--page-margin-right);
+    --bs-body-bg: rgb(0 10 0);
+    --bs-body-color: #fff;
+    --bs-secondary-color: rgba(255,255,255,66%);
+    --bs-border-color-translucent: rgba(255,255,255,10%);
+    --bs-border-width: 2px;
+    --bs-modal-header-border-width: 0;
+    --bs-modal-footer-border-width: 0;
+    --bs-modal-header-padding: 1rem 1rem 0 1rem;
+    --bs-modal-footer-gap: 0rem;
+    --bs-border-color: rgba(255,255,255,10%);
+    --bs-backdrop-opacity: 0.7 !important;
+    --bs-dropdown-link-hover-color: var(--bs-yellow) !important;
+}
+
+.btn-primary {
+    --bs-btn-color: #fff !important;
+    --bs-btn-bg: #009e00 !important;
+    --bs-btn-border-color: rgba(0, 0, 0, 20%) !important;
+
+    --bs-btn-hover-color: #fff !important;
+    --bs-btn-hover-bg: #007f00 !important;
+    --bs-btn-hover-border-color: rgba(0, 0, 0, 10%) !important;
+
+    --bs-btn-focus-shadow-rgb: 0, 158, 0 !important;
+
+    --bs-btn-active-color: #fff !important;
+    --bs-btn-active-bg: #009f00 !important;
+    --bs-btn-active-border-color: rgba(255,255,255,0.10) !important;
+
+    --bs-btn-disabled-color: #fff !important;
+    --bs-btn-disabled-bg: #007700 !important;
+    --bs-btn-disabled-border-color: rgba(255,255,255, 0.05) !important;
+
+    box-shadow: 0 0 0 1px rgba(160, 255, 160, 0.10);
+}
+
+.btn-secondary {
+    --bs-btn-color: #1f2a23 !important;
+    --bs-btn-bg: #aeb9b1 !important;
+    --bs-btn-border-color: rgba(0,0,0, 0.20) !important;
+
+    --bs-btn-hover-color: #ffffff !important;
+    --bs-btn-hover-bg: #8a968e !important;
+    --bs-btn-hover-border-color: rgba(0,0,0, 0.30) !important;
+
+    --bs-btn-focus-shadow-rgb: 174, 185, 177 !important;
+
+    --bs-btn-active-color: #ffffff !important;
+    --bs-btn-active-bg: #98a49c !important;
+    --bs-btn-active-border-color: rgba(0,0,0, 0.15) !important;
+
+    --bs-btn-disabled-color: rgba(255,255,255,0.80) !important;
+    --bs-btn-disabled-bg: #758178 !important;
+    --bs-btn-disabled-border-color: rgba(200,230,200,0.10) !important;
+
+    box-shadow: 0 0 0 1px rgba(200, 230, 200, 0.10);
+}
+
+.closeButton {
+    transform: translate(4px, -4px);
+}
+
+html, body {
+    --bs-body-bg: rgb(0 10 0) !important;
+    background: var(--bs-body-bg) !important;
+}
+
+input {
+    background: rgba(255,255,255,5%) !important;
+    border: 2px rgba(255,255,255,5%) solid !important;
+    /*color: rgba(255,255,255,80%) !important;*/
+
+    /*&::placeholder {*/
+    /*    color: rgba(255,255,255,40%) !important;*/
+    /*}*/
+}
+
+/* Theme-consistent focus outline for Bootstrap and plain inputs. */
+input:focus,
+input:focus-visible,
+.form-control:focus,
+.form-control:focus-visible {
+    outline: 3px solid rgba(140, 255, 140, 0.15) !important;
+    /*outline-offset: 0;*/
+    /*border-color: rgba(140, 255, 140, 0.35) !important;*/
+    box-shadow: 0 0 0 0.2rem rgba(90, 200, 90, 0.2) !important;
+}
+
+body {
+    padding: var(--page-margin);
+    --bs-body-font-family: "JetBrains Mono";
+}
+
+.digital-camo {
+    /*background: url("/static/img/bg.jpg") center repeat-y;*/
+    /*filter: saturate(0);*/
+}
+
+.navbar-item {
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color ease-in 0.1s;
+    color: var(--bs-white);
+
+    &:hover {
+        color: var(--bs-yellow);
+    }
+}
+
+.flag-sm {
+    height: 60%;
+    margin-left: 0.4rem;
+}
+
+.filter-btn {
+    background-color: rgba(255,255,255,10%) !important;
+    padding: 0 .6rem 0 0 !important;
+    height: 2rem !important;
+    transition: background-color ease-in 0.1s, outline ease-in 0.1s;
+
+    &:hover {
+        background-color: rgba(255,255,255, 20%) !important;
+    }
+
+    &:active {
+        background-color: rgba(255,255,255, 15%) !important;
+    }
+}
+
+.filter-btn.checked {
+    outline: #0f0 2px solid !important;
+    background-color: rgba(0,255,0,20%) !important;
+
+    &:hover {
+        background-color: rgba(0,255,0,40%) !important;
+    }
+
+    &:active {
+        background-color: rgba(0,255,0,30%) !important;
+    }
+}

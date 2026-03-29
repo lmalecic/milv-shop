@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:replace="~{shared/head.html :: head('')}"></head>
+<body>
+    <div th:replace="~{shared/navbar.html :: navbar}"></div>
+    <div>
+        <div class="text-center">
+            <img src="/img/maus-panzerkampfwagen.gif" alt="Cover image">
+        </div>
+        <h1 class="fw-bold text-center">Welcome to MilV Shop!</h1>
+        <h2 class="text-center" style="opacity: 70%">We offer a wide variety of tanks from any era you wish!</h2>
+        <h4 class="text-center mb-5 italic" style="opacity: 20%">Don't ask who our supplier is.</h4>
+        <div class="row mb-5">
+            <div class="col" style="max-width: 50%">
+                <h3 class="fw-bold mb-3 text-center">Quick search by nation</h3>
+                <div class="d-flex align-items-center flex-wrap justify-content-center gap-2">
+                    <a th:each="nation : ${nationsList}" href="#"
+                       class="text-decoration-none text-white d-inline-flex flex-row align-items-center gap-2 rounded-3"
+                       style="padding-right: .6rem; height: 2rem; background-color: rgba(255,255,255,10%);">
+                        <img class="rounded-1 flag-sm" th:src="${nation.imgPath}" th:alt="${nation.name}">
+                        <h5 class="card-title fs-6 text-uppercase" th:text="${nation.name}"></h5>
+                    </a>
+                </div>
+            </div>
+            <div class="col" style="max-width: 50%">
+                <h3 class="fw-bold mb-3 text-center">Quick search by role</h3>
+                <div class="d-flex align-items-center flex-wrap justify-content-center gap-2">
+                    <a th:each="role : ${tankRolesList}" href="#"
+                       class="text-decoration-none text-white d-inline-flex flex-row align-items-center gap-2 rounded-3"
+                       style="padding-right: .6rem; height: 2rem; background-color: rgba(255,255,255,10%);">
+                        <img class="flag-sm" th:src="${role.imgPath}" th:alt="${role.name}">
+                        <h5 class="card-title fs-6 text-uppercase" th:text="${role.name}"></h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center gap-3">
+            <h3 class="fw-bold">YOUR TANK AWAITS</h3>
+            <a th:href="@{/tanks/all}" class="btn btn-primary text-uppercase mx-auto">Search all tanks</a>
+        </div>
+    </div>
+    <footer th:replace="~{shared/footer.html :: footer}"></footer>
+</body>
+</html>
