@@ -103,7 +103,7 @@
                             th:attr="data-filter-value=${role.id}"
                             th:with="isChecked=${filterModel.tankRoleIds != null ? filterModel.tankRoleIds.contains(role.id) : false}"
                             th:class="${(isChecked ? 'checked ' : '') + 'filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3'}">
-                        <img class="flag-sm" th:src="${role.imgPath}" th:alt="${role.name}">
+                        <img class="flag-sm" th:src="${role.imgPath}" alt="">
                         <span class="fs-6 text-uppercase" th:text="${role.name}"></span>
                     </button>
                 </div>
@@ -118,9 +118,9 @@
                         <img th:src="${tank.imgPath}" th:alt="${tank.name}" class="card-img">
                         <div class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
                             <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row">
-                                <img th:src="${tank.nation.imgPath}" th:alt="${tank.nation.name}" class="rounded-1 icon">
+                                <img th:src="${tank.nation.imgPath}" alt="" class="rounded-1 icon">
                                 <span th:text="${tank.name}"></span>
-                                <img th:src="${tank.tankRole.imgPath}" th:alt="${tank.tankRole.name}" class="icon">
+                                <img th:src="${tank.tankRole.imgPath}" alt="" class="icon">
                             </div>
                         </div>
                         <div class="tank-card-price position-absolute rounded-3 fs-6 fst-italic" th:text="${tank.getPriceString()}"></div>

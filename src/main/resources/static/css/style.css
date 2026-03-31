@@ -3,6 +3,7 @@
     --page-margin: 0 var(--page-margin-right);
     --bs-body-bg: rgb(0 10 0);
     --bs-body-color: #fff;
+    --bs-secondary-rgb: 190,192,190;
     --bs-secondary-color: rgba(255,255,255,66%);
     --bs-border-color-translucent: rgba(255,255,255,10%);
     --bs-border-width: 2px;
@@ -143,9 +144,11 @@ body {
     }
 }
 
-.tank-card {
-    background: rgba(255,255,255,3%) !important;
+.card {
+    background-color: rgb(8 18 8) !important;
+}
 
+.tank-card {
     .card-img {
         transition: transform var(--ease-out-expo) 0.3s;
         transform: scale(100%);

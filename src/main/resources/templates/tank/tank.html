@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
-<head th:replace="~{shared/head.html :: head('Tanks')}"></head>
+<head th:replace="~{shared/head.html :: head(${tank.name})}"></head>
 <body>
     <div th:replace="~{shared/navbar.html :: navbar}"></div>
-    <h1 class="fw-bold">Tank</h1>
 
     <div class="row">
         <div class="col" style="max-width: 30%">
@@ -12,44 +11,64 @@
             </div>
         </div>
         <div class="col">
-
+            <div class="d-inline-flex flex-row mb-2 gap-2">
+                <a type="button"
+                   th:href="@{/tanks/filter(nationIds=${tank.nation.id})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" th:src="${tank.nation.imgPath}" alt="">
+                    <span class="fs-6 text-uppercase" th:text="${tank.nation.name}"></span>
+                </a>
+                <a type="button"
+                   th:href="@{/tanks/filter(tankRoleIds=${tank.tankRole.id})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" th:src="${tank.tankRole.imgPath}" alt="">
+                    <span class="fs-6 text-uppercase" th:text="${tank.tankRole.name}"></span>
+                </a>
+            </div>
+            <h1 class="fw-bold" th:text="${tank.name}"></h1>
+            <p th:text="${tank.description}" class="text-secondary"></p>
+            <div class="d-inline-flex flex-row flex-wrap gap-2">
+                <a
+                   th:href="@{/tanks/filter(crewSize=${tank.crewSize})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" src="/img/stats/crewSize.png" alt="">
+                    <span class="fs-6 text-uppercase" th:text="${tank.crewSize}"></span>
+                </a>
+                <a
+                   th:href="@{/tanks/filter(mainGunCalibre=${tank.mainGunCalibre})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" src="/img/stats/mainGunCalibre.png" alt="">
+                    <span class="fs-6 text-uppercase" th:text="${tank.mainGunCalibre} + 'mm'"></span>
+                </a>
+                <a
+                   th:href="@{/tanks/filter(armorThicknessMin=${tank.armorThickness}, armorThicknessMax=${tank.armorThickness})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" src="/img/stats/armorThickness.png" alt="">
+                    <span class="fs-6 text-uppercase" th:text="${tank.armorThickness + 'mm'}"></span>
+                </a>
+                <a
+                   th:href="@{/tanks/filter(maxSpeed=${tank.maxSpeed})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" src="/img/stats/maxSpeed.png" alt="">
+                    <span class="fs-6 text-uppercase" th:text="${tank.maxSpeed + 'km/h'}"></span>
+                </a>
+            </div>
+        </div>
+        <div class="col" style="max-width: 15%;">
+            <div class="d-flex flex-column align-items-end">
+                <form class="d-flex flex-column gap-3">
+                    <div th:text="${tank.getPriceString()}" class="text-end fs-4 text-secondary"></div>
+                    <div class="input-group">
+                        <button class="input-group-text fw-bolder">&minus;</button>
+                        <input class="form-control text-center" type="text" value="1">
+                        <button class="input-group-text fw-bolder">&plus;</button>
+                    </div>
+                    <button type="submit" class="btn btn-primary text-uppercase">Add to cart</button>
+                </form>
+            </div>
         </div>
     </div>
 
     <footer th:replace="~{shared/footer.html :: footer}"></footer>
-
-    <script>
-        const filterButtons = $('.filter-btn');
-
-        function initFilterButton(btn) {
-            $(btn).on("click", () => {
-                if ($(btn).hasClass('checked')) {
-                    $(btn).removeClass('checked');
-                } else {
-                    $(btn).addClass('checked');
-                }
-            })
-        }
-
-        for (const filterButton of filterButtons) {
-            initFilterButton(filterButton);
-        }
-
-        $('#filterForm').on("submit", (e) => {
-            const checkedButtons = $('.filter-btn.checked');
-            const filters = {};
-            for (const btn of checkedButtons) {
-                const filterType = $(btn).data('filter-type');
-                const filterValue = Number($(btn).data('filter-value'));
-                if (!filters[filterType]) {
-                    filters[filterType] = [];
-                }
-                filters[filterType].push(filterValue);
-            }
-
-            $('#nationFilters').val(filters['nations'] ? filters['nations'].join(',') : '');
-            $('#tankRoleFilters').val(filters['tankRoles'] ? filters['tankRoles'].join(',') : '');
-        })
-    </script>
 </body>
 </html>
