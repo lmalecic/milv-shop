@@ -33,4 +33,8 @@ public final class Tank {
     @ManyToOne
     @JoinColumn(name = "tank_role_id")
     private TankRole tankRole;
+
+    public String getPriceString() {
+        return String.format("€%.2f", this.price);
+    }
 }

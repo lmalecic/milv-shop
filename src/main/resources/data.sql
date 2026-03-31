@@ -21,6 +21,9 @@ values ('German Reich', '/img/nation/german_reich.svg');
 insert into NATION (name, img_path)
 values ('USSR', '/img/nation/ussr.svg');
 
+insert into NATION (name, img_path)
+values ('Great Britain', '/img/nation/uk.svg');
+
 -- INSERT TANKS
 insert into TANK (nation_id, tank_role_id, name, price, description, img_path, main_gun_calibre, armor_thickness, max_speed, crew_size)
 values (
@@ -64,3 +67,30 @@ values (
            5
        );
 
+insert into TANK (nation_id, tank_role_id, name, price, description, img_path, main_gun_calibre, armor_thickness, max_speed, crew_size)
+values (
+           (select id from NATION where name = 'USA'),
+           (select id from TANK_ROLE where name = 'Heavy tank'),
+           'M4A3E2',
+           105000,
+           'The M4A3E2 Sherman - Assault Tank is an armoured modification of the M4A3, which is the fourth variant of the early-generation Medium Tank M4 (Sherman) family.',
+           '/img/tank/sherman_jumbo.png',
+           75,
+           177,
+           35,
+           5
+       );
+
+insert into TANK (nation_id, tank_role_id, name, price, description, img_path, main_gun_calibre, armor_thickness, max_speed, crew_size)
+values (
+           (select id from NATION where name = 'Great Britain'),
+           (select id from TANK_ROLE where name = 'Medium tank'),
+           'Centurion Mk 3',
+           210000,
+           'The Centurion Mk 3 was the third variant of the Centurion medium tank family. The 84 mm Ordnance QF 20-pounder tank gun was installed in this variant, which provided significantly superior accuracy thanks to a newly developed two-plane fully automatic stabilization system (modified from the Centurion Mk 2).',
+           '/img/tank/cent_mk3.png',
+           84,
+           152,
+           35,
+           4
+       );

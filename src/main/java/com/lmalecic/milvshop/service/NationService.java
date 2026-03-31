@@ -20,6 +20,8 @@ public class NationService {
         return nationRepository.findAll();
     }
 
+    public List<Nation> findAllOrdered() { return nationRepository.findAllByOrderByNameAsc(); }
+
     public Optional<Nation> findById(Long id) {
         return nationRepository.findById(id);
     }

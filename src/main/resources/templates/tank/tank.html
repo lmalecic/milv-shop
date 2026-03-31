@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:replace="~{shared/head.html :: head('Tanks')}"></head>
+<body>
+    <div th:replace="~{shared/navbar.html :: navbar}"></div>
+    <h1 class="fw-bold">Tank</h1>
+
+    <div class="row">
+        <div class="col" style="max-width: 30%">
+            <div class="card p-4 border-3 rounded-4">
+                <img class="card-img" th:src="${tank.imgPath}" th:alt="${'Image of' + tank.name}">
+            </div>
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+
+    <footer th:replace="~{shared/footer.html :: footer}"></footer>
+
+    <script>
+        const filterButtons = $('.filter-btn');
+
+        function initFilterButton(btn) {
+            $(btn).on("click", () => {
+                if ($(btn).hasClass('checked')) {
+                    $(btn).removeClass('checked');
+                } else {
+                    $(btn).addClass('checked');
+                }
+            })
+        }
+
+        for (const filterButton of filterButtons) {
+            initFilterButton(filterButton);
+        }
+
+        $('#filterForm').on("submit", (e) => {
+            const checkedButtons = $('.filter-btn.checked');
+            const filters = {};
+            for (const btn of checkedButtons) {
+                const filterType = $(btn).data('filter-type');
+                const filterValue = Number($(btn).data('filter-value'));
+                if (!filters[filterType]) {
+                    filters[filterType] = [];
+                }
+                filters[filterType].push(filterValue);
+            }
+
+            $('#nationFilters').val(filters['nations'] ? filters['nations'].join(',') : '');
+            $('#tankRoleFilters').val(filters['tankRoles'] ? filters['tankRoles'].join(',') : '');
+        })
+    </script>
+</body>
+</html>

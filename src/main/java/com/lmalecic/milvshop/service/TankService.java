@@ -5,6 +5,7 @@ import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.repository.TankRepository;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -63,7 +64,45 @@ public class TankService {
                 predicates.add(root.get("tankRole").get("id").in(filter.getTankRoleIds()));
             }
 
+            if (filter.getPriceMin() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), filter.getPriceMin()));
+            }
+
+            if (filter.getPriceMax() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("price"), filter.getPriceMax()));
+            }
+
+            if (filter.getMainGunCalibre() != null) {
+                predicates.add(root.get("mainGunCalibre").equalTo(filter.getMainGunCalibre()));
+            }
+
+            if (filter.getArmorThicknessMin() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("armorThickness"), filter.getArmorThicknessMin()));
+            }
+
+            if (filter.getArmorThicknessMax() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("armorThickness"), filter.getArmorThicknessMax()));
+            }
+
+            if (filter.getMaxSpeed() != null) {
+                predicates.add(root.get("maxSpeed").equalTo(filter.getMaxSpeed()));
+            }
+
+            if (filter.getCrewSize() != null) {
+                predicates.add(root.get("crewSize").equalTo(filter.getCrewSize()));
+            }
+
+            System.out.println("Generated predicates: " + predicates);
+
             return cb.and(predicates.toArray(new Predicate[0]));
         });
+    }
+
+    public List<Integer> findAllMainGunCalibres() {
+        return this.findAll().stream()
+                .map(Tank::getMainGunCalibre)
+                .distinct()
+                .sorted()
+                .toList();
     }
 }

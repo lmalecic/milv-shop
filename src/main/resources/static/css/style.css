@@ -10,9 +10,11 @@
     --bs-modal-footer-border-width: 0;
     --bs-modal-header-padding: 1rem 1rem 0 1rem;
     --bs-modal-footer-gap: 0rem;
-    --bs-border-color: rgba(255,255,255,10%);
+    --bs-border-color: rgb(26 35 26);
     --bs-backdrop-opacity: 0.7 !important;
     --bs-dropdown-link-hover-color: var(--bs-yellow) !important;
+    --bs-tertiary-bg: rgba(255,255,255,10%) !important;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-primary {
@@ -68,24 +70,22 @@ html, body {
     background: var(--bs-body-bg) !important;
 }
 
-input {
-    background: rgba(255,255,255,5%) !important;
-    border: 2px rgba(255,255,255,5%) solid !important;
-    /*color: rgba(255,255,255,80%) !important;*/
+input, .form-select {
+    background-color: rgb(13 22 13) !important;
 
-    /*&::placeholder {*/
-    /*    color: rgba(255,255,255,40%) !important;*/
-    /*}*/
+    &:focus {
+        border: 2px rgba(255,255,255,5%) solid !important;
+    }
 }
 
 /* Theme-consistent focus outline for Bootstrap and plain inputs. */
 input:focus,
 input:focus-visible,
+.form-select:focus,
+.form-select:focus-visible,
 .form-control:focus,
 .form-control:focus-visible {
     outline: 3px solid rgba(140, 255, 140, 0.15) !important;
-    /*outline-offset: 0;*/
-    /*border-color: rgba(140, 255, 140, 0.35) !important;*/
     box-shadow: 0 0 0 0.2rem rgba(90, 200, 90, 0.2) !important;
 }
 
@@ -102,7 +102,7 @@ body {
 .navbar-item {
     text-decoration: none;
     text-transform: uppercase;
-    transition: color ease-in 0.1s;
+    transition: color var(--ease-out-expo) 0.3s;
     color: var(--bs-white);
 
     &:hover {
@@ -119,7 +119,7 @@ body {
     background-color: rgba(255,255,255,10%) !important;
     padding: 0 .6rem 0 0 !important;
     height: 2rem !important;
-    transition: background-color ease-in 0.1s, outline ease-in 0.1s;
+    transition: background-color var(--ease-out-expo) 0.3s, outline var(--ease-out-expo) 0.3s;
 
     &:hover {
         background-color: rgba(255,255,255, 20%) !important;
@@ -140,5 +140,79 @@ body {
 
     &:active {
         background-color: rgba(0,255,0,30%) !important;
+    }
+}
+
+.tank-card {
+    background: rgba(255,255,255,3%) !important;
+
+    .card-img {
+        transition: transform var(--ease-out-expo) 0.3s;
+        transform: scale(100%);
+    }
+
+    &:hover {
+        .card-img {
+            transform: scale(110%);
+        }
+    }
+}
+
+.tank-card-stat {
+    background: var(--bs-border-color);
+    padding: 0.2rem 0.4rem;
+    gap: 0.3em;
+
+    .icon {
+        margin: auto 0;
+        height: 1.2em;
+    }
+}
+
+.tank-card-price {
+    background: #adb8b0;
+    color: #1f2a23;
+    right: -0.5rem;
+    bottom: -0.5rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.top-left-corner {
+    position: absolute;
+    left: -0.5rem;
+    top: -0.5rem;
+}
+
+.tank-stat-name {
+    --nationIcon: "";
+    --tankRoleIcon: "";
+    --margin-x: 0.3em;
+    --icon-border-width: 1px;
+    --icon-border-color: transparent;
+    --icon-border-radius: 0.3em;
+
+    &:before,
+    &:after {
+        content: "";
+        display: inline-block;
+        width: 1.2em;
+        height: 1.2em;
+        box-sizing: border-box;
+        border: var(--icon-border-width) solid var(--icon-border-color);
+        border-radius: var(--icon-border-radius);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        vertical-align: -0.2em;
+    }
+
+    &:before {
+        margin-right: var(--margin-x);
+        background-image: var(--nationIcon);
+    }
+
+    &:after {
+        margin-left: var(--margin-x);
+        background-image: var(--tankRoleIcon);
     }
 }
