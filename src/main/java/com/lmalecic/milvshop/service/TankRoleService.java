@@ -19,6 +19,8 @@ public class TankRoleService {
         return tankRoleRepository.findAll();
     }
 
+    public List<TankRole> findAllOrdered() { return this.tankRoleRepository.findAllByOrderByNameAsc(); }
+
     public Optional<TankRole> findById(Long id) {
         return tankRoleRepository.findById(id);
     }

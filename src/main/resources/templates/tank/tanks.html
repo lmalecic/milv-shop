@@ -11,7 +11,7 @@
         <input name="tankRoleIds" id="tankRoleFilters" hidden>
         <div class="d-inline-flex flex-row gap-3">
             <label hidden for="search"></label>
-            <input name="searchQuery" id="search" type="text" class="form-control" placeholder="Search by name or description..." th:value="${filterModel.searchQuery}">
+            <input name="searchQuery" id="search" type="text" class="form-control" placeholder="Search by name or description..." th:value="${viewModel.filter.searchQuery}">
             <button class="btn btn-primary text-uppercase px-5">Search</button>
         </div>
     </form>
@@ -22,21 +22,21 @@
             <div class="d-flex flex-row gap-3">
                 <div class="d-flex flex-column gap-1" style="max-width: 40%;">
                     <label for="crewSize">Crew size</label>
-                    <input name="crewSize" id="crewSize" th:value="${filterModel.crewSize}" form="filterForm" class="form-control" type="text" placeholder="any">
+                    <input name="crewSize" id="crewSize" th:value="${viewModel.filter.crewSize}" form="filterForm" class="form-control" type="text" placeholder="any">
                 </div>
                 <div class="d-flex flex-column flex-fill gap-1">
                     <label for="mainGunCalibre">Gun calibre</label>
                     <select class="form-select input" name="mainGunCalibre" id="mainGunCalibre" form="filterForm">
-                        <option value="" th:selected="${filterModel.mainGunCalibre == null}">any</option>
-                        <option th:each="calibre : ${gunCalibresList}"
+                        <option value="" th:selected="${viewModel.filter.mainGunCalibre == null}">any</option>
+                        <option th:each="calibre : ${viewModel.mainGunCalibres}"
                                 th:value="${calibre}"
                                 th:text="${calibre + 'mm'}"
-                                th:selected="${filterModel.mainGunCalibre != null and filterModel.mainGunCalibre.equals(calibre)}">
+                                th:selected="${viewModel.filter.mainGunCalibre != null and viewModel.filter.mainGunCalibre.equals(calibre)}">
                         </option>
 
                     </select>
 <!--                    <div class="input-group">-->
-<!--                        <input name="mainGunCalibre" id="mainGunCalibre" th:value="${filterModel.mainGunCalibre}" form="filterForm" class="form-control" type="text" placeholder="any">-->
+<!--                        <input name="mainGunCalibre" id="mainGunCalibre" th:value="${viewModel.filter.mainGunCalibre}" form="filterForm" class="form-control" type="text" placeholder="any">-->
 <!--                        <span class="input-group-text">mm</span>-->
 <!--                    </div>-->
                 </div>
@@ -47,10 +47,10 @@
                     <div class="d-flex flex-column gap-1">
                         <div class="input-group">
                             <span class="input-group-text">€</span>
-                            <input name="priceMin" id="priceMin" form="filterForm" th:value="${filterModel.priceMin}" class="form-control" type="text" placeholder="min">
+                            <input name="priceMin" id="priceMin" form="filterForm" th:value="${viewModel.filter.priceMin}" class="form-control" type="text" placeholder="min">
                             <span class="input-group-text">-</span>
                             <label for="priceMax" hidden></label>
-                            <input name="priceMax" id="priceMax" form="filterForm" th:value="${filterModel.priceMax}" class="form-control" type="text" placeholder="max">
+                            <input name="priceMax" id="priceMax" form="filterForm" th:value="${viewModel.filter.priceMax}" class="form-control" type="text" placeholder="max">
                         </div>
                     </div>
                 </div>
@@ -60,10 +60,10 @@
                 <div class="d-flex flex-row gap-3">
                     <div class="d-flex flex-column gap-1">
                         <div class="input-group">
-                            <input name="armorThicknessMin" id="armorThicknessMin" th:value="${filterModel.armorThicknessMin}" form="filterForm" class="form-control" type="text" placeholder="min">
+                            <input name="armorThicknessMin" id="armorThicknessMin" th:value="${viewModel.filter.armorThicknessMin}" form="filterForm" class="form-control" type="text" placeholder="min">
                             <span class="input-group-text">-</span>
                             <label for="armorThicknessMax" hidden></label>
-                            <input name="armorThicknessMax" id="armorThicknessMax" th:value="${filterModel.armorThicknessMax}" form="filterForm" class="form-control" type="text" placeholder="max">
+                            <input name="armorThicknessMax" id="armorThicknessMax" th:value="${viewModel.filter.armorThicknessMax}" form="filterForm" class="form-control" type="text" placeholder="max">
                             <span class="input-group-text">mm</span>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                 <div class="d-flex flex-row gap-3">
                     <div class="d-flex flex-column gap-1">
                         <div class="input-group">
-                            <input name="maxSpeed" id="maxSpeed" form="filterForm" th:value="${filterModel.maxSpeed}" class="form-control" type="text" placeholder="any">
+                            <input name="maxSpeed" id="maxSpeed" form="filterForm" th:value="${viewModel.filter.maxSpeed}" class="form-control" type="text" placeholder="any">
                             <span class="input-group-text">km&sol;h</span>
                         </div>
                     </div>
@@ -83,28 +83,28 @@
             <div class="d-flex flex-column gap-1">
                 <label>Nations</label>
                 <div class="d-inline-flex align-items-center flex-wrap gap-2">
-                    <button th:each="nation : ${nationsList}"
+                    <button th:each="nation : ${viewModel.nations}"
                             type="button"
                             data-filter-type="nations"
                             th:attr="data-filter-value=${nation.id}"
-                            th:with="isChecked=${filterModel.nationIds != null ? filterModel.nationIds.contains(nation.id) : false}"
+                            th:with="isChecked=${viewModel.filter.nationIds != null ? viewModel.filter.nationIds.contains(nation.id) : false}"
                             th:class="${(isChecked ? 'checked ' : '') + 'filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3'}">
                         <img class="rounded-1 flag-sm" th:src="${nation.imgPath}" th:alt="${nation.name}">
-                        <span class="fs-6 text-uppercase" th:text="${nation.name}"></span>
+                        <span class="fs-6" th:text="${nation.name}"></span>
                     </button>
                 </div>
             </div>
             <div class="d-flex flex-column gap-1">
                 <label>Tank roles</label>
                 <div class="d-inline-flex align-items-center flex-wrap gap-2">
-                    <button th:each="role : ${tankRolesList}"
+                    <button th:each="role : ${viewModel.tankRoles}"
                             type="button"
                             data-filter-type="tankRoles"
                             th:attr="data-filter-value=${role.id}"
-                            th:with="isChecked=${filterModel.tankRoleIds != null ? filterModel.tankRoleIds.contains(role.id) : false}"
+                            th:with="isChecked=${viewModel.filter.tankRoleIds != null ? viewModel.filter.tankRoleIds.contains(role.id) : false}"
                             th:class="${(isChecked ? 'checked ' : '') + 'filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3'}">
                         <img class="flag-sm" th:src="${role.imgPath}" alt="">
-                        <span class="fs-6 text-uppercase" th:text="${role.name}"></span>
+                        <span class="fs-6" th:text="${role.name}"></span>
                     </button>
                 </div>
             </div>
@@ -112,10 +112,10 @@
 
         <!-- TANKS -->
         <div class="col">
-            <div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 row-cols-1 g-3" th:if="${not #lists.isEmpty(tanksList)}">
-                <div class="px-2" th:each="tank : ${tanksList}">
-                    <a class="tank-card card border-3 rounded-4 p-2" th:href="@{/tanks/{id}(id=${tank.id})}">
-                        <img th:src="${tank.imgPath}" th:alt="${tank.name}" class="card-img">
+            <div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 row-cols-1 g-3" th:if="${not #lists.isEmpty(viewModel.tanks)}">
+                <div class="px-2" th:each="tank : ${viewModel.tanks}">
+                    <a class="tank-card card border-3 rounded-4 p-2 text-decoration-none" th:href="@{/tanks/{id}(id=${tank.id})}">
+                        <img th:src="${tank.imgPath}" class="card-img text-center" alt="[NO IMAGE]">
                         <div class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
                             <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row">
                                 <img th:src="${tank.nation.imgPath}" alt="" class="rounded-1 icon">

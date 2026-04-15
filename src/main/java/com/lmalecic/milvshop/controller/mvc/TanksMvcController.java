@@ -1,17 +1,17 @@
 package com.lmalecic.milvshop.controller.mvc;
 
 import com.lmalecic.milvshop.dto.TanksFilterModel;
+import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.service.NationService;
 import com.lmalecic.milvshop.service.TankRoleService;
 import com.lmalecic.milvshop.service.TankService;
+import com.lmalecic.milvshop.viewmodel.TankCreateViewModel;
+import com.lmalecic.milvshop.viewmodel.TanksViewModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,30 +24,30 @@ public class TanksMvcController {
     private final NationService nationService;
     private final TankRoleService tankRoleService;
 
-    @GetMapping("")
+    @GetMapping({"", "/"})
     public String getTanksView(Model model) {
-        model.addAttribute("tanksList", this.tankService.findAll());
-        model.addAttribute("gunCalibresList", this.tankService.findAllMainGunCalibres());
-        model.addAttribute("nationsList", this.nationService.findAllOrdered());
-        model.addAttribute("tankRolesList", this.tankRoleService.findAll());
-        model.addAttribute("filterModel", new TanksFilterModel());
-        return "tank/tanks";
+        model.addAttribute("viewModel", TanksViewModel.builder()
+                .tanks(this.tankService.findAll())
+                .mainGunCalibres(this.tankService.findAllMainGunCalibres())
+                .nations(this.nationService.findAllOrdered())
+                .tankRoles(this.tankRoleService.findAllOrdered())
+                .filter(new TanksFilterModel())
+                .build());
+        return "/tank/tanks";
     }
 
-    @GetMapping("{id}")
-    public String getTankView(@PathVariable Long id, Model model) {
+    @GetMapping("/{id}")
+    public String getTankView(Model model, @PathVariable Long id) {
         var tank = this.tankService.findById(id);
         if (tank.isEmpty()) {
-            return "/error/404";
+            throw new ResourceNotFoundException("Tank with id " + id + " not found.");
         }
         model.addAttribute("tank", tank.get());
         return "/tank/tank";
     }
 
     @GetMapping("/filter")
-    public String getTanksViewFilter(@ModelAttribute TanksFilterModel filter, Model model) {
-        System.out.println("Received filter: " + filter);
-        System.out.println("Has active filters: " + hasActiveFilters(filter));
+    public String getTanksViewFilter(Model model, @ModelAttribute TanksFilterModel filter) {
         List<Tank> tanksList;
 
         if (hasActiveFilters(filter)) {
@@ -57,12 +57,13 @@ public class TanksMvcController {
             filter = new TanksFilterModel();
         }
 
-        model.addAttribute("tanksList", tanksList);
-        model.addAttribute("gunCalibresList", this.tankService.findAllMainGunCalibres());
-        model.addAttribute("nationsList", this.nationService.findAll());
-        model.addAttribute("tankRolesList", this.tankRoleService.findAll());
-        model.addAttribute("filterModel", filter);
-
+        model.addAttribute("viewModel", TanksViewModel.builder()
+                .tanks(tanksList)
+                .mainGunCalibres(this.tankService.findAllMainGunCalibres())
+                .nations(this.nationService.findAllOrdered())
+                .tankRoles(this.tankRoleService.findAllOrdered())
+                .filter(filter)
+                .build());
         return "/tank/tanks";
     }
 

@@ -33,7 +33,7 @@ public class TankService {
         return tankRepository.save(tank);
     }
 
-    public Tank update(Tank tank) {
+    public Tank update(Long id, Tank tank) {
         if (!tankRepository.existsById(tank.getId())) {
             throw new IllegalArgumentException("Tank with id " + tank.getId() + " does not exist.");
         }

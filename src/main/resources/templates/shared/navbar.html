@@ -2,7 +2,8 @@
 <html lang="en"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-    <nav th:fragment="navbar" class="d-flex flex-column align-items-center text-white fw-bold w-100 mb-5">
+<head th:replace="~{shared/head.html :: head('Navbar')}"></head>
+<nav th:fragment="navbar" class="d-flex flex-column align-items-center text-white fw-bold w-100 mb-5">
         <a style="text-transform: none;" class="mt-2 navbar-item fs-2 fw-bolder d-inline-flex flex-row align-items-center gap-3" th:href="@{/}">
             <img src="/img/shop.png" alt="" height="32">
             MilV Shop
@@ -51,7 +52,7 @@
         <!-- Login/Register Modal -->
         <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <form th:action="@{/login}" class="modal-content form-group" method="post">
+                <form id="authForm" th:action="@{/login}" class="modal-content form-group needs-validation" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title me-auto text-uppercase" id="loginModalLongTitle">&gt; Log_in</h5>
                         <button type="button" class="close bg-transparent border-0 ratio-1x1 p-0 closeButton" data-bs-dismiss="modal" aria-label="Close">
@@ -59,10 +60,16 @@
                         </button>
                     </div>
                     <div class="modal-body d-flex flex-column gap-1">
-                        <label for="username" class="form-text text-uppercase">Username</label>
-                        <input id="username" name="username" type="text" class="form-control" placeholder="Enter username" required autofocus>
-                        <label for="password" class="form-text text-uppercase">Password</label>
-                        <input id="password" name="password" type="password" class="form-control" placeholder="Enter password" required>
+                        <div>
+                            <label for="username" class="form-text text-uppercase">Username</label>
+                            <input id="username" name="username" type="text" class="form-control" placeholder="Enter username" required autofocus>
+                            <div class="invalid-feedback">Please enter a username!</div>
+                        </div>
+                        <div>
+                            <label for="password" class="form-text text-uppercase">Password</label>
+                            <input id="password" name="password" type="password" class="form-control" placeholder="Enter password" required>
+                            <div class="invalid-feedback">Please enter a password!</div>
+                        </div>
                     </div>
                     <div class="modal-footer d-flex flex-column gap-2">
                         <button type="submit" class="btn btn-primary w-100 m-0 text-uppercase">Log in</button>
@@ -72,5 +79,36 @@
                 </form>
             </div>
         </div>
+
+        <script src="/js/shared.js"></script>
+        <script>
+            const form = $("#authForm");
+            const usernameInput = $("#username");
+            const passwordInput = $("#password");
+            const csrfInput = $('input[name="_csrf"]');
+
+            $("#registerBtn").on("click", async (e) => {
+                validateForm(form.get(0), e)
+
+                const username = usernameInput.val().trim();
+                const password = passwordInput.val().trim();
+
+                $.ajax({
+                    url: "user/register",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    data: JSON.stringify({
+                        "_csrf": csrfInput ? csrfInput.val() : "",
+                        "username": username,
+                        "password": password
+                    }),
+                    success: function() {
+                        form.submit();
+                    }
+                });
+            })
+        </script>
     </nav>
 </html>

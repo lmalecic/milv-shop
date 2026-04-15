@@ -16,6 +16,8 @@
     --bs-dropdown-link-hover-color: var(--bs-yellow) !important;
     --bs-tertiary-bg: rgba(255,255,255,10%) !important;
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --tank-card-aspect-ratio: 1.8335187661;
 }
 
 .btn-primary {
@@ -71,7 +73,7 @@ html, body {
     background: var(--bs-body-bg) !important;
 }
 
-input, .form-select {
+input, .form-select, .form-control {
     background-color: rgb(13 22 13) !important;
 
     &:focus {
@@ -149,12 +151,22 @@ body {
 }
 
 .tank-card {
+    aspect-ratio: var(--tank-card-aspect-ratio);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
     .card-img {
+        width: fit-content !important;
         transition: transform var(--ease-out-expo) 0.3s;
         transform: scale(100%);
+        object-position: center !important;
+        object-fit: contain !important;
+        max-width: 100%;
+        max-height: 100%;
     }
 
-    &:hover {
+    &:is(a):hover, &:is(button):hover {
         .card-img {
             transform: scale(110%);
         }
@@ -218,4 +230,18 @@ body {
         margin-left: var(--margin-x);
         background-image: var(--tankRoleIcon);
     }
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+label {
+    text-transform: uppercase;
 }

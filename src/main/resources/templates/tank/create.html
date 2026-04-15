@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:replace="~{shared/head.html :: head('New tank')}"></head>
+<body>
+<div th:replace="~{shared/navbar.html :: navbar}"></div>
+
+<h1 class="fw-bold">Create a new Tank</h1>
+<form class="needs-validation" method="post" th:action="@{create}" novalidate>
+    <div class="row">
+        <div class="col d-flex flex-column gap-3">
+                <div class="row g-3">
+                    <div class="col d-flex flex-column gap-1">
+                        <label for="name">Name</label>
+                        <input id="name" name="name" class="form-control" type="text" placeholder="Enter tank name..." required>
+                        <div class="invalid-feedback">Please enter a name.</div>
+                    </div>
+                    <div class="col-3 d-flex flex-column gap-1">
+                        <label class="text-uppercase" for="nation">Nation</label>
+                        <select class="form-select input" name="nation" id="nation" required>
+                            <option selected disabled value="">Select...</option>
+                            <option th:each="nation : ${viewModel.nations}"
+                                    th:value="${nation.id}"
+                                    th:text="${nation.name}">
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">Please select a nation.</div>
+                    </div>
+                    <div class="col-3 d-flex flex-column gap-1">
+                        <label for="tankRole">Main role</label>
+                        <select class="form-select input" name="tankRole" id="tankRole" required>
+                            <option selected disabled value="">Select...</option>
+                            <option th:each="tankRole : ${viewModel.tankRoles}"
+                                    th:value="${tankRole.id}"
+                                    th:text="${tankRole.name}">
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">Please select a role.</div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-2 d-flex flex-column gap-1">
+                        <label for="crewSize">Crew size</label>
+                        <div class="input-group has-validation">
+                            <input id="crewSize" name="crewSize" class="form-control" type="number" min="0" required>
+                            <span class="input-group-text">ppl</span>
+                            <div class="invalid-feedback">Please enter a positive number.</div>
+                        </div>
+                    </div>
+                    <div class="col-2 d-flex flex-column gap-1">
+                        <label for="mainGunCalibre">Gun calibre</label>
+                        <div class="input-group has-validation">
+                            <input id="mainGunCalibre" name="mainGunCalibre" class="form-control" type="number" min="0" required>
+                            <span class="input-group-text">mm</span>
+                            <div class="invalid-feedback">Please enter a positive number.</div>
+                        </div>
+                    </div>
+                    <div class="col-2 d-flex flex-column gap-1">
+                        <label for="maxSpeed">Max speed</label>
+                        <div class="input-group has-validation">
+                            <input id="maxSpeed" name="maxSpeed" class="form-control" type="number" min="0" required>
+                            <span class="input-group-text">km&sol;h</span>
+                            <div class="invalid-feedback">Please enter a positive number.</div>
+                        </div>
+                    </div>
+                    <div class="col-3 d-flex flex-column gap-1">
+                        <label for="armorThickness">Armor thickness</label>
+                        <div class="input-group has-validation">
+                            <input id="armorThickness" name="armorThickness" class="form-control" min="0" type="number" required>
+                            <span class="input-group-text">mm</span>
+                            <div class="invalid-feedback">Please enter a positive number.</div>
+                        </div>
+                    </div>
+                    <div class="col d-flex flex-column gap-1">
+                        <label for="price">Price</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text">&euro;</span>
+                            <input id="price" name="price" class="form-control" type="number" placeholder="0.00" min="0" step="0.01" required>
+                            <div class="invalid-feedback">Please enter a positive number.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col d-flex flex-column gap-1">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" name="description" id="description" rows="3" placeholder="Enter tank description..."></textarea>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col d-flex flex-column gap-1">
+                        <button class="btn btn-primary text-uppercase" type="submit">Create Tank</button>
+                    </div>
+                </div>
+        </div>
+        <div class="col d-flex flex-column gap-1" style="max-width: 30%">
+            <label for="imgPath" class="text-uppercase">Image</label>
+            <div class="tank-card card p-2 mb-2">
+                <img id="tankImg" class="card-img text-center my-auto" src="" alt="[NO IMAGE]">
+            </div>
+            <input class="form-control" id="imgPath" type="text" placeholder="Enter image url..." name="imgPath">
+        </div>
+    </div>
+</form>
+
+<footer th:replace="~{shared/footer.html :: footer}"></footer>
+<script>
+    const tankImg = $("#tankImg");
+    const imgPathInput = $("#imgPath");
+
+    imgPathInput.on("input", function() {
+        const url = $(this).val();
+        tankImg.attr("src", url || "");
+    });
+</script>
+<script src="/js/shared.js"></script>
+</body>
+</html>
