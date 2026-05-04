@@ -1,3 +1,14 @@
+-- USER ROLES
+insert into USER_ROLE (name)
+values ('USER');
+
+insert into USER_ROLE (name)
+values ('ADMIN');
+
+-- USERS
+insert into USER (username, pwdHash)
+values ('admin', '')
+
 -- INSERT TANK ROLES
 insert into TANK_ROLE (name, img_path)
 values ('Light tank', '/img/tankrole/light_tank.svg');

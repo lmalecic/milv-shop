@@ -24,13 +24,14 @@ public class User implements UserDetails {
     private String pwdHash;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable
+    private List<UserRole> roles;
 
     @Override
     @NullMarked
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(role);
+        return this.roles;
     }
 
     @Override

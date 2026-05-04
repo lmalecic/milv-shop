@@ -1,14 +1,33 @@
 package com.lmalecic.milvshop.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 
-public enum UserRole implements GrantedAuthority {
-    USER,
-    ADMIN;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table
+public class UserRole implements GrantedAuthority {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String name;
 
     @Override
     public String getAuthority() {
-        return this.name();
+        return this.name;
     }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable
+    private List<User> users;
 }
