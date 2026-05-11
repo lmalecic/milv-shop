@@ -26,7 +26,7 @@ public class TanksAdminMvcController {
                 .nations(this.nationService.findAllOrdered())
                 .tankRoles(this.tankRoleService.findAllOrdered())
                 .build());
-        return "/tank/create";
+        return "/admin/tank/create";
     }
 
     @PostMapping("/create")
@@ -37,11 +37,12 @@ public class TanksAdminMvcController {
 
     @GetMapping("/delete/{id}")
     public String getDeleteView(Model model, @PathVariable Long id) {
-        return "/tank/delete";
+        return "/admin/tank/delete";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteTank(@PathVariable Long id) {
+        // TODO: Redirect to previous page?
         this.tankService.deleteById(id);
         return "redirect:/tanks";
     }
@@ -53,7 +54,7 @@ public class TanksAdminMvcController {
                 .nations(this.nationService.findAllOrdered())
                 .tankRoles(this.tankRoleService.findAllOrdered())
                 .build());
-        return "/tank/edit";
+        return "/admin/tank/edit";
     }
 
     @PutMapping("/edit/{id}")

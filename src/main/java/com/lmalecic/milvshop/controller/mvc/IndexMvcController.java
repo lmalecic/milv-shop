@@ -20,6 +20,6 @@ public class IndexMvcController {
     public String getIndex(Model model) {
         model.addAttribute("nationsList", nationRepository.findAll());
         model.addAttribute("tankRolesList", tankRoleRepository.findAll());
-        return "index";
+        return "/index";
     }
 }
