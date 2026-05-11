@@ -3,37 +3,33 @@ package com.lmalecic.milvshop.controller.rest;
 import com.lmalecic.milvshop.dto.UserDto;
 import com.lmalecic.milvshop.exception.UserAlreadyExistsException;
 import com.lmalecic.milvshop.model.User;
-import com.lmalecic.milvshop.model.UserRole;
+import com.lmalecic.milvshop.repository.UserRepository;
 import com.lmalecic.milvshop.repository.UserRoleRepository;
-import com.lmalecic.milvshop.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
-public class UserRestController {
+public class AuthRestController {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public void registerUser(@RequestBody @Valid UserDto userDto) {
-        if (userService.findByUsername(userDto.getUsername()).isPresent()) {
+        if (userRepository.existsByUsername(userDto.getUsername())) {
             throw new UserAlreadyExistsException("User " + userDto.getUsername() + " already exists!");
         }
 
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setPwdHash(passwordEncoder.encode(userDto.getPassword()));
-        user.setRoles(List.of(userRoleRepository.findByName("USER").orElseThrow()));
-
-        userService.save(user);
+        userRepository.save(User.builder()
+                .username(userDto.getUsername())
+                .pwdHash(passwordEncoder.encode(userDto.getPassword()))
+                .roles(List.of(userRoleRepository.findByName("USER").orElseThrow())).build());
     }
 }

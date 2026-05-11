@@ -1,6 +1,7 @@
 package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.model.User;
+import com.lmalecic.milvshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     @NullMarked
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userService.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " not found"));
     }
 }

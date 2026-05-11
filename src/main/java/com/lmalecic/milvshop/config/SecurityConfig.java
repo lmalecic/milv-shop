@@ -19,11 +19,13 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/login").permitAll()
+                                .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
+                                .requestMatchers("/login", "/login/", "/", "/tanks", "/tanks/").permitAll()
                                 .requestMatchers("/admin", "/admin/", "/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
+                        .loginPage("/")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
                         .permitAll()
