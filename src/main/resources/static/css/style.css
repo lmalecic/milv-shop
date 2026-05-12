@@ -113,6 +113,10 @@ body {
     }
 }
 
+.navbar-item.active {
+    color: var(--bs-yellow);
+}
+
 .flag-sm {
     height: 60%;
     margin-left: 0.4rem;

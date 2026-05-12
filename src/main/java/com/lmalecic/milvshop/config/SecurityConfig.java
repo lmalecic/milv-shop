@@ -20,13 +20,13 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
-                                .requestMatchers("/login", "/login/", "/", "/tanks", "/tanks/").permitAll()
+                                .requestMatchers("/error", "/login", "/login/", "/", "/tanks", "/tanks/").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/admin", "/admin/", "/admin/**").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/")
-                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )

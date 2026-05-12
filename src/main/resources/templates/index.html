@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
-<head th:replace="~{shared/head.html :: head('')}"></head>
+<head th:replace="~{fragments/head.html :: head('')}"></head>
 <body>
-    <div th:replace="~{shared/navbar.html :: navbar}"></div>
-    <div>
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main>
         <div class="text-center">
             <img src="/img/maus-panzerkampfwagen.gif" alt="Cover image">
         </div>
@@ -38,7 +38,7 @@
             <h3 class="fw-bold">YOUR TANK AWAITS</h3>
             <a th:href="@{/tanks}" class="btn btn-primary text-uppercase mx-auto">Search all tanks</a>
         </div>
-    </div>
+    </main>
     <footer th:replace="~{fragments/footer.html :: footer}"></footer>
 </body>
 </html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
-<head th:replace="~{shared/head.html :: head(${tank.name})}"></head>
+<head th:replace="~{fragments/head :: head(${tank.name})}"></head>
 <body>
-    <div th:replace="~{shared/navbar.html :: navbar}"></div>
+    <header th:replace="~{fragments/header :: header}"></header>
 
-    <div class="row">
+    <main class="row">
         <div class="col" style="max-width: 30%" th:if="${tank.imgPath != null}">
             <div class="tank-card card p-2 border-3 rounded-4">
                 <img class="card-img" th:src="${tank.imgPath}" alt="Tank image">
@@ -70,7 +70,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </main>
 
     <footer th:replace="~{fragments/footer.html :: footer}"></footer>
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<form id="authForm" th:object="${userDto}" class="modal-content form-group needs-validation">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <div class="modal-header">
+        <h5 class="modal-title me-auto text-uppercase">&gt; Log_in / Register</h5>
+        <button type="button" class="close bg-transparent border-0 ratio-1x1 p-0 closeButton" data-bs-dismiss="modal" aria-label="Close">
+            <img src="/img/close.png" alt="">
+        </button>
+    </div>
+    <div class="modal-body d-flex flex-column gap-1">
+        <div>
+            <label for="username" class="form-text text-uppercase">Username</label>
+            <input id="username" th:field="*{username}" type="text" class="form-control"
+                   th:class="${#fields.hasErrors('username') ? 'form-control is-invalid' : 'form-control'}"
+                   placeholder="Enter username" required autofocus>
+            <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback d-block">
+                <span th:errors="*{username}"></span>
+            </div>
+        </div>
+        <div>
+            <label for="password" class="form-text text-uppercase">Password</label>
+            <input id="password" th:field="*{password}" type="password" class="form-control"
+                   th:class="${#fields.hasErrors('password') ? 'form-control is-invalid' : 'form-control'}"
+                   placeholder="Enter password" required>
+            <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block">
+                <span th:errors="*{password}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer d-flex flex-column gap-2">
+        <button type="submit" hx-post="/auth/login" hx-target="#authForm" hx-swap="outerHTML" class="btn btn-primary w-100 m-0 text-uppercase">Log in</button>
+        <label class="fw-lighter">&#8659; or create a new account &#8659;</label>
+        <button type="submit" hx-post="/auth/register" hx-target="#authForm" hx-swap="outerHTML" class="btn btn-secondary w-100 m-0 text-uppercase">Register</button>
+    </div>
+</form>
+</html>
+
+
+
+
+
+
+
