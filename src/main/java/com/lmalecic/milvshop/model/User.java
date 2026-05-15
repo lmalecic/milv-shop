@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -37,7 +38,9 @@ public class User implements UserDetails {
     @Override
     @NullMarked
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        return this.roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .toList();
     }
 
     @Override

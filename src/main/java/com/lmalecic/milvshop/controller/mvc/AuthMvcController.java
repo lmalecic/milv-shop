@@ -4,17 +4,10 @@ import com.lmalecic.milvshop.dto.UserDto;
 import com.lmalecic.milvshop.model.User;
 import com.lmalecic.milvshop.repository.UserRepository;
 import com.lmalecic.milvshop.repository.UserRoleRepository;
-import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
-import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponseHeader;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,8 +24,8 @@ public class AuthMvcController {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationConfiguration authenticationConfiguration;
 
+    @HxRequest
     @GetMapping("/login")
     public String getLoginForm(Model model) {
         model.addAttribute("userDto", new UserDto());
@@ -40,35 +33,29 @@ public class AuthMvcController {
     }
 
     @HxRequest
-    @PostMapping("/login")
-    public String processLogin(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult) throws Exception {
-        if (bindingResult.hasErrors()) {
-            return "fragments/auth/login-form";
-        }
-
-        try {
-            AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            return "refresh:htmx";
-        } catch (Exception e) {
-            bindingResult.rejectValue("username", "error.auth", "");
-            bindingResult.rejectValue("password", "error.auth", "Invalid username or password");
-            return "fragments/auth/login-form";
-        }
+    @PostMapping("/login-success")
+    public String loginSuccess() {
+        return "refresh:htmx";
     }
 
+    @HxRequest
+    @PostMapping("/login-failed")
+    public String loginFailed(Model model, @Valid @ModelAttribute UserDto userDto, BindingResult bindingResult) {
+        bindingResult.rejectValue("username", "error.auth", "");
+        bindingResult.rejectValue("password", "error.auth", "Invalid username or password");
+        return "fragments/auth/login-form";
+    }
+
+    @HxRequest
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
         model.addAttribute("userDto", new UserDto());
         return "fragments/auth/login-form";
     }
 
+    @HxRequest
     @PostMapping("/register")
-    public String processRegister(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult) {
+    public String processRegister(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             return "fragments/auth/login-form";
         }
@@ -81,9 +68,10 @@ public class AuthMvcController {
         userRepository.save(User.builder()
                 .username(userDto.getUsername())
                 .pwdHash(passwordEncoder.encode(userDto.getPassword()))
-                .roles(List.of(userRoleRepository.findByName("USER").orElseThrow())).build());
+                .roles(List.of(userRoleRepository.findByName("ROLE_USER").orElseThrow())).build());
 
-        return "redirect:/";
+        htmxResponse.addTrigger("login");
+        return "fragments/auth/login-form";
     }
 }
 

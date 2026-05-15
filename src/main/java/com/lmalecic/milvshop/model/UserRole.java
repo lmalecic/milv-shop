@@ -28,8 +28,4 @@ public class UserRole implements GrantedAuthority {
     public String getAuthority() {
         return this.name;
     }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable
-    private List<User> users;
 }
