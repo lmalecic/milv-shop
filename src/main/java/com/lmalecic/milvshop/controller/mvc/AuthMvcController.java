@@ -4,6 +4,7 @@ import com.lmalecic.milvshop.dto.UserDto;
 import com.lmalecic.milvshop.model.User;
 import com.lmalecic.milvshop.repository.UserRepository;
 import com.lmalecic.milvshop.repository.UserRoleRepository;
+import com.lmalecic.milvshop.service.UserService;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
@@ -21,9 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthMvcController {
 
-    private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @HxRequest
     @GetMapping("/login")
@@ -41,8 +40,10 @@ public class AuthMvcController {
     @HxRequest
     @PostMapping("/login-failed")
     public String loginFailed(Model model, @Valid @ModelAttribute UserDto userDto, BindingResult bindingResult) {
-        bindingResult.rejectValue("username", "error.auth", "");
-        bindingResult.rejectValue("password", "error.auth", "Invalid username or password");
+        if (!bindingResult.hasErrors()) {
+            bindingResult.rejectValue("username", "error.auth", "");
+            bindingResult.rejectValue("password", "error.auth", "Invalid username or password");
+        }
         return "fragments/auth/login-form";
     }
 
@@ -60,15 +61,12 @@ public class AuthMvcController {
             return "fragments/auth/login-form";
         }
 
-        if (userRepository.existsByUsername(userDto.getUsername())) {
+        if (userService.existsByUsername(userDto.getUsername())) {
             bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
             return "fragments/auth/login-form";
         }
 
-        userRepository.save(User.builder()
-                .username(userDto.getUsername())
-                .pwdHash(passwordEncoder.encode(userDto.getPassword()))
-                .roles(List.of(userRoleRepository.findByName("ROLE_USER").orElseThrow())).build());
+        userService.register(userDto);
 
         htmxResponse.addTrigger("login");
         return "fragments/auth/login-form";

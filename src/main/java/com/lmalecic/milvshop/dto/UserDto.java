@@ -11,10 +11,10 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Username is required!")
+    @NotBlank(message = "Username can't be blank!")
     private String username;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Password is required!")
+    @NotBlank(message = "Password can't be blank!")
     private String password;
 }

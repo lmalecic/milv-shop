@@ -27,7 +27,7 @@
             <div style="margin-right: var(--page-margin-right)" class="position-absolute d-flex gap-3 end-0 fs-5">
                 <div class="d-flex gap-2 fs-5 justify-content-center" sec:authorize="isAnonymous()">
                     <a href="#" class="navbar-item d-flex align-items-center gap-sm-2"
-                       hx-get="/auth/login" hx-target="#authModal"
+                       hx:get="@{/auth/login}" hx-target="#authModal"
                        data-bs-toggle="modal" data-bs-target="#loginModal">
                         <img style="transform: rotate(225deg)" class="h-75" src="/img/login.png" alt="">
                         Login

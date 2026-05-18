@@ -21,3 +21,4 @@ function validateForm(form, event) {
         }, false)
     })
 })()
+

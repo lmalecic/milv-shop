@@ -30,7 +30,7 @@
     </div>
     <div class="modal-footer d-flex flex-column gap-2">
         <button type="submit"
-                hx-post="/login"
+                hx:post="@{/login}"
                 hx-trigger="click, login from:body"
                 hx-target="#authForm"
                 hx-swap="outerHTML"
@@ -38,7 +38,7 @@
                 class="btn btn-primary w-100 m-0 text-uppercase">Log in</button>
         <label class="fw-lighter">&#8659; or create a new account &#8659;</label>
         <button type="submit"
-                hx-post="/auth/register"
+                hx:post="@{/auth/register}"
                 hx-target="#authForm"
                 hx-swap="outerHTML"
                 hx-disabled-elt="this"
