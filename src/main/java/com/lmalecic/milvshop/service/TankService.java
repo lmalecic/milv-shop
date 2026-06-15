@@ -92,8 +92,6 @@ public class TankService {
                 predicates.add(root.get("crewSize").equalTo(filter.getCrewSize()));
             }
 
-            System.out.println("Generated predicates: " + predicates);
-
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }

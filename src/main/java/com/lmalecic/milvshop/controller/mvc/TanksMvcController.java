@@ -6,8 +6,10 @@ import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.service.NationService;
 import com.lmalecic.milvshop.service.TankRoleService;
 import com.lmalecic.milvshop.service.TankService;
-import com.lmalecic.milvshop.viewmodel.TankCreateViewModel;
+import com.lmalecic.milvshop.util.UrlUtils;
 import com.lmalecic.milvshop.viewmodel.TanksViewModel;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,15 +27,24 @@ public class TanksMvcController {
     private final TankRoleService tankRoleService;
 
     @GetMapping({"", "/"})
-    public String getTanksView(Model model) {
+    public String getTanksView(Model model, @ModelAttribute TanksFilterModel filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+        List<Tank> tanksList = filter.hasActiveFilters() ? this.tankService.findAllFiltered(filter) : this.tankService.findAll();
+
         model.addAttribute("viewModel", TanksViewModel.builder()
-                .tanks(this.tankService.findAll())
+                .tanks(tanksList)
                 .mainGunCalibres(this.tankService.findAllMainGunCalibres())
                 .nations(this.nationService.findAllOrdered())
                 .tankRoles(this.tankRoleService.findAllOrdered())
-                .filter(new TanksFilterModel())
+                .filter(filter)
                 .build());
-        return "/tank/tanks";
+
+        if (htmxRequest.isHtmxRequest()) {
+            htmxResponse.setReplaceUrl(UrlUtils.fromObject("/tanks", filter).build().encode().toUriString());
+        }
+
+        return htmxRequest.isHtmxRequest()
+                ? "/fragments/tank/tanks :: tanksGrid"
+                : "/tank/tanks";
     }
 
     @GetMapping("/{id}")
@@ -44,37 +55,5 @@ public class TanksMvcController {
         }
         model.addAttribute("tank", tank.get());
         return "/tank/tank";
-    }
-
-    @GetMapping("/filter")
-    public String getTanksViewFilter(Model model, @ModelAttribute TanksFilterModel filter) {
-        List<Tank> tanksList;
-
-        if (hasActiveFilters(filter)) {
-            tanksList = this.tankService.findAllFiltered(filter);
-        } else {
-            tanksList = this.tankService.findAll();
-            filter = new TanksFilterModel();
-        }
-
-        model.addAttribute("viewModel", TanksViewModel.builder()
-                .tanks(tanksList)
-                .mainGunCalibres(this.tankService.findAllMainGunCalibres())
-                .nations(this.nationService.findAllOrdered())
-                .tankRoles(this.tankRoleService.findAllOrdered())
-                .filter(filter)
-                .build());
-        return "/tank/tanks";
-    }
-
-    private boolean hasActiveFilters(TanksFilterModel filter) {
-        return (filter.getSearchQuery() != null && !filter.getSearchQuery().isEmpty()) ||
-                (filter.getNationIds() != null && !filter.getNationIds().isEmpty()) ||
-                (filter.getTankRoleIds() != null && !filter.getTankRoleIds().isEmpty()) ||
-                (filter.getPriceMin() != null) || (filter.getPriceMax() != null) ||
-                (filter.getMainGunCalibre() != null) ||
-                (filter.getArmorThicknessMin() != null) || (filter.getArmorThicknessMax() != null) ||
-                (filter.getMaxSpeed() != null) ||
-                (filter.getCrewSize() != null);
     }
 }

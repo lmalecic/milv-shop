@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 @Data
 @Table
 @Entity
@@ -35,6 +38,9 @@ public final class Tank {
     private TankRole tankRole;
 
     public String getPriceString() {
-        return String.format("€%.2f", this.price);
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("hr-HR"));
+        numberFormat.setMinimumFractionDigits(2);
+        numberFormat.setMaximumFractionDigits(2);
+        return numberFormat.format(price) + " €";
     }
 }

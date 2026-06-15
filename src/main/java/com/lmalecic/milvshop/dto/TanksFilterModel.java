@@ -4,6 +4,9 @@ import jakarta.annotation.Nullable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Field;
+import java.sql.SQLOutput;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -19,4 +22,15 @@ public class TanksFilterModel {
     private Integer armorThicknessMax = null;
     private Integer maxSpeed = null;
     private Integer crewSize = null;
+
+    public boolean hasActiveFilters() {
+        return (this.searchQuery != null && !this.searchQuery.isEmpty()) ||
+                (this.nationIds != null && !this.nationIds.isEmpty()) ||
+                (this.tankRoleIds != null && !this.tankRoleIds.isEmpty()) ||
+                (this.priceMin != null) || (this.priceMax != null) ||
+                (this.mainGunCalibre != null) ||
+                (this.armorThicknessMin != null) || (this.armorThicknessMax != null) ||
+                (this.maxSpeed != null) ||
+                (this.crewSize != null);
+    }
 }

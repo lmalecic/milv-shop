@@ -8,9 +8,11 @@
         <h1 class="fw-bold">Tanks</h1>
         <form method="get" id="filterForm"
               class="d-flex flex-column gap-3 mb-4"
-              th:action="@{/tanks/filter}">
-            <input name="nationIds" id="nationFilters" hidden>
-            <input name="tankRoleIds" id="tankRoleFilters" hidden>
+              hx:get="@{/tanks}"
+              hx-trigger="load, submit, change delay:300ms, input delay:300ms"
+              hx-target="#tanksResult">
+            <input name="nationIds" id="nationFilters" th:value="${viewModel.filter.nationIds != null ? #strings.arrayJoin(viewModel.filter.nationIds, ',') : ''}" hidden>
+            <input name="tankRoleIds" id="tankRoleFilters" th:value="${viewModel.filter.tankRoleIds != null ? #strings.arrayJoin(viewModel.filter.tankRoleIds, ',') : ''}" hidden>
             <div class="d-inline-flex flex-row gap-3">
                 <label hidden for="search"></label>
                 <input name="searchQuery" id="search" type="text" class="form-control" placeholder="Search by name or description..." th:value="${viewModel.filter.searchQuery}">
@@ -19,7 +21,6 @@
         </form>
 
         <div class="row">
-            <!-- FILTERS -->
             <div class="col d-flex flex-column gap-4" style="max-width: 300px;">
                 <div class="d-flex flex-row gap-3">
                     <div class="d-flex flex-column gap-1" style="max-width: 40%;">
@@ -35,12 +36,7 @@
                                     th:text="${calibre + 'mm'}"
                                     th:selected="${viewModel.filter.mainGunCalibre != null and viewModel.filter.mainGunCalibre.equals(calibre)}">
                             </option>
-
                         </select>
-                        <!--                    <div class="input-group">-->
-                        <!--                        <input name="mainGunCalibre" id="mainGunCalibre" th:value="${viewModel.filter.mainGunCalibre}" form="filterForm" class="form-control" type="text" placeholder="any">-->
-                        <!--                        <span class="input-group-text">mm</span>-->
-                        <!--                    </div>-->
                     </div>
                 </div>
                 <div class="d-flex flex-column gap-1">
@@ -49,7 +45,7 @@
                         <div class="d-flex flex-column gap-1">
                             <div class="input-group">
                                 <span class="input-group-text">€</span>
-                                <input name="priceMin" id="priceMin" form="filterForm" th:value="${viewModel.filter.priceMin}" class="form-control" type="text" placeholder="min">
+                                <input name="priceMin" id="priceMin" form='filterForm' th:value="${viewModel.filter.priceMin}" class="form-control" type="text" placeholder="min">
                                 <span class="input-group-text">-</span>
                                 <label for="priceMax" hidden></label>
                                 <input name="priceMax" id="priceMax" form="filterForm" th:value="${viewModel.filter.priceMax}" class="form-control" type="text" placeholder="max">
@@ -112,60 +108,42 @@
                 </div>
             </div>
 
-            <!-- TANKS -->
-            <div class="col">
-                <div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 row-cols-1 g-3" th:if="${not #lists.isEmpty(viewModel.tanks)}">
-                    <div class="px-2" th:each="tank : ${viewModel.tanks}">
-                        <a class="tank-card card border-3 rounded-4 p-2 text-decoration-none" th:href="@{/tanks/{id}(id=${tank.id})}">
-                            <img th:src="${tank.imgPath}" class="card-img text-center" alt="[NO IMAGE]">
-                            <div class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
-                                <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row">
-                                    <img th:src="${tank.nation.imgPath}" alt="" class="rounded-1 icon">
-                                    <span th:text="${tank.name}"></span>
-                                    <img th:src="${tank.tankRole.imgPath}" alt="" class="icon">
-                                </div>
-                            </div>
-                            <div class="tank-card-price position-absolute rounded-3 fs-6 fst-italic" th:text="${tank.getPriceString()}"></div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <div id="tanksResult" class="col"></div>
         </div>
     </main>
 
     <footer th:replace="~{fragments/layout :: footer}"></footer>
 
     <script>
-        const filterButtons = $('.filter-btn');
+        $(".filter-btn").on("click", function () {
+            $(this).toggleClass("checked");
 
-        function initFilterButton(btn) {
-            $(btn).on("click", () => {
-                if ($(btn).hasClass('checked')) {
-                    $(btn).removeClass('checked');
-                } else {
-                    $(btn).addClass('checked');
-                }
-            })
-        }
+            const type = $(this).data("filter-type");
+            const value = Number($(this).data("filter-value"));
 
-        for (const filterButton of filterButtons) {
-            initFilterButton(filterButton);
-        }
+            const hidden = $(`#${type === "nations" ? "nationFilters" : "tankRoleFilters"}`);
 
-        $('#filterForm').on("submit", (e) => {
-            const checkedButtons = $('.filter-btn.checked');
-            const filters = {};
-            for (const btn of checkedButtons) {
-                const filterType = $(btn).data('filter-type');
-                const filterValue = Number($(btn).data('filter-value'));
-                if (!filters[filterType]) {
-                    filters[filterType] = [];
-                }
-                filters[filterType].push(filterValue);
+            let values = hidden.val()
+                ? hidden.val().split(",").map(Number).filter(Boolean)
+                : [];
+
+            if ($(this).hasClass("checked")) {
+                if (!values.includes(value)) values.push(value);
+            } else {
+                values = values.filter(v => v !== value);
             }
 
-            $('#nationFilters').val(filters['nations'] ? filters['nations'].join(',') : '');
-            $('#tankRoleFilters').val(filters['tankRoles'] ? filters['tankRoles'].join(',') : '');
+            hidden.val(values.join(","));
+
+            htmx.trigger("#filterForm", "change");
+        });
+
+        $("input[form='filterForm']").on("input", e => {
+            htmx.trigger("#filterForm", "input");
+        })
+
+        $("select[form='filterForm']").on("change", e => {
+            htmx.trigger("#filterForm", "change");
         })
     </script>
 </body>

@@ -55,7 +55,7 @@ public class DataInitializer implements CommandLineRunner {
     private void initNations() {
         record NationSeed(String name, String imgPath) {}
         List<NationSeed> toCheck = List.of(
-                new NationSeed("USA", "/img/nation/usa.svg'"),
+                new NationSeed("USA", "/img/nation/usa.svg"),
                 new NationSeed("German Reich", "/img/nation/german_reich.svg"),
                 new NationSeed("USSR", "/img/nation/ussr.svg"),
                 new NationSeed("Great Britain", "/img/nation/uk.svg")

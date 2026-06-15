@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/layout :: head('')}">
+</head>
+<body>
+    <header th:replace="~{fragments/layout :: header}"></header>
+    <main>
+        <div class="text-center mb-4">
+            <img src="/img/admin_salute.png" height="160" alt="Cover image">
+        </div>
+        <h2 class="fw-bold text-center">Reporting for duty sir, all systems online!</h2>
+        <h4 class="text-center mb-5" style="opacity: 70%">We prepared quick access for your administration needs here.</h4>
+
+        <div class="admin-navbar">
+            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/tank/tanks}">
+                <img src="/img/tank.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
+                Tanks<br/>Department
+            </a>
+            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/tank/tanks}">
+                <img src="/img/world.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
+                Nations<br/>Department
+            </a>
+            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/tank/tanks}">
+                <img src="/img/tankrole/heavy_tank.svg" class="card-img text-center mb-3" alt="[NO IMAGE]">
+                Tank Roles<br/>Department
+            </a>
+            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/tank/tanks}">
+                <img src="/img/user.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
+                Users<br/>Department
+            </a>
+            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/tank/tanks}">
+                <img src="/img/orders.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
+                Orders<br/>Department
+            </a>
+        </div>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

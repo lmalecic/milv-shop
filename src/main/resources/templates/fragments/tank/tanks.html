@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<div th:fragment="tanksGrid">
+    <div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 row-cols-1 g-3" th:if="${not #lists.isEmpty(viewModel.tanks)}">
+        <div class="px-2" th:each="tank : ${viewModel.tanks}">
+            <a class="tank-card card border-3 rounded-4 p-2 text-decoration-none" th:href="@{/tanks/{id}(id=${tank.id})}">
+                <img th:src="${tank.imgPath}" class="card-img text-center" alt="[NO IMAGE]">
+                <div class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
+                    <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row">
+                        <img th:src="${tank.nation.imgPath}" alt="" class="rounded-1 icon">
+                        <span th:text="${tank.name}" class="fw-semibold"></span>
+                        <img th:src="${tank.tankRole.imgPath}" alt="" class="icon">
+                    </div>
+                </div>
+                <div class="tank-card-price position-absolute rounded-3 fs-6 fw-semibold" th:text="${tank.getPriceString()}"></div>
+            </a>
+        </div>
+    </div>
+    <p class="text-center" th:if="${#lists.isEmpty(viewModel.tanks)}">No matching tanks found :(</p>
+</div>
+
+</html>
