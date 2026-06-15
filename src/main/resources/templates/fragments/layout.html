@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head th:fragment="head(title)"
+      th:with="
+        appTitle=${T(com.lmalecic.milvshop.util.Constants).AppTitle},
+        pageTitle=${title != null ? title.trim() : ''}
+      ">
+    <title th:text="${#strings.isEmpty(pageTitle) ? '🪖 ' + appTitle : '🪖 ' + pageTitle + ' | ' + appTitle}">
+        MilV Shop
+    </title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header th:fragment="header">
+    <nav class="d-flex flex-column align-items-center text-white fw-bold w-100 mb-5 mt-1">
+        <a style="text-transform: none;" class="mt-2 navbar-item fs-2 fw-bolder d-inline-flex flex-row align-items-center gap-3" th:href="@{/}">
+            <img src="/img/shop.png" alt="" height="32">
+            MilV Shop
+            <img src="/img/shop.png" alt="" height="32">
+        </a>
+        <div class="mt-2 d-flex gap-3 fs-5 justify-content-center">
+            <div class="d-flex gap-3 justify-content-center navbar-item-container">
+                <a class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/}">
+                    <img class="h-75" src="/img/home.png" alt="">
+                    Home
+                </a>
+                <span>//</span>
+                <a class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/tanks}">
+                    <img class="h-75" src="/img/tank.png" alt="">
+                    Tanks
+                </a>
+                <span>//</span>
+                <a id="navbar-cart" class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/cart}">
+                    <img class="h-75" src="/img/cart.png" alt="">
+                    Cart
+                </a>
+                <span class="d-inline-flex gap-3" sec:authorize="isAuthenticated()">
+                    <span>//</span>
+                    <a id="navbar-orders" class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/orders}">
+                        <img class="h-75" src="/img/orders.png" alt="">
+                        Orders
+                    </a>
+                </span>
+                <span class="d-inline-flex gap-3" sec:authorize="hasRole('ADMIN')">
+                    <span>//</span>
+                    <a id="navbar-admin" class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/admin}">
+                        <img class="h-75" src="/img/admin.png" alt="">
+                        Admin
+                    </a>
+                </span>
+            </div>
+            <div style="margin-right: var(--page-margin-right)" class="position-absolute d-flex gap-3 end-0 fs-5">
+                <div class="d-flex gap-2 fs-5 justify-content-center" sec:authorize="isAnonymous()">
+                    <a href="#" class="navbar-item d-flex align-items-center gap-sm-2"
+                       hx:get="@{/auth/login}" hx-target="#authModal"
+                       data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <img style="transform: rotate(225deg)" class="h-75" src="/img/login.png" alt="">
+                        Login
+                    </a>
+                </div>
+                <div sec:authorize="isAuthenticated()" class="dropdown">
+                    <a href="#" role="button" id="userDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
+                       class="navbar-item d-flex align-items-center gap-sm-2">
+                        <img height="24" width="24" src="/img/user.png" alt="">
+                        <span style="text-transform: none !important;" sec:authentication="name"></span>
+                    </a>
+
+                    <form class="dropdown-menu dropdown-menu-end text-end border-0 rounded-0" style="background-color: var(--bs-body-bg) !important;" aria-labelledby="userDropdownMenuLink" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                        <button type="submit" class="dropdown-item navbar-item fw-bolder bg-transparent border-0 d-flex align-items-center gap-sm-1 p-0 justify-content-end">
+                            <img height="24" width="24" src="/img/close.png" alt="">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login/Register Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" id="authModal">
+        </div>
+    </div>
+
+    <script src="/js/shared.js"></script>
+</header>
+<footer th:fragment="footer" class="d-flex flex-column align-items-center text-white fw-bold w-100 mt-5 mb-5 opacity-25">
+    <span class="fs-5">© 2026 MilV Shop. All rights reserved.</span>
+    <span class="fs-6">Designed and developed by Luka Malečić.</span>
+</footer>
+</body>
+</html>
