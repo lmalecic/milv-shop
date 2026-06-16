@@ -23,7 +23,7 @@ public class SecurityConfig {
         var requestMatcher = new RequestHeaderRequestMatcher("HX-Request");
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
-                        .requestMatchers("/error", "/login", "/login/", "/", "/tanks", "/tanks/").permitAll()
+                        .requestMatchers("/error", "/login/**", "/", "/tanks/**", "/cart/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

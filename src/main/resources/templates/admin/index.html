@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
-<head th:insert="~{fragments/layout :: head('')}">
+<head th:replace="~{fragments/layout :: head('')}">
 </head>
-<body>
+<body hx-ext="response-targets" hx-target-error="#selected-view">
     <header th:replace="~{fragments/layout :: header}"></header>
     <main>
         <div class="text-center mb-4">
@@ -12,28 +12,60 @@
         <h4 class="text-center mb-5" style="opacity: 70%">We prepared quick access for your administration needs here.</h4>
 
         <div class="admin-navbar">
-            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/admin/tanks}">
+            <button class="card admin-nav-btn text-center px-4 fs-4"
+                    th:classappend="${@urlUtils.activeClass('/admin/tanks')}"
+                    hx:get="@{/admin/tanks}"
+                    hx-trigger="click"
+                    hx-target="#selected-view">
                 <img src="/img/tank.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Tanks<br/>Department
-            </a>
-            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/admin/nations}">
+            </button>
+            <button class="card admin-nav-btn text-center px-4 fs-4"
+                    hx:get="@{/admin/nations}"
+                    hx-trigger="click"
+                    hx-target="#selected-view">
                 <img src="/img/world.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Nations<br/>Department
-            </a>
-            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/admin/tankroles}">
+            </button>
+            <button class="card admin-nav-btn text-center px-4 fs-4"
+                    hx:get="@{/admin/tankroles}"
+                    hx-trigger="click"
+                    hx-target="#selected-view">
                 <img src="/img/tankrole/heavy_tank.svg" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Tank Roles<br/>Department
-            </a>
-            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/admin/users}">
+            </button>
+            <button class="card admin-nav-btn text-center px-4 fs-4"
+                    hx:get="@{/admin/users}"
+                    hx-trigger="click"
+                    hx-target="#selected-view">
                 <img src="/img/user.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Users<br/>Department
-            </a>
-            <a class="card admin-nav-card text-center px-4 fs-4" th:href="@{/admin/orders}">
+            </button>
+            <button class="card admin-nav-btn text-center px-4 fs-4"
+                    hx:get="@{/admin/orders}"
+                    hx-trigger="click"
+                    hx-target="#selected-view">
                 <img src="/img/orders.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Orders<br/>Department
-            </a>
+            </button>
+        </div>
+
+        <div id="selected-view" class="mt-5">
+            <div th:if="${section != null}"
+                 hx:get="@{/admin/{section}(section=${section})}"
+                 hx-trigger="load"
+                 hx-target="#selected-view">
+            </div>
         </div>
     </main>
     <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <script>
+        let navBtns = $(".admin-nav-btn");
+        let selectedView = $("#selected-view");
+        navBtns.on("click", function () {
+            navBtns.removeClass("active");
+            $(this).addClass("active");
+        })
+    </script>
 </body>
 </html>

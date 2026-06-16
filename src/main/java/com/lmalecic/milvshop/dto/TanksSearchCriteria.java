@@ -3,16 +3,17 @@ package com.lmalecic.milvshop.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class TanksFilterModel {
+public class TanksSearchCriteria {
     private String searchQuery = null;
     private List<Long> nationIds = null;
     private List<Long> tankRoleIds = null;
-    private Double priceMin = null;
-    private Double priceMax = null;
+    private BigDecimal priceMin = null;
+    private BigDecimal priceMax = null;
     private Integer mainGunCalibre = null;
     private Integer armorThicknessMin = null;
     private Integer armorThicknessMax = null;

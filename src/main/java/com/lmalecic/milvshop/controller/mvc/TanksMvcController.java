@@ -1,6 +1,8 @@
 package com.lmalecic.milvshop.controller.mvc;
 
-import com.lmalecic.milvshop.dto.TanksFilterModel;
+import com.lmalecic.milvshop.ViewContext;
+import com.lmalecic.milvshop.dto.TankDto;
+import com.lmalecic.milvshop.dto.TanksSearchCriteria;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.service.NationService;
@@ -10,6 +12,7 @@ import com.lmalecic.milvshop.util.UrlUtils;
 import com.lmalecic.milvshop.viewmodel.TanksViewModel;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,8 +30,9 @@ public class TanksMvcController {
     private final TankRoleService tankRoleService;
 
     @GetMapping({"", "/"})
-    public String getTanksView(Model model, @ModelAttribute TanksFilterModel filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
-        List<Tank> tanksList = filter.hasActiveFilters() ? this.tankService.findAllFiltered(filter) : this.tankService.findAll();
+    public String getTanksView(Model model, @ModelAttribute TanksSearchCriteria filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
+        String requestUri = request.getRequestURI();
+        List<TankDto> tanksList = this.tankService.findAllBySearchCriteria(filter);
 
         model.addAttribute("viewModel", TanksViewModel.builder()
                 .tanks(tanksList)
@@ -37,14 +41,15 @@ public class TanksMvcController {
                 .tankRoles(this.tankRoleService.findAllOrdered())
                 .filter(filter)
                 .build());
+        model.addAttribute("viewContext", ViewContext.VIEW);
+        model.addAttribute("itemClickPath", requestUri);
 
         if (htmxRequest.isHtmxRequest()) {
-            htmxResponse.setReplaceUrl(UrlUtils.fromObject("/tanks", filter).build().encode().toUriString());
+            htmxResponse.setReplaceUrl(UrlUtils.fromObject(requestUri, filter).build().encode().toUriString());
+            return "/fragments/tank/tanks-grid :: content";
         }
 
-        return htmxRequest.isHtmxRequest()
-                ? "/fragments/tank/tanks :: tanksGrid"
-                : "/tank/tanks";
+        return "/tank/tanks";
     }
 
     @GetMapping("/{id}")

@@ -7,6 +7,7 @@ import java.util.Collection;
 
 public final class UrlUtils {
     private UrlUtils() {}
+    
     public static UriComponentsBuilder fromObject(String path, Object obj) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path);
 

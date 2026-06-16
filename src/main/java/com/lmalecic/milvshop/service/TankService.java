@@ -1,8 +1,10 @@
 package com.lmalecic.milvshop.service;
 
-import com.lmalecic.milvshop.dto.TanksFilterModel;
+import com.lmalecic.milvshop.dto.TankDto;
+import com.lmalecic.milvshop.dto.TanksSearchCriteria;
 import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.repository.TankRepository;
+import com.lmalecic.milvshop.specification.TankSpecification;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,90 +19,88 @@ public class TankService {
 
     private final TankRepository tankRepository;
 
-    public List<Tank> findAll() {
-        return tankRepository.findAll();
+    public List<TankDto> findAll() {
+        return this.tankRepository.findAll()
+                .stream().map(this::toDto)
+                .toList();
     }
 
-    public Optional<Tank> findById(Long id) {
-        return tankRepository.findById(id);
+    public Optional<TankDto> findById(Long id) {
+        return this.tankRepository.findById(id)
+                .map(this::toDto);
     }
 
-    public Tank create(Tank tank) {
-        if (tank.getId() != null) {
-            throw new IllegalArgumentException("New tank cannot have an id.");
-        }
-        return tankRepository.save(tank);
+    public TankDto create(TankDto tankDto) {
+        tankDto.setId(null);
+        return this.toDto(this.tankRepository.save(this.toEntity(tankDto)));
     }
 
-    public Tank update(Long id, Tank tank) {
-        if (!tankRepository.existsById(id)) {
+    public TankDto update(Long id, TankDto tankDto) {
+        if (!this.tankRepository.existsById(id)) {
             throw new IllegalArgumentException("Tank with id " + id + " does not exist.");
         }
-        tank.setId(id);
-        return tankRepository.save(tank);
+        tankDto.setId(id);
+        return this.toDto(this.tankRepository.save(this.toEntity(tankDto)));
     }
 
     public void deleteById(Long id) {
-        tankRepository.deleteById(id);
+        this.tankRepository.deleteById(id);
     }
 
-    public List<Tank> findAllFiltered(TanksFilterModel filter) {
-        return this.tankRepository.findAll((root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-
-            if (filter.getSearchQuery() != null && !filter.getSearchQuery().isBlank()) {
-                String q = "%" + filter.getSearchQuery().trim().toLowerCase() + "%";
-                predicates.add(cb.or(
-                        cb.like(cb.lower(root.get("name")), q),
-                        cb.like(cb.lower(root.get("description")), q)
-                ));
-            }
-
-            if (filter.getNationIds() != null && !filter.getNationIds().isEmpty()) {
-                predicates.add(root.get("nation").get("id").in(filter.getNationIds()));
-            }
-
-            if (filter.getTankRoleIds() != null && !filter.getTankRoleIds().isEmpty()) {
-                predicates.add(root.get("tankRole").get("id").in(filter.getTankRoleIds()));
-            }
-
-            if (filter.getPriceMin() != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), filter.getPriceMin()));
-            }
-
-            if (filter.getPriceMax() != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("price"), filter.getPriceMax()));
-            }
-
-            if (filter.getMainGunCalibre() != null) {
-                predicates.add(root.get("mainGunCalibre").equalTo(filter.getMainGunCalibre()));
-            }
-
-            if (filter.getArmorThicknessMin() != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("armorThickness"), filter.getArmorThicknessMin()));
-            }
-
-            if (filter.getArmorThicknessMax() != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("armorThickness"), filter.getArmorThicknessMax()));
-            }
-
-            if (filter.getMaxSpeed() != null) {
-                predicates.add(root.get("maxSpeed").equalTo(filter.getMaxSpeed()));
-            }
-
-            if (filter.getCrewSize() != null) {
-                predicates.add(root.get("crewSize").equalTo(filter.getCrewSize()));
-            }
-
-            return cb.and(predicates.toArray(new Predicate[0]));
-        });
+    public List<TankDto> findAllBySearchCriteria(TanksSearchCriteria filter) {
+        if (!filter.hasActiveFilters()) {
+            return this.findAll();
+        }
+        return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(filter.getSearchQuery())
+                        .and(TankSpecification.containsNation(filter.getNationIds()))
+                        .and(TankSpecification.containsTankRole(filter.getTankRoleIds()))
+                        .and(TankSpecification.priceBetween(filter.getPriceMin(), filter.getPriceMax()))
+                        .and(TankSpecification.mainGunCalibreEquals(filter.getMainGunCalibre()))
+                        .and(TankSpecification.armorThicknessBetween(filter.getArmorThicknessMin(), filter.getArmorThicknessMax()))
+                        .and(TankSpecification.maxSpeedEquals(filter.getMaxSpeed()))
+                        .and(TankSpecification.crewSizeEquals(filter.getCrewSize())))
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 
     public List<Integer> findAllMainGunCalibres() {
         return this.findAll().stream()
-                .map(Tank::getMainGunCalibre)
+                .map(TankDto::getMainGunCalibre)
                 .distinct()
                 .sorted()
                 .toList();
+    }
+
+    private TankDto toDto(Tank tank) {
+        return TankDto.builder()
+                .id(tank.getId())
+                .name(tank.getName())
+                .description(tank.getDescription())
+                .imgPath(tank.getImgPath())
+                .price(tank.getPrice())
+                .mainGunCalibre(tank.getMainGunCalibre())
+                .armorThickness(tank.getArmorThickness())
+                .maxSpeed(tank.getMaxSpeed())
+                .crewSize(tank.getCrewSize())
+                .nation(tank.getNation())
+                .tankRole(tank.getTankRole())
+                .build();
+    }
+
+    private Tank toEntity(TankDto dto) {
+        return Tank.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .imgPath(dto.getImgPath())
+                .price(dto.getPrice())
+                .mainGunCalibre(dto.getMainGunCalibre())
+                .armorThickness(dto.getArmorThickness())
+                .maxSpeed(dto.getMaxSpeed())
+                .crewSize(dto.getCrewSize())
+                .nation(dto.getNation())
+                .tankRole(dto.getTankRole())
+                .build();
     }
 }

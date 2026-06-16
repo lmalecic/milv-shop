@@ -18,6 +18,7 @@
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
     --tank-card-aspect-ratio: 1.8335187661;
+    --active-text-color: var(--bs-yellow);
 }
 
 .btn-primary {
@@ -105,16 +106,22 @@ body {
 .navbar-item {
     text-decoration: none;
     text-transform: uppercase;
-    transition: color var(--ease-out-expo) 0.3s;
+    transform: translateY(0);
+    transition: color var(--ease-out-expo) 0.3s, transform var(--ease-out-expo) 0.3s;
     color: var(--bs-white);
 
     &:hover {
         color: var(--bs-yellow);
+        transform: translateY(-5%);
     }
 }
 
 .navbar-item.active {
-    color: var(--bs-yellow);
+    color: var(--active-text-color);
+}
+
+.navbar-item-separator::after {
+    content: "//";
 }
 
 .flag-sm {
@@ -159,6 +166,8 @@ body {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    transform: translateY(0);
+    transition: transform var(--ease-out-expo) 0.3s;
 
     .card-img {
         width: fit-content !important;
@@ -171,6 +180,8 @@ body {
     }
 
     &:is(a):hover, &:is(button):hover {
+        transform: translateY(-5%);
+
         .card-img {
             transform: scale(110%);
         }
@@ -250,14 +261,19 @@ label {
     text-transform: uppercase;
 }
 
-.admin-nav-card {
+.admin-nav-btn.active {
+    color: var(--active-text-color);
+}
+
+.admin-nav-btn {
     align-items: center !important;
     justify-content: center !important;
     border-radius: 1rem !important;
 
     text-decoration: none;
     text-transform: uppercase;
-    transition: color var(--ease-out-expo) 0.3s;
+    transform: translateY(0);
+    transition: color var(--ease-out-expo) 0.3s, transform var(--ease-out-expo) 0.3s;
     color: var(--bs-white);
 
     height: 100% !important;
@@ -277,6 +293,7 @@ label {
 
     &:hover {
         color: var(--bs-yellow);
+        transform: translateY(-5%);
 
         .card-img {
             transform: scale(1.25);
@@ -292,14 +309,14 @@ label {
 
 /* Bootstrap-style breakpoints */
 @media (max-width: 1399px) {      /* xxl → 4 cols */
-    .admin-nav-card { flex: 1 1 calc(25% - 1rem); min-width: calc(25% - 1rem); }
+    .admin-nav-btn { flex: 1 1 calc(25% - 1rem); min-width: calc(25% - 1rem); }
 }
 @media (max-width: 1199px) {      /* xl  → 3 cols */
-    .admin-nav-card { flex: 1 1 calc(33.333% - 1rem); min-width: calc(33.333% - 1rem); }
+    .admin-nav-btn { flex: 1 1 calc(33.333% - 1rem); min-width: calc(33.333% - 1rem); }
 }
 @media (max-width: 767px) {       /* md  → 2 cols */
-    .admin-nav-card { flex: 1 1 calc(50% - 1rem); min-width: calc(50% - 1rem); }
+    .admin-nav-btn { flex: 1 1 calc(50% - 1rem); min-width: calc(50% - 1rem); }
 }
 @media (max-width: 575px) {       /* sm  → 1 col  */
-    .admin-nav-card { flex: 1 1 100%; min-width: 100%; }
+    .admin-nav-btn { flex: 1 1 100%; min-width: 100%; }
 }

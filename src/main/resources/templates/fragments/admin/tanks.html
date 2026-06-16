@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Admin | Tanks')}"></head>
+<body>
+<div th:fragment="content">
+    <h1 class="fw-bold">Tanks Department</h1>
+    <form method="get" id="filterForm"
+          class="d-flex flex-column gap-3 mb-4"
+          hx:get="@{/admin/tanks}"
+          hx-trigger="load, submit, change delay:300ms, input delay:300ms"
+          hx-target="#tanksResult">
+        <input name="nationIds" id="nationFilters" th:value="${viewModel.filter.nationIds != null ? #strings.arrayJoin(viewModel.filter.nationIds, ',') : ''}" hidden>
+        <input name="tankRoleIds" id="tankRoleFilters" th:value="${viewModel.filter.tankRoleIds != null ? #strings.arrayJoin(viewModel.filter.tankRoleIds, ',') : ''}" hidden>
+        <div class="d-inline-flex flex-row gap-3">
+            <label hidden for="search"></label>
+            <input name="searchQuery" id="search" type="text" class="form-control" placeholder="Search by name or description..." th:value="${viewModel.filter.searchQuery}">
+            <button class="btn btn-primary text-uppercase px-5">Search</button>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col d-flex flex-column gap-4" style="max-width: 300px;">
+            <div class="d-flex flex-row gap-3">
+                <div class="d-flex flex-column gap-1" style="max-width: 40%;">
+                    <label for="crewSize">Crew size</label>
+                    <input name="crewSize" id="crewSize" th:value="${viewModel.filter.crewSize}" form="filterForm" class="form-control" type="text" placeholder="any">
+                </div>
+                <div class="d-flex flex-column flex-fill gap-1">
+                    <label for="mainGunCalibre">Gun calibre</label>
+                    <select class="form-select input" name="mainGunCalibre" id="mainGunCalibre" form="filterForm">
+                        <option value="" th:selected="${viewModel.filter.mainGunCalibre == null}">any</option>
+                        <option th:each="calibre : ${viewModel.mainGunCalibres}"
+                                th:value="${calibre}"
+                                th:text="${calibre + 'mm'}"
+                                th:selected="${viewModel.filter.mainGunCalibre != null and viewModel.filter.mainGunCalibre.equals(calibre)}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+                <label for="priceMin">Price range</label>
+                <div class="d-flex flex-row gap-3">
+                    <div class="d-flex flex-column gap-1">
+                        <div class="input-group">
+                            <span class="input-group-text">€</span>
+                            <input name="priceMin" id="priceMin" form='filterForm' th:value="${viewModel.filter.priceMin}" class="form-control" type="text" placeholder="min">
+                            <span class="input-group-text">-</span>
+                            <label for="priceMax" hidden></label>
+                            <input name="priceMax" id="priceMax" form="filterForm" th:value="${viewModel.filter.priceMax}" class="form-control" type="text" placeholder="max">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+                <label for="armorThicknessMin">Armour thickness</label>
+                <div class="d-flex flex-row gap-3">
+                    <div class="d-flex flex-column gap-1">
+                        <div class="input-group">
+                            <input name="armorThicknessMin" id="armorThicknessMin" th:value="${viewModel.filter.armorThicknessMin}" form="filterForm" class="form-control" type="text" placeholder="min">
+                            <span class="input-group-text">-</span>
+                            <label for="armorThicknessMax" hidden></label>
+                            <input name="armorThicknessMax" id="armorThicknessMax" th:value="${viewModel.filter.armorThicknessMax}" form="filterForm" class="form-control" type="text" placeholder="max">
+                            <span class="input-group-text">mm</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+                <label for="maxSpeed">Max speed</label>
+                <div class="d-flex flex-row gap-3">
+                    <div class="d-flex flex-column gap-1">
+                        <div class="input-group">
+                            <input name="maxSpeed" id="maxSpeed" form="filterForm" th:value="${viewModel.filter.maxSpeed}" class="form-control" type="text" placeholder="any">
+                            <span class="input-group-text">km&sol;h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+                <label>Nations</label>
+                <div class="d-inline-flex align-items-center flex-wrap gap-2">
+                    <button th:each="nation : ${viewModel.nations}"
+                            type="button"
+                            data-filter-type="nations"
+                            th:attr="data-filter-value=${nation.id}"
+                            th:with="isChecked=${viewModel.filter.nationIds != null ? viewModel.filter.nationIds.contains(nation.id) : false}"
+                            th:class="${(isChecked ? 'checked ' : '') + 'filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3'}">
+                        <img class="rounded-1 flag-sm" th:src="${nation.imgPath}" th:alt="${nation.name}">
+                        <span class="fs-6" th:text="${nation.name}"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+                <label>Tank roles</label>
+                <div class="d-inline-flex align-items-center flex-wrap gap-2">
+                    <button th:each="role : ${viewModel.tankRoles}"
+                            type="button"
+                            data-filter-type="tankRoles"
+                            th:attr="data-filter-value=${role.id}"
+                            th:with="isChecked=${viewModel.filter.tankRoleIds != null ? viewModel.filter.tankRoleIds.contains(role.id) : false}"
+                            th:class="${(isChecked ? 'checked ' : '') + 'filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3'}">
+                        <img class="flag-sm" th:src="${role.imgPath}" alt="">
+                        <span class="fs-6" th:text="${role.name}"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tanksResult" class="col"></div>
+    </div>
+</div>
+</body>
+</html>

@@ -20,6 +20,7 @@
 
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,37 +37,47 @@
         </a>
         <div class="mt-2 d-flex gap-3 fs-5 justify-content-center">
             <div class="d-flex gap-3 justify-content-center navbar-item-container">
-                <a class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/}">
+                <a class="navbar-item d-flex align-items-center gap-sm-2"
+                   th:classappend="${@urlUtils.activeClass('/')}"
+                   th:href="@{/}">
                     <img class="h-75" src="/img/home.png" alt="">
                     Home
                 </a>
-                <span>//</span>
-                <a class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/tanks}">
+                <span class="navbar-item-separator"></span>
+                <a class="navbar-item d-flex align-items-center gap-sm-2"
+                   th:classappend="${@urlUtils.activeClass('/tanks')}"
+                   th:href="@{/tanks}">
                     <img class="h-75" src="/img/tank.png" alt="">
                     Tanks
                 </a>
-                <span>//</span>
-                <a id="navbar-cart" class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/cart}">
+                <span class="navbar-item-separator"></span>
+                <a id="navbar-cart" class="navbar-item d-flex align-items-center gap-sm-2"
+                   th:classappend="${@urlUtils.activeClass('/cart')}"
+                   th:href="@{/cart}">
                     <img class="h-75" src="/img/cart.png" alt="">
                     Cart
                 </a>
                 <span class="d-inline-flex gap-3" sec:authorize="isAuthenticated()">
-                    <span>//</span>
-                    <a id="navbar-orders" class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/orders}">
+                    <span class="navbar-item-separator"></span>
+                    <a id="navbar-orders" class="navbar-item d-flex align-items-center gap-sm-2"
+                       th:classappend="${@urlUtils.activeClass('/orders')}"
+                       th:href="@{/orders}">
                         <img class="h-75" src="/img/orders.png" alt="">
                         Orders
                     </a>
                 </span>
                 <span class="d-inline-flex gap-3" sec:authorize="hasRole('ADMIN')">
-                    <span>//</span>
-                    <a id="navbar-admin" class="navbar-item d-flex align-items-center gap-sm-2" th:href="@{/admin}">
+                    <span class="navbar-item-separator"></span>
+                    <a id="navbar-admin" class="navbar-item d-flex align-items-center gap-sm-2"
+                       th:classappend="${@urlUtils.activeClass('/admin')}"
+                       th:href="@{/admin}">
                         <img class="h-75" src="/img/admin.png" alt="">
                         Admin
                     </a>
                 </span>
             </div>
             <div style="margin-right: var(--page-margin-right)" class="position-absolute d-flex gap-3 end-0 fs-5">
-                <div class="d-flex gap-2 fs-5 justify-content-center" sec:authorize="isAnonymous()">
+                <div sec:authorize="isAnonymous()" class="d-flex gap-2 fs-5 justify-content-center">
                     <a href="#" class="navbar-item d-flex align-items-center gap-sm-2"
                        hx:get="@{/auth/login}" hx-target="#authModal"
                        data-bs-toggle="modal" data-bs-target="#loginModal">
@@ -75,7 +86,7 @@
                     </a>
                 </div>
                 <div sec:authorize="isAuthenticated()" class="dropdown">
-                    <a href="#" role="button" id="userDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
+                    <a href="#" id="userDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
                        class="navbar-item d-flex align-items-center gap-sm-2">
                         <img height="24" width="24" src="/img/user.png" alt="">
                         <span style="text-transform: none !important;" sec:authentication="name"></span>
@@ -93,12 +104,10 @@
     </nav>
 
     <!-- Login/Register Modal -->
-    <dialog class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
+    <dialog class="modal fade" id="loginModal" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" id="authModal">
         </div>
     </dialog>
-
-    <script src="/js/shared.js"></script>
 </header>
 <footer th:fragment="footer" class="d-flex flex-column align-items-center text-white fw-bold w-100 mt-5 mb-5 opacity-25">
     <span class="fs-5">© 2026 MilV Shop. All rights reserved.</span>

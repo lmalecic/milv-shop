@@ -1,5 +1,6 @@
 package com.lmalecic.milvshop.controller.mvc;
 
+import com.lmalecic.milvshop.dto.TankDto;
 import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.service.NationService;
 import com.lmalecic.milvshop.service.TankRoleService;
@@ -22,7 +23,7 @@ public class TanksAdminMvcController {
     @GetMapping("/create")
     public String getCreateView(Model model) {
         model.addAttribute("viewModel", TankCreateViewModel.builder()
-                .tank(new Tank())
+                .tank(new TankDto())
                 .nations(this.nationService.findAllOrdered())
                 .tankRoles(this.tankRoleService.findAllOrdered())
                 .build());
@@ -30,8 +31,8 @@ public class TanksAdminMvcController {
     }
 
     @PostMapping("/create")
-    public String createTank(@ModelAttribute Tank tank) {
-        Tank newTank = this.tankService.create(tank);
+    public String createTank(@ModelAttribute TankDto tankDto) {
+        TankDto newTank = this.tankService.create(tankDto);
         return "redirect:/tanks/" + newTank.getId();
     }
 
@@ -58,7 +59,7 @@ public class TanksAdminMvcController {
     }
 
     @PutMapping("/edit/{id}")
-    public String editTank(@PathVariable Long id, @ModelAttribute Tank tank) {
+    public String editTank(@PathVariable Long id, @ModelAttribute TankDto tank) {
         var updated = this.tankService.update(id, tank);
         return "redirect:/tanks/" + updated.getId();
     }
