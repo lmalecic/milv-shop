@@ -4,7 +4,6 @@ import com.lmalecic.milvshop.ViewContext;
 import com.lmalecic.milvshop.dto.TankDto;
 import com.lmalecic.milvshop.dto.TanksSearchCriteria;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
-import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.service.NationService;
 import com.lmalecic.milvshop.service.TankRoleService;
 import com.lmalecic.milvshop.service.TankService;

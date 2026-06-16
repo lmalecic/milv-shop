@@ -5,11 +5,9 @@ import com.lmalecic.milvshop.dto.TanksSearchCriteria;
 import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.repository.TankRepository;
 import com.lmalecic.milvshop.specification.TankSpecification;
-import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

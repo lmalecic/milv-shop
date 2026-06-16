@@ -42,25 +42,18 @@ public class AuthMvcController {
     }
 
     @HxRequest
-    @GetMapping("/register")
-    public String getRegisterForm(Model model) {
-        model.addAttribute("userDto", new UserDto());
-        return "fragments/auth/login-form";
-    }
-
-    @HxRequest
     @PostMapping("/register")
     public String processRegister(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             return "fragments/auth/login-form";
         }
 
-        if (userService.existsByUsername(userDto.getUsername())) {
+        if (this.userService.existsByUsername(userDto.getUsername())) {
             bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
             return "fragments/auth/login-form";
         }
 
-        userService.register(userDto);
+        this.userService.register(userDto);
 
         htmxResponse.addTrigger("login");
         return "fragments/auth/login-form";
