@@ -5,7 +5,6 @@ import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.repository.TankRepository;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,9 +33,10 @@ public class TankService {
     }
 
     public Tank update(Long id, Tank tank) {
-        if (!tankRepository.existsById(tank.getId())) {
-            throw new IllegalArgumentException("Tank with id " + tank.getId() + " does not exist.");
+        if (!tankRepository.existsById(id)) {
+            throw new IllegalArgumentException("Tank with id " + id + " does not exist.");
         }
+        tank.setId(id);
         return tankRepository.save(tank);
     }
 

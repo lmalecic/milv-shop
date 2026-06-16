@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 public final class UrlUtils {
+    private UrlUtils() {}
     public static UriComponentsBuilder fromObject(String path, Object obj) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path);
 
@@ -18,22 +19,22 @@ public final class UrlUtils {
 
                 String name = field.getName();
 
-                if (value instanceof String s) {
-                    if (s.isEmpty()) continue;
-                    builder.queryParam(name, s);
-                }
-                else if (value instanceof Collection<?> col) {
-                    for (Object item : col) {
-                        if (item != null) {
-                            builder.queryParam(name, item);
+                switch (value) {
+                    case String s -> {
+                        if (s.isEmpty()) continue;
+                        builder.queryParam(name, s);
+                    }
+                    case Collection<?> col -> {
+                        for (Object item : col) {
+                            if (item != null) {
+                                builder.queryParam(name, item);
+                            }
                         }
                     }
-                }
-                else {
-                    builder.queryParam(name, value);
+                    default -> builder.queryParam(name, value);
                 }
 
-            } catch (IllegalAccessException ignored) {
+            } catch (IllegalAccessException _) {
                 System.out.println("Failed to access field: " + field.getName());
             }
         }

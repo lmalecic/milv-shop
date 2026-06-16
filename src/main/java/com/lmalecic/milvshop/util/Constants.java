@@ -1,5 +1,6 @@
 package com.lmalecic.milvshop.util;
 
 public class Constants {
-    public static final String AppTitle = "MilV Shop";
+    private Constants() {}
+    public static final String APP_TITLE = "MilV Shop";
 }

@@ -1,12 +1,8 @@
 package com.lmalecic.milvshop.dto;
 
-import jakarta.annotation.Nullable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.lang.reflect.Field;
-import java.sql.SQLOutput;
-import java.util.Collection;
 import java.util.List;
 
 @Data

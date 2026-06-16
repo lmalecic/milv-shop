@@ -1,6 +1,5 @@
 package com.lmalecic.milvshop.service;
 
-import com.lmalecic.milvshop.model.Nation;
 import com.lmalecic.milvshop.model.TankRole;
 import com.lmalecic.milvshop.repository.TankRoleRepository;
 import lombok.RequiredArgsConstructor;

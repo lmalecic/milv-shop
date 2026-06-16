@@ -86,11 +86,11 @@
         });
 
         function validateQuantity() {
-            let value = parseInt(quantityInput.val());
-            const min = parseInt(quantityInput.attr('min'));
-            const max = parseInt(quantityInput.attr('max'));
+            let value = Number.parseInt(quantityInput.val());
+            const min = Number.parseInt(quantityInput.attr('min'));
+            const max = Number.parseInt(quantityInput.attr('max'));
 
-            if (isNaN(value) || value < min) {
+            if (Number.isNaN(value) || value < min) {
                 quantityInput.val(min);
                 value = min;
             } else if (value > max) {

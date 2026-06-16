@@ -43,7 +43,7 @@ public class DataInitializer implements CommandLineRunner {
         if (!userRepository.existsByUsername("admin")) {
             userRepository.save(User.builder()
                     .username("admin")
-                    .pwdHash(passwordEncoder.encode("password"))
+                    .pwdHash(passwordEncoder.encode("password")) // TODO: Read this from application.properties
                     .roles(List.of(userRoleRepository.findByName("ROLE_ADMIN")
                                             .orElse(UserRole.builder()
                                                             .name("ROLE_ADMIN")

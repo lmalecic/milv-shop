@@ -4,8 +4,6 @@ import com.lmalecic.milvshop.dto.UserDto;
 import com.lmalecic.milvshop.model.User;
 import com.lmalecic.milvshop.repository.UserRepository;
 import com.lmalecic.milvshop.repository.UserRoleRepository;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

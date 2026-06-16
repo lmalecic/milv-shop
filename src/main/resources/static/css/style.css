@@ -262,6 +262,11 @@ label {
 
     height: 100% !important;
 
+    flex: 1 1 calc(20% - 1rem); /* 5 per row at full HD */
+    min-height: 9em;
+    min-width: calc(20% - 1rem);
+    box-sizing: border-box;
+
     .card-img {
         aspect-ratio: 1;
         max-width: 32px;
@@ -283,13 +288,6 @@ label {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-}
-
-.admin-nav-card {
-    flex: 1 1 calc(20% - 1rem); /* 5 per row at full HD */
-    min-height: 9em;
-    min-width: calc(20% - 1rem);
-    box-sizing: border-box;
 }
 
 /* Bootstrap-style breakpoints */

@@ -3,7 +3,7 @@
       xmlns:th="https://www.thymeleaf.org">
 <head th:fragment="head(title)"
       th:with="
-        appTitle=${T(com.lmalecic.milvshop.util.Constants).AppTitle},
+        appTitle=${T(com.lmalecic.milvshop.util.Constants).APP_TITLE},
         pageTitle=${title != null ? title.trim() : ''}
       ">
     <title th:text="${#strings.isEmpty(pageTitle) ? '🪖 ' + appTitle : '🪖 ' + pageTitle + ' | ' + appTitle}">
@@ -93,10 +93,10 @@
     </nav>
 
     <!-- Login/Register Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document" id="authModal">
+    <dialog class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" id="authModal">
         </div>
-    </div>
+    </dialog>
 
     <script src="/js/shared.js"></script>
 </header>

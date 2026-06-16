@@ -1,9 +1,7 @@
 package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.model.Nation;
-import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.repository.NationRepository;
-import com.lmalecic.milvshop.repository.TankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

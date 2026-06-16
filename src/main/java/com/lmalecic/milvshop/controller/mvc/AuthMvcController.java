@@ -1,21 +1,15 @@
 package com.lmalecic.milvshop.controller.mvc;
 
 import com.lmalecic.milvshop.dto.UserDto;
-import com.lmalecic.milvshop.model.User;
-import com.lmalecic.milvshop.repository.UserRepository;
-import com.lmalecic.milvshop.repository.UserRoleRepository;
 import com.lmalecic.milvshop.service.UserService;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/auth")

@@ -4,7 +4,6 @@ import io.github.wimdeblauwe.htmx.spring.boot.security.HxRefreshHeaderAuthentica
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password4j.Argon2Password4jPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +18,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) {
         var entryPoint = new HxRefreshHeaderAuthenticationEntryPoint();
         var requestMatcher = new RequestHeaderRequestMatcher("HX-Request");
         http.authorizeHttpRequests(auth -> auth

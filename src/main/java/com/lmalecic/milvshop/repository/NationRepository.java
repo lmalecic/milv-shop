@@ -1,7 +1,6 @@
 package com.lmalecic.milvshop.repository;
 
 import com.lmalecic.milvshop.model.Nation;
-import com.lmalecic.milvshop.model.Tank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
