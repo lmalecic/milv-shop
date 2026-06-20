@@ -13,7 +13,7 @@
 
         <div class="admin-navbar">
             <button class="card admin-nav-btn text-center px-4 fs-4"
-                    th:classappend="${@urlUtils.activeClass('/admin/tanks')}"
+                    th:classappend="${@viewUtils.activeClass('/admin/tanks')}"
                     hx:get="@{/admin/tanks}"
                     hx-trigger="click"
                     hx-target="#selected-view">
@@ -51,21 +51,13 @@
         </div>
 
         <div id="selected-view" class="mt-5">
-            <div th:if="${section != null}"
-                 hx:get="@{/admin/{section}(section=${section})}"
-                 hx-trigger="load"
+            <div th:if="${sectionUrl != null}"
+                 hx:get="${sectionUrl}"
+                 hx-trigger="load queue:first"
                  hx-target="#selected-view">
             </div>
         </div>
     </main>
     <footer th:replace="~{fragments/layout :: footer}"></footer>
-    <script>
-        let navBtns = $(".admin-nav-btn");
-        let selectedView = $("#selected-view");
-        navBtns.on("click", function () {
-            navBtns.removeClass("active");
-            $(this).addClass("active");
-        })
-    </script>
 </body>
 </html>

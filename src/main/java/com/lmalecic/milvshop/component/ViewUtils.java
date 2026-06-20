@@ -1,4 +1,4 @@
-package com.lmalecic.milvshop.util;
+package com.lmalecic.milvshop.component;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @RequiredArgsConstructor
-@Component("urlUtils")
-public class ViewUrlUtils {
+@Component("viewUtils")
+public class ViewUtils {
 
     private final HttpServletRequest request;
 
@@ -22,5 +22,9 @@ public class ViewUrlUtils {
 
     public String activeClass(String... paths) {
         return this.isActive(paths) ? "active" : "";
+    }
+
+    public <T> boolean isOptionSelected(T option, T selected) {
+        return option.equals(selected);
     }
 }

@@ -75,46 +75,48 @@
     <footer th:replace="~{fragments/layout :: footer}"></footer>
 
     <script>
-        const quantityInput = $("#quantity");
-        const decrementBtn = $("#decrementQuantity");
-        const incrementBtn = $("#incrementQuantity");
+        (() => {
+            const quantityInput = $("#quantity");
+            const decrementBtn = $("#decrementQuantity");
+            const incrementBtn = $("#incrementQuantity");
 
-        quantityInput.on('keydown', (e) => {
-            if (e.key.length === 1 && /\D/.test(e.key)) {
-                e.preventDefault();
+            quantityInput.on('keydown', (e) => {
+                if (e.key.length === 1 && /\D/.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+
+            function validateQuantity() {
+                let value = Number.parseInt(quantityInput.val());
+                const min = Number.parseInt(quantityInput.attr('min'));
+                const max = Number.parseInt(quantityInput.attr('max'));
+
+                if (Number.isNaN(value) || value < min) {
+                    quantityInput.val(min);
+                    value = min;
+                } else if (value > max) {
+                    quantityInput.val(max);
+                    value = max;
+                }
+
+                decrementBtn.prop("disabled", value <= min);
+                incrementBtn.prop("disabled", value >= max);
             }
-        });
 
-        function validateQuantity() {
-            let value = Number.parseInt(quantityInput.val());
-            const min = Number.parseInt(quantityInput.attr('min'));
-            const max = Number.parseInt(quantityInput.attr('max'));
+            quantityInput.on('focusout', (e) => {
+                validateQuantity();
+            });
 
-            if (Number.isNaN(value) || value < min) {
-                quantityInput.val(min);
-                value = min;
-            } else if (value > max) {
-                quantityInput.val(max);
-                value = max;
-            }
+            decrementBtn.on("click", () => {
+                quantityInput.get(0).stepDown();
+                validateQuantity();
+            });
 
-            decrementBtn.prop("disabled", value <= min);
-            incrementBtn.prop("disabled", value >= max);
-        }
-
-        quantityInput.on('focusout', (e) => {
-            validateQuantity();
-        });
-
-        decrementBtn.on("click", () => {
-            quantityInput.get(0).stepDown();
-            validateQuantity();
-        });
-
-        incrementBtn.on("click", () => {
-            quantityInput.get(0).stepUp();
-            validateQuantity();
-        });
+            incrementBtn.on("click", () => {
+                quantityInput.get(0).stepUp();
+                validateQuantity();
+            });
+        })();
     </script>
 </body>
 </html>

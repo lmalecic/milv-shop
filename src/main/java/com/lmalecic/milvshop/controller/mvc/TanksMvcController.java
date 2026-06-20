@@ -4,13 +4,17 @@ import com.lmalecic.milvshop.ViewContext;
 import com.lmalecic.milvshop.dto.TankDto;
 import com.lmalecic.milvshop.dto.TanksSearchCriteria;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
+import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.service.NationService;
 import com.lmalecic.milvshop.service.TankRoleService;
 import com.lmalecic.milvshop.service.TankService;
 import com.lmalecic.milvshop.util.UrlUtils;
+import com.lmalecic.milvshop.viewmodel.TankViewModel;
 import com.lmalecic.milvshop.viewmodel.TanksViewModel;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxReplaceUrl;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -44,20 +48,24 @@ public class TanksMvcController {
         model.addAttribute("itemClickPath", requestUri);
 
         if (htmxRequest.isHtmxRequest()) {
-            htmxResponse.setReplaceUrl(UrlUtils.fromObject(requestUri, filter).build().encode().toUriString());
-            return "/fragments/tank/tanks-grid :: content";
+            htmxResponse.setReplaceUrl(UrlUtils.urlWithParams(requestUri, filter).toUriString());
+            return "/fragments/tank/tanks-grid";
         }
 
         return "/tank/tanks";
     }
 
+    @HxRequest
     @GetMapping("/{id}")
-    public String getTankView(Model model, @PathVariable Long id) {
-        var tank = this.tankService.findById(id);
-        if (tank.isEmpty()) {
-            throw new ResourceNotFoundException("Tank with id " + id + " not found.");
-        }
-        model.addAttribute("tank", tank.get());
-        return "/tank/tank";
+    public String getTankForm(Model model, @PathVariable Long id) {
+        TankDto tank = this.tankService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank with id " + id + " not found."));
+
+        model.addAttribute("viewModel", TankViewModel.builder()
+                .tank(tank)
+                .build());
+        model.addAttribute("viewContext", ViewContext.VIEW);
+
+        return "fragments/tank/tank-form";
     }
 }

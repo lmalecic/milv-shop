@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/layout :: head('Tanks')}"></head>
-<body th:with="
-        viewContext=${T(com.lmalecic.milvshop.ViewContext).VIEW},
-        searchFormPath=@{/tanks}">
+<body th:with="searchFormPath=@{/tanks}">
     <header th:replace="~{fragments/layout :: header}"></header>
     <main>
         <h1 class="fw-bold">Tanks</h1>
-        <form th:replace="~{fragments/tank/search-form :: form(${viewContext}, ${searchFormPath})}"></form>
+        <form th:replace="~{fragments/tank/search-form :: form(${searchFormPath})}"></form>
     </main>
     <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

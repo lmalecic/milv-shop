@@ -9,16 +9,17 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class TanksSearchCriteria {
-    private String searchQuery = null;
-    private List<Long> nationIds = null;
-    private List<Long> tankRoleIds = null;
-    private BigDecimal priceMin = null;
-    private BigDecimal priceMax = null;
-    private Integer mainGunCalibre = null;
-    private Integer armorThicknessMin = null;
-    private Integer armorThicknessMax = null;
-    private Integer maxSpeed = null;
-    private Integer crewSize = null;
+    private String searchQuery;
+    private List<Long> nationIds;
+    private List<Long> tankRoleIds;
+    private BigDecimal priceMin;
+    private BigDecimal priceMax;
+    private Integer mainGunCalibre;
+    private Integer armorThicknessMin;
+    private Integer armorThicknessMax;
+    private Integer maxSpeed;
+    private Integer crewSize;
+    private Boolean showDeleted;
 
     public boolean hasActiveFilters() {
         return (this.searchQuery != null && !this.searchQuery.isEmpty()) ||
@@ -28,6 +29,7 @@ public class TanksSearchCriteria {
                 (this.mainGunCalibre != null) ||
                 (this.armorThicknessMin != null) || (this.armorThicknessMax != null) ||
                 (this.maxSpeed != null) ||
-                (this.crewSize != null);
+                (this.crewSize != null) ||
+                (this.showDeleted != null);
     }
 }

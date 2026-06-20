@@ -77,6 +77,10 @@ html, body {
 input, .form-select, .form-control {
     background-color: rgb(13 22 13) !important;
 
+    &:disabled {
+        color: rgba(255,255,255, 30%) !important;
+    }
+
     &:focus {
         border: 2px rgba(255,255,255,5%) solid !important;
     }
@@ -167,7 +171,7 @@ body {
     align-items: center !important;
     justify-content: center !important;
     transform: translateY(0);
-    transition: transform var(--ease-out-expo) 0.3s;
+    transition: transform var(--ease-out-expo) 0.3s, color var(--ease-out-expo) 0.3s, background-color var(--ease-out-expo) 0.3s !important;
 
     .card-img {
         width: fit-content !important;
@@ -179,11 +183,21 @@ body {
         max-height: 100%;
     }
 
-    &:is(a):hover, &:is(button):hover {
-        transform: translateY(-5%);
+    &:is(a), &:is(button) {
+        &:active {
+            transform: translateY(0);
 
-        .card-img {
-            transform: scale(110%);
+            .card-img {
+                transform: scale(100%);
+            }
+        }
+
+        &:hover {
+            transform: translateY(-5%);
+
+            .card-img {
+                transform: scale(110%) !important;
+            }
         }
     }
 }
@@ -319,4 +333,27 @@ label {
 }
 @media (max-width: 575px) {       /* sm  → 1 col  */
     .admin-nav-btn { flex: 1 1 100%; min-width: 100%; }
+}
+
+.btn-danger {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #dc3545;
+    --bs-btn-border-color: rgba(0,0,0,20%) !important;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #9a2632;
+    --bs-btn-hover-border-color: rgba(0,0,0,10%) !important;
+    --bs-btn-focus-shadow-rgb: 225,83,97;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #ff3c4d;
+    --bs-btn-active-border-color: rgba(0,0,0,10%) !important;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #cd4b5a;
+    --bs-btn-disabled-border-color: rgba(0,0,0,5%) !important;
+}
+
+.red-header-popover {
+    font-family: var(--bs-body-font-family), serif;
+    --bs-popover-body-padding-x: .75rem;
+    --bs-popover-body-padding-y: .5rem;
 }

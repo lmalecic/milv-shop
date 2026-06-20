@@ -45,4 +45,6 @@ public class TankDto {
     private Nation nation;
     @NotNull
     private TankRole tankRole;
+    @Builder.Default
+    private boolean deleted = false;
 }

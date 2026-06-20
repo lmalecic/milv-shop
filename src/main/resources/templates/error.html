@@ -5,7 +5,7 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 
 <main th:fragment="content" class="d-flex flex-column gap-1 align-items-center">
-    <h1 class="fw-bold" th:text="${status}"></h1>
+    <h1 class="fw-bold" th:text="${status}">Header</h1>
     <p class="text-secondary" th:text="${error}"></p>
     <p class="text-secondary" th:text="${message}" th:if="${message != error}"></p>
 </main>

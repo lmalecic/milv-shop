@@ -113,6 +113,11 @@
             <artifactId>password4j</artifactId>
             <version>1.8.2</version>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-processor -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-processor</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -126,7 +131,16 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                         </path>
+                        <path>
+                            <groupId>org.hibernate.orm</groupId>
+                            <artifactId>hibernate-processor</artifactId>
+                        </path>
                     </annotationProcessorPaths>
+                    <!-- This setting is required for the hibernate-processor dependencies to
+                         also be managed by <dependencyManagement> rules, if any.
+                         More information is available in Maven compiler plugin documentation:
+                         https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#annotationProcessorPathsUseDepMgmt -->
+                    <annotationProcessorPathsUseDepMgmt>true</annotationProcessorPathsUseDepMgmt>
                 </configuration>
             </plugin>
             <plugin>

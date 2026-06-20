@@ -13,21 +13,27 @@ public final class UrlUtils {
 
     private UrlUtils() {}
 
-    public static UriComponentsBuilder fromObject(String path, Object obj) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path);
+    public static UriComponentsBuilder urlWithParams(String path, Object params) {
+        return paramsFromObject(params).path(path);
+    }
 
-        for (Field field : obj.getClass().getDeclaredFields()) {
-            if (field.trySetAccessible()) {
-                tryFieldToQueryParam(obj, field, builder);
+    public static UriComponentsBuilder paramsFromObject(Object obj) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+        if (obj != null) {
+            for (Field field : obj.getClass().getDeclaredFields()) {
+                if (field.trySetAccessible()) {
+                    tryFieldToQueryParams(obj, field, builder);
+                }
             }
         }
 
         return builder;
     }
 
-    private static void tryFieldToQueryParam(Object obj, Field field, UriComponentsBuilder builder) {
+    private static void tryFieldToQueryParams(Object params, Field field, UriComponentsBuilder builder) {
         try {
-            Object value = field.get(obj);
+            Object value = field.get(params);
 
             if (value == null || value instanceof String valueStr && valueStr.isEmpty()) return;
 

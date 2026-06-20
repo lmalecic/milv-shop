@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<form class="modal-content from-group">
+    <div class="modal-body row">
+        <div class="col d-inline-flex flex-column gap-2" style="max-width: 30%" th:if="${viewModel.tank.imgPath != null}">
+            <div class="tank-card card p-2 border-2 rounded-4">
+                <img class="card-img" th:src="${viewModel.tank.imgPath}" alt="Tank image">
+            </div>
+            <div class="d-inline-flex flex-row flex-wrap justify-content-center gap-2">
+                <a th:href="@{/tanks(crewSize=${viewModel.tank.crewSize})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" src="/img/stats/crewSize.png" alt="">
+                    <span class="fs-6" th:text="${viewModel.tank.crewSize}"></span>
+                </a>
+                <a th:href="@{/tanks(mainGunCalibre=${viewModel.tank.mainGunCalibre})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" src="/img/stats/mainGunCalibre.png" alt="">
+                    <span class="fs-6" th:text="${viewModel.tank.mainGunCalibre} + 'mm'"></span>
+                </a>
+                <a th:href="@{/tanks(armorThicknessMin=${viewModel.tank.armorThickness}, armorThicknessMax=${viewModel.tank.armorThickness})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" src="/img/stats/armorThickness.png" alt="">
+                    <span class="fs-6" th:text="${viewModel.tank.armorThickness + 'mm'}"></span>
+                </a>
+                <a th:href="@{/tanks(maxSpeed=${viewModel.tank.maxSpeed})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" src="/img/stats/maxSpeed.png" alt="">
+                    <span class="fs-6" th:text="${viewModel.tank.maxSpeed + 'km/h'}"></span>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="d-inline-flex flex-row mb-2 gap-2 w-100">
+                <a type="button"
+                   th:href="@{/tanks(nationIds=${viewModel.tank.nation.id})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" th:src="${viewModel.tank.nation.imgPath}" alt="">
+                    <span class="fs-6" th:text="${viewModel.tank.nation.name}"></span>
+                </a>
+                <a type="button"
+                   th:href="@{/tanks(tankRoleIds=${viewModel.tank.tankRole.id})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3 text-decoration-none">
+                    <img class="rounded-1 flag-sm" th:src="${viewModel.tank.tankRole.imgPath}" alt="">
+                    <span class="fs-6" th:text="${viewModel.tank.tankRole.name}"></span>
+                </a>
+                <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
+            </div>
+            <h1 class="modal-title me-auto" th:text="${viewModel.tank.name}">Tank name</h1>
+
+            <p th:text="${viewModel.tank.description}" class="text-secondary" style="text-align: justify"></p>
+        </div>
+    </div>
+
+    <div class="modal-footer pt-0">
+        <div class="d-flex flex-column align-items-end gap-2">
+            <div id="price" th:text="${@formatUtils.getPriceString(viewModel.tank.price.floatValue())}" th:data-price="${viewModel.tank.price.floatValue()}" class="text-end fs-4 text-secondary fw-bold"></div>
+            <div class="d-inline-flex gap-3">
+                <div class="d-inline-flex gap-3">
+                    <label for="quantity" class="align-self-center">Quantity</label>
+                    <div class="input-group">
+                        <button type="button" id="decrementQuantity" class="input-group-text fw-bolder">&minus;</button>
+                        <input id="quantity" name="quantity" class="form-control text-center" style="width: fit-content !important;" type="number" value="1" min="1" max="99">
+                        <button type="button" id="incrementQuantity" class="input-group-text fw-bolder">&plus;</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary text-uppercase d-inline-flex gap-1">
+                    <i class="bi bi-cart-plus-fill"></i>Add to cart
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script th:inline="javascript" type="text/javascript">
+    (() => {
+        const quantityInput = $("#quantity");
+        const decrementBtn = $("#decrementQuantity");
+        const incrementBtn = $("#incrementQuantity");
+        const price = $("#price");
+
+        quantityInput.on('keydown', (e) => {
+            if (e.key.length === 1 && /\D/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        function validateQuantity() {
+            let value = Number.parseInt(quantityInput.val());
+            const min = Number.parseInt(quantityInput.attr('min'));
+            const max = Number.parseInt(quantityInput.attr('max'));
+
+            if (Number.isNaN(value) || value < min) {
+                quantityInput.val(min);
+                value = min;
+            } else if (value > max) {
+                quantityInput.val(max);
+                value = max;
+            }
+
+            decrementBtn.prop("disabled", value <= min);
+            incrementBtn.prop("disabled", value >= max);
+
+            $.ajax("/api/format/price", {
+                data: {
+                    value: Number.parseFloat(price.data("price")),
+                    amount: value,
+                    locale: "hr-HR"
+                },
+            }).done(data => {
+                price.text(data);
+            })
+        }
+
+        quantityInput.on('focusout', validateQuantity);
+        quantityInput.on('load', validateQuantity);
+        price.on('load', validateQuantity);
+
+        decrementBtn.on("click", () => {
+            quantityInput.get(0).stepDown();
+            validateQuantity();
+        });
+
+        incrementBtn.on("click", () => {
+            quantityInput.get(0).stepUp();
+            validateQuantity();
+        });
+    })();
+</script>
+
+</html>

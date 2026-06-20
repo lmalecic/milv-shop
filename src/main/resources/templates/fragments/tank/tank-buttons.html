@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<button th:fragment="create" class="tank-card btn btn-secondary w-100 h-100 d-flex flex-column border-2 rounded-4 p-2 text-decoration-none fw-bold"
+        hx:get="@{/admin/tanks/create}"
+        hx-target="#tankModalContent"
+        hx-trigger="click"
+        data-bs-toggle="modal"
+        data-bs-target="#tankModal">
+    <span class="fs-1 card-img">&plus;</span>
+    <span class="fs-5 text-uppercase card-img">&lsqb;New Tank&rsqb;</span>
+</button>
+
+<a th:fragment="item(tank)" href="#"
+   hx:get="@{{itemClickPath}/{id}(itemClickPath=${itemClickPath}, id=${tank.id})}"
+   hx-target="#tankModalContent"
+   hx-trigger="click"
+   data-bs-toggle="modal"
+   data-bs-target="#tankModal"
+   class="tank-card card border-2 rounded-4 p-2 text-decoration-none">
+    <img th:src="${tank.imgPath}" class="card-img text-center" alt="[NO IMAGE]">
+    <div class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
+        <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row">
+            <img th:src="${tank.nation.imgPath}" alt="" class="rounded-1 icon">
+            <span th:text="${tank.name}" class="fw-semibold"></span>
+            <img th:src="${tank.tankRole.imgPath}" alt="" class="icon">
+        </div>
+    </div>
+    <div class="tank-card-price position-absolute rounded-3 fs-6 fw-semibold" th:text="${@formatUtils.getPriceString(tank.getPrice())}"></div>
+</a>
+
+</html>

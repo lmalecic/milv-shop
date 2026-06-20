@@ -1,10 +1,8 @@
 package com.lmalecic.milvshop.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
@@ -33,6 +31,10 @@ public final class Tank {
     private Integer maxSpeed;
     @Column(nullable = false)
     private Integer crewSize;
+    @Builder.Default
+    @ColumnDefault("false")
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "nation_id")

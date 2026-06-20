@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<div th:fragment="content">
-    <div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 row-cols-1 g-3" th:if="${not #lists.isEmpty(viewModel.tanks)}">
-        <div class="px-2" th:each="tank : ${viewModel.tanks}">
-            <a class="tank-card card border-2 rounded-4 p-2 text-decoration-none" th:href="@{{itemClickPath}/{id}(itemClickPath=${itemClickPath}, id=${tank.id})}">
-                <img th:src="${tank.imgPath}" class="card-img text-center" alt="[NO IMAGE]">
-                <div class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
-                    <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row">
-                        <img th:src="${tank.nation.imgPath}" alt="" class="rounded-1 icon">
-                        <span th:text="${tank.name}" class="fw-semibold"></span>
-                        <img th:src="${tank.tankRole.imgPath}" alt="" class="icon">
-                    </div>
-                </div>
-                <div class="tank-card-price position-absolute rounded-3 fs-6 fw-semibold" th:text="${@formatUtils.getPriceString(tank.getPrice())}"></div>
-            </a>
-        </div>
+<!--No results-->
+<div class="d-flex flex-column align-items-center w-100 h-100 gap-3" th:if="${#lists.isEmpty(viewModel.tanks)}">
+    <p class="text-center fs-4 mt-5">No matching tanks found :(</p>
+    <div th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).ADMIN.name()}"
+         class="px-2"
+         style="min-width: 25% !important; max-width: 100%"
+         th:insert="~{fragments/tank/tank-buttons :: create}">
     </div>
-    <p class="text-center" th:if="${#lists.isEmpty(viewModel.tanks)}">No matching tanks found :(</p>
+</div>
+
+<!--With results-->
+<div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 row-cols-1 g-3" th:unless="${#lists.isEmpty(viewModel.tanks)}">
+    <div th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).ADMIN.name()}"
+         th:insert="~{fragments/tank/tank-buttons :: create}"
+         class="px-2">
+    </div>
+    <div th:each="tank : ${viewModel.tanks}"
+         th:insert="~{fragments/tank/tank-buttons :: item(${tank})}"
+         class="px-2">
+    </div>
 </div>
 
 </html>

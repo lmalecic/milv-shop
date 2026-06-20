@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<form th:fragment="form(viewContext, hxGetPath)" method="get" id="filterForm"
-      class="d-flex flex-column gap-3 mb-4"
-      hx:get="${hxGetPath}"
-      hx-trigger="load, submit, change delay:300ms, input delay:300ms"
+<form th:fragment="form(searchPath)" method="get" id="filterForm"
+      class="d-flex flex-column gap-3 mt-3"
+      hx:get="${searchPath}"
+      hx-trigger="load queue:all, submit, change delay:300ms, input delay:300ms"
       hx-target="#tanksResult">
+    <input name="showDeleted" id="showDeleted" type="checkbox" hidden>
     <input name="nationIds" id="nationFilters" th:value="${viewModel.filter.nationIds != null ? #strings.arrayJoin(viewModel.filter.nationIds, ',') : ''}" hidden>
     <input name="tankRoleIds" id="tankRoleFilters" th:value="${viewModel.filter.tankRoleIds != null ? #strings.arrayJoin(viewModel.filter.tankRoleIds, ',') : ''}" hidden>
     <div class="d-inline-flex flex-row gap-3">
-        <label hidden for="search"></label>
+        <label hidden for="search">Name or description</label>
+        <label hidden for="showDeleted" th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).ADMIN.name()}">Show deleted</label>
+        <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).ADMIN.name()}"
+                th:with="isChecked=${viewModel.filter.showDeleted != null ? viewModel.filter.showDeleted : false}"
+                th:class="${(isChecked ? 'checked ' : '') + 'border border-0 text-white rounded-3'}">
+            Show deleted
+        </button>
         <input name="searchQuery" id="search" type="text" class="form-control" placeholder="Search by name or description..." th:value="${viewModel.filter.searchQuery}">
-        <button class="btn btn-primary text-uppercase px-5">Search</button>
+        <button class="btn btn-primary text-uppercase px-5 d-inline-flex gap-1">
+            <i class="bi bi-search"></i>
+            Search
+        </button>
     </div>
     <div class="row">
         <div class="col d-flex flex-column gap-4" style="max-width: 300px;">
@@ -72,7 +82,7 @@
                 </div>
             </div>
             <div class="d-flex flex-column gap-1">
-                <label>Nations</label>
+                <label for="nationFilters">Nations</label>
                 <div class="d-inline-flex align-items-center flex-wrap gap-2">
                     <button th:each="nation : ${viewModel.nations}"
                             type="button"
@@ -86,7 +96,7 @@
                 </div>
             </div>
             <div class="d-flex flex-column gap-1">
-                <label>Tank roles</label>
+                <label for="tankRoleFilters">Tank roles</label>
                 <div class="d-inline-flex align-items-center flex-wrap gap-2">
                     <button th:each="role : ${viewModel.tankRoles}"
                             type="button"
@@ -100,9 +110,12 @@
                 </div>
             </div>
         </div>
-
         <div id="tanksResult" class="col"></div>
     </div>
+    <dialog id="tankModal" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">
+        <div id="tankModalContent" class="modal-dialog modal-dialog-centered modal-xl">
+        </div>
+    </dialog>
     <script>
         $(".filter-btn").on("click", function () {
             $(this).toggleClass("checked");

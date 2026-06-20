@@ -2,6 +2,8 @@ package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.dto.TankDto;
 import com.lmalecic.milvshop.dto.TanksSearchCriteria;
+import com.lmalecic.milvshop.exception.NoContentException;
+import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.repository.TankRepository;
 import com.lmalecic.milvshop.specification.TankSpecification;
@@ -19,6 +21,12 @@ public class TankService {
 
     public List<TankDto> findAll() {
         return this.tankRepository.findAll()
+                .stream().map(this::toDto)
+                .toList();
+    }
+
+    public List<TankDto> findAllActive() {
+        return this.tankRepository.findAllByDeleted(false)
                 .stream().map(this::toDto)
                 .toList();
     }
@@ -41,13 +49,19 @@ public class TankService {
         return this.toDto(this.tankRepository.save(this.toEntity(tankDto)));
     }
 
-    public void deleteById(Long id) {
-        this.tankRepository.deleteById(id);
+    public TankDto deleteById(Long id) {
+        Tank tank = this.tankRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank with id " + id + " does not exist."));
+        if (tank.isDeleted()) {
+            throw new NoContentException("Tank with id " + id + " is already deleted.");
+        }
+        tank.setDeleted(true);
+        return this.toDto(this.tankRepository.save(tank));
     }
 
     public List<TankDto> findAllBySearchCriteria(TanksSearchCriteria filter) {
         if (!filter.hasActiveFilters()) {
-            return this.findAll();
+            return this.findAllActive();
         }
         return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(filter.getSearchQuery())
                         .and(TankSpecification.containsNation(filter.getNationIds()))
@@ -83,6 +97,7 @@ public class TankService {
                 .crewSize(tank.getCrewSize())
                 .nation(tank.getNation())
                 .tankRole(tank.getTankRole())
+                .deleted(tank.isDeleted())
                 .build();
     }
 
@@ -99,6 +114,7 @@ public class TankService {
                 .crewSize(dto.getCrewSize())
                 .nation(dto.getNation())
                 .tankRole(dto.getTankRole())
+                .deleted(dto.isDeleted())
                 .build();
     }
 }

@@ -12,11 +12,14 @@
 
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="/css/style.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
     <!-- Bootstrap CSS via CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Custom CSS Styles, must be after Bootstrap -->
+    <link href="/css/style.css" rel="stylesheet">
 
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -38,21 +41,21 @@
         <div class="mt-2 d-flex gap-3 fs-5 justify-content-center">
             <div class="d-flex gap-3 justify-content-center navbar-item-container">
                 <a class="navbar-item d-flex align-items-center gap-sm-2"
-                   th:classappend="${@urlUtils.activeClass('/')}"
+                   th:classappend="${@viewUtils.activeClass('/')}"
                    th:href="@{/}">
                     <img class="h-75" src="/img/home.png" alt="">
                     Home
                 </a>
                 <span class="navbar-item-separator"></span>
                 <a class="navbar-item d-flex align-items-center gap-sm-2"
-                   th:classappend="${@urlUtils.activeClass('/tanks')}"
+                   th:classappend="${@viewUtils.activeClass('/tanks')}"
                    th:href="@{/tanks}">
                     <img class="h-75" src="/img/tank.png" alt="">
                     Tanks
                 </a>
                 <span class="navbar-item-separator"></span>
                 <a id="navbar-cart" class="navbar-item d-flex align-items-center gap-sm-2"
-                   th:classappend="${@urlUtils.activeClass('/cart')}"
+                   th:classappend="${@viewUtils.activeClass('/cart')}"
                    th:href="@{/cart}">
                     <img class="h-75" src="/img/cart.png" alt="">
                     Cart
@@ -60,7 +63,7 @@
                 <span class="d-inline-flex gap-3" sec:authorize="isAuthenticated()">
                     <span class="navbar-item-separator"></span>
                     <a id="navbar-orders" class="navbar-item d-flex align-items-center gap-sm-2"
-                       th:classappend="${@urlUtils.activeClass('/orders')}"
+                       th:classappend="${@viewUtils.activeClass('/orders')}"
                        th:href="@{/orders}">
                         <img class="h-75" src="/img/orders.png" alt="">
                         Orders
@@ -69,7 +72,7 @@
                 <span class="d-inline-flex gap-3" sec:authorize="hasRole('ADMIN')">
                     <span class="navbar-item-separator"></span>
                     <a id="navbar-admin" class="navbar-item d-flex align-items-center gap-sm-2"
-                       th:classappend="${@urlUtils.activeClass('/admin')}"
+                       th:classappend="${@viewUtils.activeClass('/admin')}"
                        th:href="@{/admin}">
                         <img class="h-75" src="/img/admin.png" alt="">
                         Admin
@@ -79,8 +82,10 @@
             <div style="margin-right: var(--page-margin-right)" class="position-absolute d-flex gap-3 end-0 fs-5">
                 <div sec:authorize="isAnonymous()" class="d-flex gap-2 fs-5 justify-content-center">
                     <a href="#" class="navbar-item d-flex align-items-center gap-sm-2"
-                       hx:get="@{/auth/login}" hx-target="#authModal"
-                       data-bs-toggle="modal" data-bs-target="#loginModal">
+                       hx:get="@{/auth/login}"
+                       hx-target="#authModalContent"
+                       data-bs-toggle="modal"
+                       data-bs-target="#authModal">
                         <img style="transform: rotate(225deg)" class="h-75" src="/img/login.png" alt="">
                         Login
                     </a>
@@ -101,13 +106,12 @@
                 </div>
             </div>
         </div>
+        <!-- Auth Modal -->
+        <dialog class="modal fade" id="authModal" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" id="authModalContent">
+            </div>
+        </dialog>
     </nav>
-
-    <!-- Login/Register Modal -->
-    <dialog class="modal fade" id="loginModal" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" id="authModal">
-        </div>
-    </dialog>
 </header>
 <footer th:fragment="footer" class="d-flex flex-column align-items-center text-white fw-bold w-100 mt-5 mb-5 opacity-25">
     <span class="fs-5">© 2026 MilV Shop. All rights reserved.</span>

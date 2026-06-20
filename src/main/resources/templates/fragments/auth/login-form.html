@@ -4,9 +4,7 @@
 <form id="authForm" th:object="${userDto}" th:action="@{/auth/login}" class="modal-content form-group needs-validation">
     <div class="modal-header">
         <h5 class="modal-title me-auto text-uppercase">&gt; Log_in / Register</h5>
-        <button type="button" class="close bg-transparent border-0 ratio-1x1 p-0 closeButton" data-bs-dismiss="modal" aria-label="Close">
-            <img src="/img/close.png" alt="">
-        </button>
+        <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
     </div>
     <div class="modal-body d-flex flex-column gap-1">
         <div>
