@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<form id="tank-form" class="modal-content form-group">
+<form id="tank-form" th:action="@{/admin/tanks/{action}(action=${viewContext.getRouteWord()})}" method="post" class="modal-content form-group">
     <div class="modal-header">
-        <h1 class="fw-bold mb-0" th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).CREATE.name()}">New Tank</h1>
-        <h1 class="fw-bold mb-0" th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).ADMIN.name()}">Edit Tank</h1>
-        <h1 class="fw-bold mb-0" th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).DELETE.name()}">Delete Tank</h1>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}">CREATE_TANK</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !tank.deleted}">EDIT_TANK</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && tank.deleted}">DELETED_TANK</h3>
         <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
     </div>
     <div class="modal-body">
@@ -14,15 +14,16 @@
                 <div class="row g-3">
                     <div class="col d-flex flex-column gap-1">
                         <label for="name">Name</label>
-                        <input id="name" name="name" class="form-control" type="text" placeholder="Enter tank name..." th:value="${viewModel.tank.name}">
+                        <input id="name" name="name" class="form-control" type="text" placeholder="Enter tank name..."
+                               th:value="${tank.name}" th:disabled="${tank.deleted}">
                         <div class="invalid-feedback">Please enter a name.</div>
                     </div>
                     <div class="col-3 d-flex flex-column gap-1">
                         <label class="text-uppercase" for="nation">Nation</label>
-                        <select class="form-select input" name="nation" id="nation">
-                            <option th:if="${viewModel.tank.nation == null}" selected disabled value="">Select...</option>
-                            <option th:each="nation : ${viewModel.nations}"
-                                    th:selected="${viewModel.tank.nation != null && @viewUtils.isOptionSelected(nation.id, viewModel.tank.nation.id)}"
+                        <select class="form-select input" name="nation" id="nation" th:disabled="${tank.deleted}">
+                            <option th:if="${tank.nation == null}" selected disabled value="">Select...</option>
+                            <option th:each="nation : ${nations}"
+                                    th:selected="${tank.nation != null && @viewUtils.isOptionSelected(nation.id, tank.nation.id)}"
                                     th:value="${nation.id}"
                                     th:text="${nation.name}">
                             </option>
@@ -31,10 +32,10 @@
                     </div>
                     <div class="col-3 d-flex flex-column gap-1">
                         <label for="tankRole">Main role</label>
-                        <select class="form-select input" name="tankRole" id="tankRole">
-                            <option th:if="${viewModel.tank.tankRole == null}" selected disabled value="">Select...</option>
-                            <option th:each="tankRole : ${viewModel.tankRoles}"
-                                    th:selected="${viewModel.tank.tankRole != null && @viewUtils.isOptionSelected(tankRole.id, viewModel.tank.tankRole.id)}"
+                        <select class="form-select input" name="tankRole" id="tankRole" th:disabled="${tank.deleted}">
+                            <option th:if="${tank.tankRole == null}" selected disabled value="">Select...</option>
+                            <option th:each="tankRole : ${tankRoles}"
+                                    th:selected="${tank.tankRole != null && @viewUtils.isOptionSelected(tankRole.id, tank.tankRole.id)}"
                                     th:value="${tankRole.id}"
                                     th:text="${tankRole.name}">
                             </option>
@@ -46,7 +47,9 @@
                     <div class="col d-flex flex-column gap-1">
                         <label for="mainGunCalibre">Gun calibre</label>
                         <div class="input-group has-validation">
-                            <input id="mainGunCalibre" name="mainGunCalibre" class="form-control" type="number" min="0" th:value="${viewModel.tank.mainGunCalibre}">
+                            <input id="mainGunCalibre" name="mainGunCalibre" class="form-control" type="number" min="0"
+                                   th:value="${tank.mainGunCalibre}"
+                                   th:disabled="${tank.deleted}">
                             <span class="input-group-text">mm</span>
                             <div class="invalid-feedback">Please enter a positive number.</div>
                         </div>
@@ -54,7 +57,9 @@
                     <div class="col d-flex flex-column gap-1">
                         <label for="maxSpeed">Max speed</label>
                         <div class="input-group has-validation">
-                            <input id="maxSpeed" name="maxSpeed" class="form-control" type="number" min="0" th:value="${viewModel.tank.maxSpeed}">
+                            <input id="maxSpeed" name="maxSpeed" class="form-control" type="number" min="0"
+                                   th:value="${tank.maxSpeed}"
+                                   th:disabled="${tank.deleted}">
                             <span class="input-group-text">km&sol;h</span>
                             <div class="invalid-feedback">Please enter a positive number.</div>
                         </div>
@@ -62,7 +67,8 @@
                     <div class="col d-flex flex-column gap-1">
                         <label for="armorThickness">Armor thickness</label>
                         <div class="input-group has-validation">
-                            <input id="armorThickness" name="armorThickness" class="form-control" min="0" type="number" th:value="${viewModel.tank.armorThickness}">
+                            <input id="armorThickness" name="armorThickness" class="form-control" min="0" type="number" th:value="${tank.armorThickness}"
+                                   th:disabled="${tank.deleted}">
                             <span class="input-group-text">mm</span>
                             <div class="invalid-feedback">Please enter a positive number.</div>
                         </div>
@@ -71,7 +77,9 @@
                 <div class="row g-3 flex-fill" style="margin-bottom: 1px;">
                     <div class="col d-flex flex-column gap-1">
                         <label for="description">Description</label>
-                        <textarea class="form-control flex-fill" name="description" id="description" rows="3" placeholder="Enter tank description..." th:text="${viewModel.tank.description}"></textarea>
+                        <textarea class="form-control flex-fill" name="description" id="description" rows="3" placeholder="Enter tank description..."
+                                  th:text="${tank.description}"
+                                  th:disabled="${tank.deleted}"></textarea>
                     </div>
                 </div>
             </div>
@@ -80,7 +88,9 @@
                     <div class="col-5 d-flex flex-column gap-1">
                         <label for="crewSize">Crew size</label>
                         <div class="input-group has-validation">
-                            <input id="crewSize" name="crewSize" class="form-control" type="number" min="0" th:value="${viewModel.tank.crewSize}">
+                            <input id="crewSize" name="crewSize" class="form-control" type="number" min="0" step="1"
+                                   th:value="${tank.crewSize}"
+                                   th:disabled="${tank.deleted}">
                             <span class="input-group-text">ppl</span>
                             <div class="invalid-feedback">Please enter a positive number.</div>
                         </div>
@@ -89,7 +99,9 @@
                     <div class="col d-flex flex-column gap-1">
                         <label for="price">Price</label>
                         <div class="input-group has-validation">
-                            <input id="price" name="price" class="form-control" type="number" placeholder="0.00" min="0" step="50" th:value="${viewModel.tank.price}">
+                            <input id="price" name="price" class="form-control" type="number" placeholder="0.00" min="0"
+                                   th:value="${tank.price}"
+                                   th:disabled="${tank.deleted}">
                             <span class="input-group-text">&euro;</span>
                             <div class="invalid-feedback">Please enter a positive number.</div>
                         </div>
@@ -98,9 +110,11 @@
                 <div class="row g-3">
                     <div class="col d-flex flex-column gap-1">
                         <label for="imgPath" class="text-uppercase">Image url</label>
-                        <input class="form-control" id="imgPath" type="text" placeholder="Enter image url..." th:value="${viewModel.tank.imgPath}" name="imgPath">
+                        <input id="imgPath" name="imgPath" class="form-control" type="text" placeholder="Enter image url..."
+                               th:value="${tank.imgPath}"
+                               th:disabled="${tank.deleted}">
                         <div class="tank-card card p-2">
-                            <img id="tankImg" class="card-img text-center my-auto" th:src="${viewModel.tank.imgPath}" alt="[NO IMAGE]">
+                            <img id="tankImg" class="card-img text-center my-auto" th:src="${tank.imgPath}" alt="[NO IMAGE]">
                         </div>
                     </div>
                 </div>
@@ -109,18 +123,27 @@
     </div>
     <div class="modal-footer pt-0">
         <div class="col d-inline-flex justify-content-end gap-3">
-            <button type="button" id="deleteButton" th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).ADMIN.name()}"
+            <button type="button" id="deleteButton" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !tank.deleted}"
+                    hx:get="@{/admin/tanks/delete/{id}(id=${tank.id})}"
+                    hx-target="#confirmDeleteModalContent"
                     data-bs-toggle="modal"
                     data-bs-target="#confirmDeleteModal"
                     class="btn btn-danger text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-trash-fill"></i>
                 Delete
             </button>
-            <button th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).ADMIN.name()}" class="btn btn-primary text-uppercase d-inline-flex gap-1">
+            <button id="recoverButton" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && tank.deleted}"
+                    hx:patch="@{/admin/tanks/recover/{id}(id=${tank.id})}"
+                    hx-target="#tankModalContent"
+                    class="btn btn-secondary text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-recycle"></i>
+                Recover
+            </button>
+            <button th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !tank.deleted}" class="btn btn-primary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-floppy-fill"></i>
                 Save
             </button>
-            <button th:if="${viewContext.name() == T(com.lmalecic.milvshop.ViewContext).CREATE.name()}" class="btn btn-primary text-uppercase d-inline-flex gap-1">
+            <button th:formaction="@{/admin/tanks/create}" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}" class="btn btn-primary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-plus-lg"></i>
                 Create
             </button>
@@ -180,29 +203,6 @@
             const url = $(this).val();
             tankImg.attr("src", url || "");
         });
-    })();
-
-    (() => {
-        // const formElements = $("#tank-form input, #tank-form textarea, #tank-form select, #tank-form button");
-        // const deleteBtn = $("#deleteButton");
-        // let confirmDelete = false;
-        //
-        // deleteBtn.on("click", e => {
-        //     if (confirmDelete == true) {
-        //         formElements.each((_, element) => {
-        //             $(element).prop("disabled", true);
-        //         });
-        //         return;
-        //     }
-        //
-        //     confirmDelete = true;
-        // });
-        //
-        // deleteBtn.on("hide.bs.popover", e => {
-        //     confirmDelete = false;
-        // });
-        //
-        // new bootstrap.Popover(deleteBtn[0]);
     })();
 </script>
 

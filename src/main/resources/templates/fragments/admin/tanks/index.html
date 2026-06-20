@@ -7,33 +7,7 @@
 <form th:replace="~{fragments/tank/search-form :: form(${searchFormPath})}"></form>
 
 <dialog id="confirmDeleteModal" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <form id="tank-form" class="modal-content form-group">
-            <div class="modal-header pb-0">
-                <h2 class="fw-bold text-uppercase">Attention!</h2>
-                <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
-            </div>
-            <div class="modal-body pt-1">
-                <p>Are you sure you want to delete this tank?</p>
-            </div>
-            <div class="modal-footer pt-0 gap-3">
-                <button type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#tankModal"
-                        class="col btn btn-primary text-uppercase d-inline-flex justify-content-center gap-1">
-                    <i class="bi bi-x-lg"></i>
-                    Cancel
-                </button>
-                <button type="button" id="confirmDeleteButton"
-                        data-bs-toggle="modal"
-                        data-bs-target="#confirmDeleteModal"
-                        class="col btn btn-danger text-uppercase d-inline-flex justify-content-center gap-1">
-                    <i class="bi bi-trash-fill"></i>
-                    Confirm
-                </button>
-            </div>
-        </form>
-    </div>
+    <div id="confirmDeleteModalContent" class="modal-dialog modal-dialog-centered"></div>
 </dialog>
 
 <script>

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class TanksSearchCriteria {
+public class TankSearchCriteria {
     private String searchQuery;
     private List<Long> nationIds;
     private List<Long> tankRoleIds;

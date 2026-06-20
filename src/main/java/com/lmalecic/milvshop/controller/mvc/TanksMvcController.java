@@ -1,19 +1,16 @@
 package com.lmalecic.milvshop.controller.mvc;
 
-import com.lmalecic.milvshop.ViewContext;
+import com.lmalecic.milvshop.viewmodel.ViewContext;
 import com.lmalecic.milvshop.dto.TankDto;
-import com.lmalecic.milvshop.dto.TanksSearchCriteria;
+import com.lmalecic.milvshop.dto.TankSearchCriteria;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
-import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.service.NationService;
 import com.lmalecic.milvshop.service.TankRoleService;
 import com.lmalecic.milvshop.service.TankService;
 import com.lmalecic.milvshop.util.UrlUtils;
-import com.lmalecic.milvshop.viewmodel.TankViewModel;
-import com.lmalecic.milvshop.viewmodel.TanksViewModel;
+import com.lmalecic.milvshop.dto.TankSearchResults;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
-import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxReplaceUrl;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +30,11 @@ public class TanksMvcController {
     private final TankRoleService tankRoleService;
 
     @GetMapping({"", "/"})
-    public String getTanksView(Model model, @ModelAttribute TanksSearchCriteria filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
+    public String getTanksView(Model model, @ModelAttribute TankSearchCriteria filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         List<TankDto> tanksList = this.tankService.findAllBySearchCriteria(filter);
 
-        model.addAttribute("viewModel", TanksViewModel.builder()
+        model.addAttribute("results", TankSearchResults.builder()
                 .tanks(tanksList)
                 .mainGunCalibres(this.tankService.findAllMainGunCalibres())
                 .nations(this.nationService.findAllOrdered())
@@ -61,9 +58,7 @@ public class TanksMvcController {
         TankDto tank = this.tankService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tank with id " + id + " not found."));
 
-        model.addAttribute("viewModel", TankViewModel.builder()
-                .tank(tank)
-                .build());
+        model.addAttribute("tank", tank);
         model.addAttribute("viewContext", ViewContext.VIEW);
 
         return "fragments/tank/tank-form";

@@ -3,23 +3,23 @@
       xmlns:th="https://www.thymeleaf.org">
 <form id="authForm" th:object="${userDto}" th:action="@{/auth/login}" class="modal-content form-group needs-validation">
     <div class="modal-header">
-        <h5 class="modal-title me-auto text-uppercase">&gt; Log_in / Register</h5>
+        <h4 class="modal-title me-auto text-uppercase">&gt; Log_in / Register</h4>
         <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
     </div>
-    <div class="modal-body d-flex flex-column gap-1">
-        <div>
-            <label for="username" class="form-text text-uppercase">Username</label>
+    <div class="modal-body d-flex flex-column gap-2">
+        <div class="d-flex flex-column gap-1">
+            <label for="username" class="text-uppercase">Username</label>
             <input id="username" th:field="*{username}" type="text" class="form-control"
-                   th:class="${#fields.hasErrors('username') ? 'form-control is-invalid' : 'form-control'}"
+                   th:classappend="${#fields.hasErrors('username') ? 'is-invalid' : ''}"
                    placeholder="Enter username" required autofocus>
             <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback d-block">
                 <span th:errors="*{username}"></span>
             </div>
         </div>
-        <div>
-            <label for="password" class="form-text text-uppercase">Password</label>
+        <div class="d-flex flex-column gap-1">
+            <label for="password" class="text-uppercase">Password</label>
             <input id="password" th:field="*{password}" type="password" class="form-control"
-                   th:class="${#fields.hasErrors('password') ? 'form-control is-invalid' : 'form-control'}"
+                   th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}"
                    placeholder="Enter password" required>
             <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block">
                 <span th:errors="*{password}"></span>

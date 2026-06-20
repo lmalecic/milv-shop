@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
-<head th:replace="~{fragments/layout :: head('')}">
-</head>
+<th:block th:replace="~{fragments/layout :: head('')}"></th:block>
 <body hx-ext="response-targets" hx-target-error="#selected-view">
     <header th:replace="~{fragments/layout :: header}"></header>
     <main>

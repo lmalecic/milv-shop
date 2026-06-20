@@ -200,6 +200,10 @@ body {
             }
         }
     }
+
+    &.deleted {
+        background-color: rgb(18, 8, 8) !important;
+    }
 }
 
 .tank-card-stat {
@@ -210,6 +214,10 @@ body {
     .icon {
         margin: auto 0;
         height: 1.2em;
+    }
+
+    &.deleted {
+        background: rgb(35 26 26) !important;
     }
 }
 
@@ -273,6 +281,25 @@ input[type="number"] {
 
 label {
     text-transform: uppercase;
+}
+
+.form-switch .form-check-input {
+    --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%28255, 255, 255, 0.25%29'/%3e%3c/svg%3e");
+
+    &:focus {
+        --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%28113, 196, 113, 1%29'/%3e%3c/svg%3e");
+    }
+
+    &:checked {
+        --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%28255, 255, 255, 1%29'/%3e%3c/svg%3e");
+    }
+}
+
+.form-check-input {
+    &:checked {
+        background-color: #009e00 !important;
+        border-color: #009e00 !important;
+    }
 }
 
 .admin-nav-btn.active {
@@ -356,4 +383,42 @@ label {
     font-family: var(--bs-body-font-family), serif;
     --bs-popover-body-padding-x: .75rem;
     --bs-popover-body-padding-y: .5rem;
+}
+
+.command-text::before {
+    content: '> ' !important;
+}
+
+.modal-title {
+    font-weight: 700 !important;
+}
+
+.separator-dots {
+    border-bottom: 0.2em dotted rgba(255,255,255,10%);
+    margin-bottom: 0.3em;
+}
+
+.toast {
+    width: auto;
+    max-width: var(--bs-toast-max-width);
+    margin: 0.5rem !important;
+    box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
+
+    .toast-body {
+        padding: 0.5em 1em;
+    }
+
+    &.toast-success {
+        background-color: #009e00;
+        border-color: color-mix(#009e00, black 20%);
+    }
+
+    &.toast-error {
+        background-color: #dc3545;
+        border-color: color-mix(#dc3545, black 20%);
+    }
+
+    &.toast-info {
+        background-color: var(--bs-body-bg);
+    }
 }

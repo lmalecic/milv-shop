@@ -32,13 +32,13 @@
 </head>
 <body>
 <header th:fragment="header">
-    <nav class="d-flex flex-column align-items-center text-white fw-bold w-100 mb-5 mt-1">
-        <a style="text-transform: none;" class="mt-2 navbar-item fs-2 fw-bolder d-inline-flex flex-row align-items-center gap-3" th:href="@{/}">
+    <nav class="d-flex flex-column align-items-center text-white w-100 mb-5 mt-1">
+        <a style="text-transform: none;" class="mt-2 navbar-item fs-2 fw-bolder d-inline-flex flex-row align-items-center gap-3 fw-bold" th:href="@{/}">
             <img src="/img/shop.png" alt="" height="32">
             MilV Shop
             <img src="/img/shop.png" alt="" height="32">
         </a>
-        <div class="mt-2 d-flex gap-3 fs-5 justify-content-center">
+        <div class="mt-2 d-flex gap-3 fs-5 fw-bold justify-content-center">
             <div class="d-flex gap-3 justify-content-center navbar-item-container">
                 <a class="navbar-item d-flex align-items-center gap-sm-2"
                    th:classappend="${@viewUtils.activeClass('/')}"
@@ -112,6 +112,7 @@
             </div>
         </dialog>
     </nav>
+    <div th:replace="~{fragments/toasts}"></div>
 </header>
 <footer th:fragment="footer" class="d-flex flex-column align-items-center text-white fw-bold w-100 mt-5 mb-5 opacity-25">
     <span class="fs-5">© 2026 MilV Shop. All rights reserved.</span>

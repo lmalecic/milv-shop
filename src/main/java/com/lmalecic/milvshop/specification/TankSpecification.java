@@ -2,6 +2,7 @@ package com.lmalecic.milvshop.specification;
 
 import com.lmalecic.milvshop.model.*;
 import jakarta.persistence.metamodel.SingularAttribute;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -10,6 +11,10 @@ import java.util.List;
 public class TankSpecification {
 
     private TankSpecification() {}
+
+    public static Sort sortByDeletedAndName() {
+        return Sort.by(Tank_.DELETED, Tank_.NAME).descending();
+    }
 
     public static Specification<Tank> containsNameOrDescription(String nameOrDescription) {
         return (root, query, builder) -> {

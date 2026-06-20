@@ -1,20 +1,18 @@
-package com.lmalecic.milvshop.viewmodel;
+package com.lmalecic.milvshop.dto;
 
-import com.lmalecic.milvshop.dto.TankDto;
 import com.lmalecic.milvshop.model.Nation;
 import com.lmalecic.milvshop.model.TankRole;
 import lombok.Builder;
 import lombok.Getter;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 @Getter
 @Builder
-public class TankViewModel {
-    private final TankDto tank;
-    @Nullable
+public class TankSearchResults {
+    private final List<TankDto> tanks;
+    private final List<Integer> mainGunCalibres;
     private final List<Nation> nations;
-    @Nullable
     private final List<TankRole> tankRoles;
+    private final TankSearchCriteria filter;
 }

@@ -14,6 +14,6 @@ public class AdminMvcController {
     @GetMapping({"", "/"})
     public String getIndexView(Model model) {
         model.addAttribute("sectionUrl", null);
-        return "admin/index";
+        return "admin";
     }
 }

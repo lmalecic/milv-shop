@@ -1,7 +1,7 @@
 package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.dto.TankDto;
-import com.lmalecic.milvshop.dto.TanksSearchCriteria;
+import com.lmalecic.milvshop.dto.TankSearchCriteria;
 import com.lmalecic.milvshop.exception.NoContentException;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.model.Tank;
@@ -41,11 +41,10 @@ public class TankService {
         return this.toDto(this.tankRepository.save(this.toEntity(tankDto)));
     }
 
-    public TankDto update(Long id, TankDto tankDto) {
-        if (!this.tankRepository.existsById(id)) {
-            throw new IllegalArgumentException("Tank with id " + id + " does not exist.");
+    public TankDto update(TankDto tankDto) {
+        if (!this.tankRepository.existsById(tankDto.getId())) {
+            throw new IllegalArgumentException("Tank with id " + tankDto.getId() + " does not exist.");
         }
-        tankDto.setId(id);
         return this.toDto(this.tankRepository.save(this.toEntity(tankDto)));
     }
 
@@ -59,7 +58,17 @@ public class TankService {
         return this.toDto(this.tankRepository.save(tank));
     }
 
-    public List<TankDto> findAllBySearchCriteria(TanksSearchCriteria filter) {
+    public TankDto recoverById(Long id) {
+        Tank tank = this.tankRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank with id " + id + " does not exist."));
+        if (!tank.isDeleted()) {
+            throw new NoContentException("Tank with id " + id + " isn't deleted.");
+        }
+        tank.setDeleted(false);
+        return this.toDto(this.tankRepository.save(tank));
+    }
+
+    public List<TankDto> findAllBySearchCriteria(TankSearchCriteria filter) {
         if (!filter.hasActiveFilters()) {
             return this.findAllActive();
         }
@@ -70,7 +79,8 @@ public class TankService {
                         .and(TankSpecification.mainGunCalibreEquals(filter.getMainGunCalibre()))
                         .and(TankSpecification.armorThicknessBetween(filter.getArmorThicknessMin(), filter.getArmorThicknessMax()))
                         .and(TankSpecification.maxSpeedEquals(filter.getMaxSpeed()))
-                        .and(TankSpecification.crewSizeEquals(filter.getCrewSize())))
+                        .and(TankSpecification.crewSizeEquals(filter.getCrewSize())),
+                        TankSpecification.sortByDeletedAndName())
                 .stream()
                 .map(this::toDto)
                 .toList();

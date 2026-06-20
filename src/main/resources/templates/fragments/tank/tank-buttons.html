@@ -11,22 +11,28 @@
     <span class="fs-5 text-uppercase card-img">&lsqb;New Tank&rsqb;</span>
 </button>
 
+<!--/* @thymesVar id="tank" type="com.lmalecic.milvshop.dto.TankDto" */-->
 <a th:fragment="item(tank)" href="#"
    hx:get="@{{itemClickPath}/{id}(itemClickPath=${itemClickPath}, id=${tank.id})}"
    hx-target="#tankModalContent"
    hx-trigger="click"
    data-bs-toggle="modal"
    data-bs-target="#tankModal"
-   class="tank-card card border-2 rounded-4 p-2 text-decoration-none">
+   class="tank-card card border-2 rounded-4 p-2 text-decoration-none"
+   th:classappend="${tank.deleted == true ? 'deleted' : ''}">
     <img th:src="${tank.imgPath}" class="card-img text-center" alt="[NO IMAGE]">
     <div class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
-        <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row">
+        <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row"
+             th:classappend="${tank.deleted == true ? 'deleted' : ''}">
             <img th:src="${tank.nation.imgPath}" alt="" class="rounded-1 icon">
-            <span th:text="${tank.name}" class="fw-semibold"></span>
+            <span th:text="${tank.name}" class="fw-semibold" th:classappend="${tank.deleted == true ? 'text-decoration-line-through' : ''}"></span>
             <img th:src="${tank.tankRole.imgPath}" alt="" class="icon">
         </div>
     </div>
-    <div class="tank-card-price position-absolute rounded-3 fs-6 fw-semibold" th:text="${@formatUtils.getPriceString(tank.getPrice())}"></div>
+    <div th:text="${@formatUtils.getPriceString(tank.getPrice())}"
+         th:classappend="${tank.deleted == true ? 'text-decoration-line-through' : ''}"
+         class="tank-card-price position-absolute rounded-3 fs-6 fw-semibold">
+    </div>
 </a>
 
 </html>

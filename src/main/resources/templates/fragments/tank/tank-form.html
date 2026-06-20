@@ -2,59 +2,62 @@
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
 <form class="modal-content from-group">
+    <div class="modal-header">
+        <h4 class="modal-title command-text">VIEW_TANK</h4>
+        <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
+    </div>
     <div class="modal-body row">
-        <div class="col d-inline-flex flex-column gap-2" style="max-width: 30%" th:if="${viewModel.tank.imgPath != null}">
+        <div class="col d-inline-flex flex-column gap-2" style="max-width: 30%" th:if="${tank.imgPath != null}">
             <div class="tank-card card p-2 border-2 rounded-4">
-                <img class="card-img" th:src="${viewModel.tank.imgPath}" alt="Tank image">
+                <img class="card-img" th:src="${tank.imgPath}" alt="Tank image">
             </div>
             <div class="d-inline-flex flex-row flex-wrap justify-content-center gap-2">
-                <a th:href="@{/tanks(crewSize=${viewModel.tank.crewSize})}"
+                <a th:href="@{/tanks(crewSize=${tank.crewSize})}"
                    class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
                     <img class="rounded-1 flag-sm" src="/img/stats/crewSize.png" alt="">
-                    <span class="fs-6" th:text="${viewModel.tank.crewSize}"></span>
+                    <span class="fs-6" th:text="${tank.crewSize}"></span>
                 </a>
-                <a th:href="@{/tanks(mainGunCalibre=${viewModel.tank.mainGunCalibre})}"
+                <a th:href="@{/tanks(mainGunCalibre=${tank.mainGunCalibre})}"
                    class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
                     <img class="rounded-1 flag-sm" src="/img/stats/mainGunCalibre.png" alt="">
-                    <span class="fs-6" th:text="${viewModel.tank.mainGunCalibre} + 'mm'"></span>
+                    <span class="fs-6" th:text="${tank.mainGunCalibre} + 'mm'"></span>
                 </a>
-                <a th:href="@{/tanks(armorThicknessMin=${viewModel.tank.armorThickness}, armorThicknessMax=${viewModel.tank.armorThickness})}"
+                <a th:href="@{/tanks(armorThicknessMin=${tank.armorThickness}, armorThicknessMax=${tank.armorThickness})}"
                    class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
                     <img class="rounded-1 flag-sm" src="/img/stats/armorThickness.png" alt="">
-                    <span class="fs-6" th:text="${viewModel.tank.armorThickness + 'mm'}"></span>
+                    <span class="fs-6" th:text="${tank.armorThickness + 'mm'}"></span>
                 </a>
-                <a th:href="@{/tanks(maxSpeed=${viewModel.tank.maxSpeed})}"
+                <a th:href="@{/tanks(maxSpeed=${tank.maxSpeed})}"
                    class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-1 rounded-3 text-decoration-none">
                     <img class="rounded-1 flag-sm" src="/img/stats/maxSpeed.png" alt="">
-                    <span class="fs-6" th:text="${viewModel.tank.maxSpeed + 'km/h'}"></span>
+                    <span class="fs-6" th:text="${tank.maxSpeed + 'km/h'}"></span>
                 </a>
             </div>
         </div>
         <div class="col">
             <div class="d-inline-flex flex-row mb-2 gap-2 w-100">
                 <a type="button"
-                   th:href="@{/tanks(nationIds=${viewModel.tank.nation.id})}"
+                   th:href="@{/tanks(nationIds=${tank.nation.id})}"
                    class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3 text-decoration-none">
-                    <img class="rounded-1 flag-sm" th:src="${viewModel.tank.nation.imgPath}" alt="">
-                    <span class="fs-6" th:text="${viewModel.tank.nation.name}"></span>
+                    <img class="rounded-1 flag-sm" th:src="${tank.nation.imgPath}" alt="">
+                    <span class="fs-6" th:text="${tank.nation.name}"></span>
                 </a>
                 <a type="button"
-                   th:href="@{/tanks(tankRoleIds=${viewModel.tank.tankRole.id})}"
+                   th:href="@{/tanks(tankRoleIds=${tank.tankRole.id})}"
                    class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3 text-decoration-none">
-                    <img class="rounded-1 flag-sm" th:src="${viewModel.tank.tankRole.imgPath}" alt="">
-                    <span class="fs-6" th:text="${viewModel.tank.tankRole.name}"></span>
+                    <img class="rounded-1 flag-sm" th:src="${tank.tankRole.imgPath}" alt="">
+                    <span class="fs-6" th:text="${tank.tankRole.name}"></span>
                 </a>
-                <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
             </div>
-            <h1 class="modal-title me-auto" th:text="${viewModel.tank.name}">Tank name</h1>
+            <h1 class="modal-title me-auto" th:text="${tank.name}">Tank name</h1>
 
-            <p th:text="${viewModel.tank.description}" class="text-secondary" style="text-align: justify"></p>
+            <p th:text="${tank.description}" class="text-secondary" style="text-align: justify"></p>
         </div>
     </div>
 
     <div class="modal-footer pt-0">
         <div class="d-flex flex-column align-items-end gap-2">
-            <div id="price" th:text="${@formatUtils.getPriceString(viewModel.tank.price.floatValue())}" th:data-price="${viewModel.tank.price.floatValue()}" class="text-end fs-4 text-secondary fw-bold"></div>
+            <div id="price" th:text="${@formatUtils.getPriceString(tank.price.floatValue())}" th:data-price="${tank.price.floatValue()}" class="text-end fs-4 text-secondary fw-bold"></div>
             <div class="d-inline-flex gap-3">
                 <div class="d-inline-flex gap-3">
                     <label for="quantity" class="align-self-center">Quantity</label>
