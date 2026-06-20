@@ -108,9 +108,15 @@ public class AdminTanksMvcController {
     }
 
     @PatchMapping("/edit")
-    public String editTank(@ModelAttribute TankDto tank) {
+    public String editTank(Model model, @ModelAttribute TankDto tank, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         TankDto updated = this.tankService.update(tank);
-        return "redirect:/tanks/" + updated.getId();
+        if (htmxRequest.isHtmxRequest()) {
+            htmxResponse.addTrigger("refreshList");
+            htmxResponse.addTrigger("pushToast", Toast.success("Tank updated successfully."));
+            this.buildDetailsModel(model, updated);
+            return "fragments/admin/tanks/tank-form";
+        }
+        return "redirect:/admin/tanks/" + updated.getId();
     }
 
     private void buildListModel(Model model, @ModelAttribute TankSearchCriteria filter, String requestUri) {
