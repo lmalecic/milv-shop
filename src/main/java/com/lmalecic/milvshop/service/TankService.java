@@ -8,6 +8,7 @@ import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.repository.TankRepository;
 import com.lmalecic.milvshop.specification.TankSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class TankService {
     }
 
     public List<TankDto> findAllActive() {
-        return this.tankRepository.findAllByDeleted(false)
+        return this.tankRepository.findAllByDeleted(false, TankSpecification.sortByName())
                 .stream().map(this::toDto)
                 .toList();
     }
