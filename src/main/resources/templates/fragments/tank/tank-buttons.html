@@ -11,7 +11,7 @@
     <span class="fs-5 text-uppercase card-img">&lsqb;New Tank&rsqb;</span>
 </button>
 
-<!--/* @thymesVar id="tank" type="com.lmalecic.milvshop.dto.TankDto" */-->
+<!--/*@thymesVar id="tank" type="com.lmalecic.milvshop.dto.TankDto"*/-->
 <a th:fragment="item(tank)" href="#"
    hx:get="@{{itemClickPath}/{id}(itemClickPath=${itemClickPath}, id=${tank.id})}"
    hx-target="#tankModalContent"

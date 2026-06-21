@@ -13,9 +13,13 @@ import com.lmalecic.milvshop.util.UrlUtils;
 import com.lmalecic.milvshop.dto.TankSearchResults;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -61,9 +65,10 @@ public class AdminTanksMvcController {
         return "fragments/admin/tanks/tank-form";
     }
 
+    @HxRequest
     @GetMapping("/create")
     public String getCreateForm(Model model) {
-        this.buildDetailsModel(model);
+        this.buildCreateModel(model);
         return "fragments/admin/tanks/tank-form";
     }
 
@@ -108,8 +113,13 @@ public class AdminTanksMvcController {
     }
 
     @PatchMapping("/edit")
-    public String editTank(Model model, @ModelAttribute TankDto tank, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
-        TankDto updated = this.tankService.update(tank);
+    public String editTank(Model model, @Valid @ModelAttribute TankDto tankDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+        if (bindingResult.hasErrors()) {
+            this.buildFormOptionsModel(model, ViewContext.ADMIN);
+            return "fragments/admin/tanks/tank-form";
+        }
+
+        TankDto updated = this.tankService.update(tankDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger("refreshList");
             htmxResponse.addTrigger("pushToast", Toast.success("Tank updated successfully."));
@@ -131,28 +141,24 @@ public class AdminTanksMvcController {
         model.addAttribute("itemClickPath", requestUri);
     }
 
-    private void buildDetailsModel(Model model) {
-        model.addAttribute("tank", new TankDto());
-        model.addAttribute("nations", this.nationService.findAllOrdered());
-        model.addAttribute("tankRoles", this.tankRoleService.findAllOrdered());
+    private void buildCreateModel(Model model) {
+        this.buildDetailsModel(model, new TankDto());
         model.addAttribute("viewContext", ViewContext.CREATE);
     }
 
     private void buildDetailsModel(Model model, Long tankId) {
-        TankDto tank = tankId != null
-                ? this.tankService.findById(tankId).orElseThrow(() -> new ResourceNotFoundException("Tank with id " + tankId + " not found."))
-                : new TankDto();
-
-        model.addAttribute("tank", tank);
-        model.addAttribute("nations", this.nationService.findAllOrdered());
-        model.addAttribute("tankRoles", this.tankRoleService.findAllOrdered());
-        model.addAttribute("viewContext", ViewContext.ADMIN);
+        this.buildDetailsModel(model, this.tankService.findById(tankId)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank with id " + tankId + " not found.")));
     }
 
     private void buildDetailsModel(Model model, TankDto tank) {
-        model.addAttribute("tank", tank);
+        model.addAttribute("tankDto", tank);
+        this.buildFormOptionsModel(model, ViewContext.ADMIN);
+    }
+
+    private void buildFormOptionsModel(Model model, ViewContext viewContext) {
         model.addAttribute("nations", this.nationService.findAllOrdered());
         model.addAttribute("tankRoles", this.tankRoleService.findAllOrdered());
-        model.addAttribute("viewContext", ViewContext.ADMIN);
+        model.addAttribute("viewContext", viewContext);
     }
 }

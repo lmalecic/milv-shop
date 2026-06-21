@@ -6,6 +6,11 @@
 <h1 class="fw-bold">Tanks Department</h1>
 <form th:replace="~{fragments/tank/search-form :: form(${searchFormPath})}"></form>
 
+<dialog id="tankModal" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">
+    <div id="tankModalContent" class="modal-dialog modal-dialog-centered modal-xl">
+    </div>
+</dialog>
+
 <dialog id="confirmDeleteModal" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">
     <div id="confirmDeleteModalContent" class="modal-dialog modal-dialog-centered"></div>
 </dialog>

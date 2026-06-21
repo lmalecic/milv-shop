@@ -22,30 +22,43 @@ import java.util.List;
 @Builder
 public class TankDto implements Displayable {
     private Long id;
-    @NotBlank(message = "Name is required and can't be blank!")
+
+    @Length(max = 46)
+    @NotBlank
     private String name;
+
     @Length(max = 1000)
     private String description;
-    @URL(message = "Image path must be a valid URL!")
+
+    @URL
     private String imgPath;
-    @NotNull
-    @Positive(message = "Price must be a positive non-zero number!")
+
+    @NotNull(message = "required")
+    @Positive
     private BigDecimal price;
-    @NotNull
-    @PositiveOrZero(message = "Main gun calibre must be a positive number or zero!")
+
+    @NotNull(message = "required")
+    @PositiveOrZero
     private Integer mainGunCalibre;
-    @NotNull
-    @PositiveOrZero(message = "Armor thickness must be a positive number or zero!")
+
+    @NotNull(message = "required")
+    @PositiveOrZero
     private Integer armorThickness;
-    @NotNull
-    @PositiveOrZero(message = "Max speed must be a positive number or zero!")
+
+    @NotNull(message = "required")
+    @PositiveOrZero
     private Integer maxSpeed;
-    @NotNull
+
+    @NotNull(message = "required")
+    @PositiveOrZero
     private Integer crewSize;
-    @NotNull
+
+    @NotNull(message = "required")
     private Nation nation;
-    @NotNull
+
+    @NotNull(message = "required")
     private TankRole tankRole;
+
     @Builder.Default
     private boolean deleted = false;
 

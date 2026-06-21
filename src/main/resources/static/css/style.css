@@ -76,6 +76,7 @@ html, body {
 
 input, .form-select, .form-control {
     background-color: rgb(13 22 13) !important;
+    margin-bottom: 0.5em;
 
     &:disabled {
         color: rgba(255,255,255, 30%) !important;
@@ -84,6 +85,19 @@ input, .form-select, .form-control {
     &:focus {
         border: 2px rgba(255,255,255,5%) solid !important;
     }
+}
+
+.input-group-text {
+    margin-bottom: 0.5em;
+}
+
+.form-label {
+    margin-left: 0.2em;
+    margin-bottom: 0.3em;
+}
+
+.invalid-feedback {
+    margin-top: 0;
 }
 
 /* Theme-consistent focus outline for Bootstrap and plain inputs. */
