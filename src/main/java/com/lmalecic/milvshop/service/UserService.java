@@ -1,5 +1,6 @@
 package com.lmalecic.milvshop.service;
 
+import com.lmalecic.milvshop.dto.UserAuthDto;
 import com.lmalecic.milvshop.dto.UserDto;
 import com.lmalecic.milvshop.model.User;
 import com.lmalecic.milvshop.repository.UserRepository;
@@ -18,14 +19,20 @@ public class UserService {
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User register(UserDto userDto) {
-        return userRepository.save(User.builder()
-                .username(userDto.getUsername())
-                .pwdHash(passwordEncoder.encode(userDto.getPassword()))
-                .roles(List.of(userRoleRepository.findByName("ROLE_USER").orElseThrow())).build());
+    public UserDto register(UserAuthDto userAuthDto) {
+        return this.toDto(this.userRepository.save(User.builder()
+                .username(userAuthDto.getUsername())
+                .pwdHash(this.passwordEncoder.encode(userAuthDto.getPassword()))
+                .roles(List.of(this.userRoleRepository.findByName("ROLE_USER")
+                        .orElseThrow()))
+                .build()));
     }
 
     public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+        return this.userRepository.existsByUsername(username);
+    }
+
+    private UserDto toDto(User user) {
+        return new UserDto(user.getId(), user.getUsername(), user.getRoles());
     }
 }

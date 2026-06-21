@@ -1,19 +1,11 @@
 package com.lmalecic.milvshop.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.lmalecic.milvshop.model.UserRole;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserDto {
-    @NotNull(message = "Username is required!")
-    @NotBlank(message = "Username can't be blank!")
-    private String username;
-    @NotNull(message = "Password is required!")
-    @NotBlank(message = "Password can't be blank!")
-    private String password;
-}
+import java.util.List;
+
+public record UserDto(
+        Long id,
+        String username,
+        List<UserRole> roles
+) {}
