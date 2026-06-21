@@ -175,7 +175,9 @@
                 <i class="bi bi-floppy-fill"></i>
                 Save
             </button>
-            <button th:formaction="@{tanks/create}" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}"
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}"
+                    hx:post="@{tanks/create}"
+                    hx-target="#tankModalContent"
                     class="btn btn-primary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-plus-lg"></i>
                 Create

@@ -1,5 +1,6 @@
 package com.lmalecic.milvshop.controller.mvc;
 
+import com.lmalecic.milvshop.util.Constants;
 import com.lmalecic.milvshop.viewmodel.Toast;
 import com.lmalecic.milvshop.viewmodel.ViewContext;
 import com.lmalecic.milvshop.dto.Displayable;
@@ -17,15 +18,19 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/tanks")
 public class AdminTanksMvcController {
+
+    private static final String INDEX_URI = "/admin/tanks";
+    private static final String REDIRECT_INDEX = "redirect:/admin/tanks/";
+    private static final String MODEL_FORM_FRAGMENT = "fragments/admin/tanks/tank-form";
+    private static final String MODEL_LIST_FRAGMENT = "fragments/tank/tanks-grid";
+    private static final String MODEL_CONFIRM_DELETE_FRAGMENT = "fragments/admin/confirm-delete";
 
     private final TankService tankService;
     private final NationService nationService;
@@ -37,45 +42,52 @@ public class AdminTanksMvcController {
         this.buildListModel(model, filter, requestUri);
 
         String sectionUrl = UrlUtils.urlWithParams(requestUri, filter).toUriString();
-
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(sectionUrl);
             return "/fragments/admin/tanks/index";
         }
 
         model.addAttribute("sectionUrl", sectionUrl);
-        return "admin";
+        return AdminMvcController.INDEX_VIEW;
     }
 
     @HxRequest
     @GetMapping("/search")
     public String searchTanks(Model model, @ModelAttribute TankSearchCriteria filter, HtmxResponse htmxResponse) {
-        String requestUri = "/admin/tanks";
-        this.buildListModel(model, filter, requestUri);
-
-        htmxResponse.setPushUrl(UrlUtils.urlWithParams(requestUri, filter).toUriString());
-
-        return "/fragments/tank/tanks-grid";
+        this.buildListModel(model, filter, INDEX_URI);
+        htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, filter).toUriString());
+        return MODEL_LIST_FRAGMENT;
     }
 
     @HxRequest
     @GetMapping("/{id}")
     public String getTankForm(Model model, @PathVariable Long id) {
         this.buildDetailsModel(model, id);
-        return "fragments/admin/tanks/tank-form";
+        return MODEL_FORM_FRAGMENT;
     }
 
     @HxRequest
     @GetMapping("/create")
     public String getCreateForm(Model model) {
         this.buildCreateModel(model);
-        return "fragments/admin/tanks/tank-form";
+        return MODEL_FORM_FRAGMENT;
     }
 
     @PostMapping("/create")
-    public String createTank(@ModelAttribute TankDto tankDto) {
+    public String createTank(Model model, @Valid @ModelAttribute TankDto tankDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+        if (bindingResult.hasErrors()) {
+            this.buildFormOptionsModel(model, ViewContext.CREATE);
+            return MODEL_FORM_FRAGMENT;
+        }
+
         TankDto newTank = this.tankService.create(tankDto);
-        return "redirect:/admin/tanks/" + newTank.getId();
+        if (htmxRequest.isHtmxRequest()) {
+            htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
+            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank updated successfully."));
+            this.buildDetailsModel(model, newTank);
+            return MODEL_FORM_FRAGMENT;
+        }
+        return REDIRECT_INDEX + newTank.getId();
     }
 
     @HxRequest
@@ -85,48 +97,48 @@ public class AdminTanksMvcController {
                         .map(Displayable.class::cast)
                 .orElseThrow(() -> new ResourceNotFoundException("Tank with id " + id + " not found.")));
         model.addAttribute("formAction", "/admin/tanks/delete/" + id);
-        return "fragments/admin/confirm-delete";
+        return MODEL_CONFIRM_DELETE_FRAGMENT;
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteTank(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         TankDto tank = this.tankService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
-            htmxResponse.addTrigger("refreshList");
-            htmxResponse.addTrigger("pushToast", Toast.success("Tank deleted successfully."));
+            htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
+            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank deleted successfully."));
             this.buildDetailsModel(model, tank);
-            return "fragments/admin/tanks/tank-form";
+            return MODEL_FORM_FRAGMENT;
         }
-        return "redirect:/admin/tanks/" + tank.getId();
+        return REDIRECT_INDEX + tank.getId();
     }
 
     @PatchMapping("/recover/{id}")
     public String recoverTank(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         TankDto tank = this.tankService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
-            htmxResponse.addTrigger("refreshList");
-            htmxResponse.addTrigger("pushToast", Toast.success("Tank recovered successfully."));
+            htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
+            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank recovered successfully."));
             this.buildDetailsModel(model, tank);
-            return "fragments/admin/tanks/tank-form";
+            return MODEL_FORM_FRAGMENT;
         }
-        return "redirect:/admin/tanks/" + tank.getId();
+        return REDIRECT_INDEX + tank.getId();
     }
 
     @PatchMapping("/edit")
     public String editTank(Model model, @Valid @ModelAttribute TankDto tankDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             this.buildFormOptionsModel(model, ViewContext.ADMIN);
-            return "fragments/admin/tanks/tank-form";
+            return MODEL_FORM_FRAGMENT;
         }
 
         TankDto updated = this.tankService.update(tankDto);
         if (htmxRequest.isHtmxRequest()) {
-            htmxResponse.addTrigger("refreshList");
-            htmxResponse.addTrigger("pushToast", Toast.success("Tank updated successfully."));
+            htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
+            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank updated successfully."));
             this.buildDetailsModel(model, updated);
-            return "fragments/admin/tanks/tank-form";
+            return MODEL_FORM_FRAGMENT;
         }
-        return "redirect:/admin/tanks/" + updated.getId();
+        return REDIRECT_INDEX + updated.getId();
     }
 
     private void buildListModel(Model model, @ModelAttribute TankSearchCriteria filter, String requestUri) {
@@ -137,13 +149,13 @@ public class AdminTanksMvcController {
                 .tankRoles(this.tankRoleService.findAllOrdered())
                 .filter(filter)
                 .build());
-        model.addAttribute("viewContext", ViewContext.ADMIN);
+        model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
         model.addAttribute("itemClickPath", requestUri);
     }
 
     private void buildCreateModel(Model model) {
         this.buildDetailsModel(model, new TankDto());
-        model.addAttribute("viewContext", ViewContext.CREATE);
+        model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.CREATE);
     }
 
     private void buildDetailsModel(Model model, Long tankId) {
@@ -159,6 +171,6 @@ public class AdminTanksMvcController {
     private void buildFormOptionsModel(Model model, ViewContext viewContext) {
         model.addAttribute("nations", this.nationService.findAllOrdered());
         model.addAttribute("tankRoles", this.tankRoleService.findAllOrdered());
-        model.addAttribute("viewContext", viewContext);
+        model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, viewContext);
     }
 }

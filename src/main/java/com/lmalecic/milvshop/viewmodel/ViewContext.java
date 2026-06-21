@@ -1,14 +1,13 @@
 package com.lmalecic.milvshop.viewmodel;
 
-import org.jspecify.annotations.Nullable;
-import org.springframework.web.util.UriComponentsBuilder;
-
 public enum ViewContext {
     CREATE,
     EDIT,
     DELETE,
     VIEW,
     ADMIN;
+
+    public static final String MODEL_ATTRIBUTE_NAME = "viewContext";
 
     public String getRouteWord() {
         if (this == VIEW || this == ADMIN) {
