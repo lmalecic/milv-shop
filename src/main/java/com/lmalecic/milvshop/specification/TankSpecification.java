@@ -13,12 +13,14 @@ public class TankSpecification {
     private TankSpecification() {}
 
     public static Sort sortByName() {
-        return Sort.by(Tank_.NAME);
+        return Sort.by(Sort.Order.by(Tank_.NAME).ignoreCase());
     }
 
     public static Sort sortByDeletedAndName() {
-        return Sort.by(Sort.Direction.DESC, Tank_.DELETED)
-                .and(Sort.by(Tank_.NAME));
+        return Sort.by(
+                Sort.Order.desc(Tank_.DELETED),
+                Sort.Order.by(Tank_.NAME).ignoreCase()
+        );
     }
 
     public static Specification<Tank> containsNameOrDescription(String nameOrDescription) {
