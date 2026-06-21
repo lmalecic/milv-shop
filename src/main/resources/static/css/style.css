@@ -16,6 +16,7 @@
     --bs-dropdown-link-hover-color: var(--bs-yellow) !important;
     --bs-tertiary-bg: rgba(255,255,255,10%) !important;
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
 
     --tank-card-aspect-ratio: 1.8335187661;
     --active-text-color: var(--bs-yellow);
@@ -114,11 +115,6 @@ input:focus-visible,
 body {
     padding: var(--page-margin);
     --bs-body-font-family: "JetBrains Mono";
-}
-
-.digital-camo {
-    /*background: url("/static/img/bg.jpg") center repeat-y;*/
-    /*filter: saturate(0);*/
 }
 
 .navbar-item {
@@ -435,4 +431,13 @@ label {
     &.toast-info {
         background-color: var(--bs-body-bg);
     }
+}
+
+@keyframes modal-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.modal-pulse.modal-dialog {
+    animation: modal-pulse 0.3s ease-in-out;
 }
