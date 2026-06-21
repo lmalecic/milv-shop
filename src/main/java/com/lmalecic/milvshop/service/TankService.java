@@ -26,7 +26,7 @@ public class TankService {
     }
 
     public List<TankDto> findAllActive() {
-        return this.tankRepository.findAllByDeleted(false)
+        return this.tankRepository.findAllByDeleted(false, TankSpecification.sortByName())
                 .stream().map(this::toDto)
                 .toList();
     }
