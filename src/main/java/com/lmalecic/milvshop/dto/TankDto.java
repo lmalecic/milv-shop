@@ -2,6 +2,7 @@ package com.lmalecic.milvshop.dto;
 
 import com.lmalecic.milvshop.model.Nation;
 import com.lmalecic.milvshop.model.TankRole;
+import com.lmalecic.milvshop.validation.UrlOrPath;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,7 +12,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,7 +30,7 @@ public class TankDto implements Displayable {
     @Length(max = 1000)
     private String description;
 
-    @URL
+    @UrlOrPath
     private String imgPath;
 
     @NotNull(message = "required")
