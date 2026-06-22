@@ -73,14 +73,14 @@ public class TankService {
         if (!filter.hasActiveFilters()) {
             return this.findAllActive();
         }
-        return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(filter.getSearchQuery())
-                        .and(TankSpecification.containsNation(filter.getNationIds()))
-                        .and(TankSpecification.containsTankRole(filter.getTankRoleIds()))
-                        .and(TankSpecification.priceBetween(filter.getPriceMin(), filter.getPriceMax()))
-                        .and(TankSpecification.mainGunCalibreEquals(filter.getMainGunCalibre()))
-                        .and(TankSpecification.armorThicknessBetween(filter.getArmorThicknessMin(), filter.getArmorThicknessMax()))
-                        .and(TankSpecification.maxSpeedEquals(filter.getMaxSpeed()))
-                        .and(TankSpecification.crewSizeEquals(filter.getCrewSize())),
+        return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(filter.searchQuery())
+                        .and(TankSpecification.containsNation(filter.nationIds()))
+                        .and(TankSpecification.containsTankRole(filter.tankRoleIds()))
+                        .and(TankSpecification.priceBetween(filter.priceMin(), filter.priceMax()))
+                        .and(TankSpecification.mainGunCalibreEquals(filter.mainGunCalibre()))
+                        .and(TankSpecification.armorThicknessBetween(filter.armorThicknessMin(), filter.armorThicknessMax()))
+                        .and(TankSpecification.maxSpeedEquals(filter.maxSpeed()))
+                        .and(TankSpecification.crewSizeEquals(filter.crewSize())),
                         TankSpecification.sortByDeletedAndName())
                 .stream()
                 .map(this::toDto)
