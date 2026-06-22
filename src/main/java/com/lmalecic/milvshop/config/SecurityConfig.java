@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password4j.Argon2Password4jPasswordEn
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Configuration
 public class SecurityConfig {
@@ -32,7 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .loginPage("/?login")
+                        .loginPage("/?auth")
                         .loginProcessingUrl("/login")
                         .successForwardUrl("/auth/login-success")
                         .failureForwardUrl("/auth/login-failed")
@@ -41,6 +42,13 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/"))
                 .exceptionHandling(configurer -> configurer
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            String redirectUrl = request.getRequestURI();
+                            System.out.println("Redirect to after login success: " + redirectUrl);
+                            response.sendRedirect(UriComponentsBuilder.fromPath("/")
+                                    .queryParam("auth")
+                                    .queryParam("redirect", redirectUrl).toUriString());
+                        })
                         .defaultAuthenticationEntryPointFor(entryPoint, requestMatcher));
 
         return http.build();

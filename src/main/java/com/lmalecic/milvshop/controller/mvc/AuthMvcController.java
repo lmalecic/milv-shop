@@ -17,19 +17,24 @@ import org.springframework.web.bind.annotation.*;
 public class AuthMvcController {
 
     public static final String LOGIN_SUCCESS_URL = "/auth/login-success";
+    public static final String FRAGMENT_AUTH_FORM = "fragments/auth/auth-form";
 
     private final UserService userService;
 
     @HxRequest
     @GetMapping("/login")
-    public String getLoginForm(Model model) {
+    public String getLoginForm(Model model, @RequestParam(required = false) String redirect) {
         model.addAttribute("userAuthDto", new UserAuthDto());
-        return "fragments/auth/login-form";
+        model.addAttribute("redirectUrl", redirect);
+        return FRAGMENT_AUTH_FORM;
     }
 
     @HxRequest
     @PostMapping("/login-success")
-    public String loginSuccess() {
+    public String loginSuccess(@RequestParam(required = false) String redirect) {
+        if (redirect != null && !redirect.isBlank()) {
+            return "redirect:htmx:" + redirect;
+        }
         return "refresh:htmx";
     }
 
@@ -40,25 +45,25 @@ public class AuthMvcController {
             bindingResult.rejectValue("username", "error.auth", "");
             bindingResult.rejectValue("password", "error.auth", "Invalid username or password");
         }
-        return "fragments/auth/login-form";
+        return FRAGMENT_AUTH_FORM;
     }
 
     @HxRequest
     @PostMapping("/register")
     public String processRegister(@Valid @ModelAttribute UserAuthDto userAuthDto, BindingResult bindingResult, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
-            return "fragments/auth/login-form";
+            return FRAGMENT_AUTH_FORM;
         }
 
         if (this.userService.existsByUsername(userAuthDto.getUsername())) {
             bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
-            return "fragments/auth/login-form";
+            return FRAGMENT_AUTH_FORM;
         }
 
         this.userService.register(userAuthDto);
 
         htmxResponse.addTrigger("login");
-        return "fragments/auth/login-form";
+        return FRAGMENT_AUTH_FORM;
     }
 }
 

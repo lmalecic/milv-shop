@@ -2,6 +2,8 @@
 <html lang="en"
       xmlns:th="https://www.thymeleaf.org">
 <form id="authForm" th:object="${userAuthDto}" th:action="@{/auth/login}" class="modal-content form-group needs-validation">
+    <label hidden for="redirect"></label>
+    <input hidden id="redirect" name="redirect" th:value="${redirectUrl}">
     <div class="modal-header">
         <h4 class="modal-title me-auto text-uppercase">&gt; Log_in / Register</h4>
         <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
