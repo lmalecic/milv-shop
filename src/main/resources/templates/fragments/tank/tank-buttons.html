@@ -29,7 +29,7 @@
             <img th:src="${tank.tankRole.imgPath}" alt="" class="icon">
         </div>
     </div>
-    <div th:text="${@formatUtils.getPriceString(tank.getPrice())}"
+    <div th:text="${@formatUtils.getPriceString(tank.price)}"
          th:classappend="${tank.deleted == true ? 'text-decoration-line-through' : ''}"
          class="tank-card-price position-absolute rounded-3 fs-6 fw-semibold">
     </div>

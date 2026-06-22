@@ -30,22 +30,21 @@ public class TanksMvcController {
     private final TankRoleService tankRoleService;
 
     @GetMapping({"", "/"})
-    public String getTanksView(Model model, @ModelAttribute TankSearchCriteria filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
+    public String getIndex(Model model, @ModelAttribute("searchCriteria") TankSearchCriteria searchCriteria, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
-        List<TankDto> tanksList = this.tankService.findAllBySearchCriteria(filter);
+        List<TankDto> tanksList = this.tankService.findAllBySearchCriteria(searchCriteria);
 
         model.addAttribute("results", TankSearchResults.builder()
                 .tanks(tanksList)
                 .mainGunCalibres(this.tankService.findAllMainGunCalibres())
                 .nations(this.nationService.findAllOrdered())
                 .tankRoles(this.tankRoleService.findAllOrdered())
-                .filter(filter)
                 .build());
         model.addAttribute("viewContext", ViewContext.VIEW);
         model.addAttribute("itemClickPath", requestUri);
 
         if (htmxRequest.isHtmxRequest()) {
-            htmxResponse.setReplaceUrl(UrlUtils.urlWithParams(requestUri, filter).toUriString());
+            htmxResponse.setReplaceUrl(UrlUtils.urlWithParams(requestUri, searchCriteria).toUriString());
             return "/fragments/tank/tanks-grid";
         }
 
@@ -54,7 +53,7 @@ public class TanksMvcController {
 
     @HxRequest
     @GetMapping("/{id}")
-    public String getTankForm(Model model, @PathVariable Long id) {
+    public String getDetailsForm(Model model, @PathVariable Long id) {
         TankDto tank = this.tankService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tank with id " + id + " not found."));
 

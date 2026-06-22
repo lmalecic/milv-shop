@@ -37,11 +37,11 @@ public class AdminTanksMvcController {
     private final TankRoleService tankRoleService;
 
     @GetMapping({"", "/"})
-    public String getIndex(Model model, @ModelAttribute TankSearchCriteria filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
+    public String getIndex(Model model, @ModelAttribute("searchCriteria") TankSearchCriteria searchCriteria, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
-        this.buildListModel(model, filter, requestUri);
+        this.buildListModel(model, searchCriteria, requestUri);
 
-        String sectionUrl = UrlUtils.urlWithParams(requestUri, filter).toUriString();
+        String sectionUrl = UrlUtils.urlWithParams(requestUri, searchCriteria).toUriString();
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(sectionUrl);
             return "/fragments/admin/tanks/index";
@@ -53,9 +53,9 @@ public class AdminTanksMvcController {
 
     @HxRequest
     @GetMapping("/search")
-    public String search(Model model, @ModelAttribute TankSearchCriteria filter, HtmxResponse htmxResponse) {
-        this.buildListModel(model, filter, INDEX_URI);
-        htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, filter).toUriString());
+    public String search(Model model, @ModelAttribute("searchCriteria") TankSearchCriteria searchCriteria, HtmxResponse htmxResponse) {
+        this.buildListModel(model, searchCriteria, INDEX_URI);
+        htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, searchCriteria).toUriString());
         return MODEL_LIST_FRAGMENT;
     }
 
@@ -80,14 +80,14 @@ public class AdminTanksMvcController {
             return MODEL_FORM_FRAGMENT;
         }
 
-        TankDto newTank = this.tankService.create(tankDto);
+        var created = this.tankService.create(tankDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
             htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank updated successfully."));
-            this.buildDetailsModel(model, newTank);
+            this.buildDetailsModel(model, created);
             return MODEL_FORM_FRAGMENT;
         }
-        return REDIRECT_INDEX + newTank.id();
+        return REDIRECT_INDEX + created.id();
     }
 
     @HxRequest
@@ -102,26 +102,26 @@ public class AdminTanksMvcController {
 
     @DeleteMapping("/delete/{id}")
     public String delete(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
-        TankDto tank = this.tankService.deleteById(id);
+        var deleted = this.tankService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
             htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank deleted successfully."));
-            this.buildDetailsModel(model, tank);
+            this.buildDetailsModel(model, deleted);
             return MODEL_FORM_FRAGMENT;
         }
-        return REDIRECT_INDEX + tank.id();
+        return REDIRECT_INDEX + deleted.id();
     }
 
     @PatchMapping("/recover/{id}")
     public String recover(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
-        TankDto tank = this.tankService.recoverById(id);
+        var recovered = this.tankService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
             htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank recovered successfully."));
-            this.buildDetailsModel(model, tank);
+            this.buildDetailsModel(model, recovered);
             return MODEL_FORM_FRAGMENT;
         }
-        return REDIRECT_INDEX + tank.id();
+        return REDIRECT_INDEX + recovered.id();
     }
 
     @PatchMapping("/edit")
@@ -141,13 +141,12 @@ public class AdminTanksMvcController {
         return REDIRECT_INDEX + updated.id();
     }
 
-    private void buildListModel(Model model, @ModelAttribute TankSearchCriteria filter, String requestUri) {
+    private void buildListModel(Model model, TankSearchCriteria criteria, String requestUri) {
         model.addAttribute("results", TankSearchResults.builder()
-                .tanks(this.tankService.findAllBySearchCriteria(filter))
+                .tanks(this.tankService.findAllBySearchCriteria(criteria))
                 .mainGunCalibres(this.tankService.findAllMainGunCalibres())
                 .nations(this.nationService.findAllOrdered())
                 .tankRoles(this.tankRoleService.findAllOrdered())
-                .filter(filter)
                 .build());
         model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
         model.addAttribute("itemClickPath", requestUri);

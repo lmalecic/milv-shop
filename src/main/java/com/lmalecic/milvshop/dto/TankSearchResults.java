@@ -10,7 +10,6 @@ import java.util.List;
 public record TankSearchResults(
         List<TankDto> tanks,
         List<Integer> mainGunCalibres,
-        List<Nation> nations,
-        List<TankRole> tankRoles,
-        TankSearchCriteria filter
+        List<NationDto> nations,
+        List<TankRole> tankRoles
 ) {}

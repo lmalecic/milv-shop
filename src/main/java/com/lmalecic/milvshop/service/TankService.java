@@ -68,18 +68,18 @@ public class TankService {
         return this.toDto(this.tankRepository.save(tank));
     }
 
-    public List<TankDto> findAllBySearchCriteria(TankSearchCriteria filter) {
-        if (!filter.hasActiveFilters()) {
+    public List<TankDto> findAllBySearchCriteria(TankSearchCriteria criteria) {
+        if (!criteria.hasActiveFilters()) {
             return this.findAllActive();
         }
-        return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(filter.searchQuery())
-                        .and(TankSpecification.containsNation(filter.nationIds()))
-                        .and(TankSpecification.containsTankRole(filter.tankRoleIds()))
-                        .and(TankSpecification.priceBetween(filter.priceMin(), filter.priceMax()))
-                        .and(TankSpecification.mainGunCalibreEquals(filter.mainGunCalibre()))
-                        .and(TankSpecification.armorThicknessBetween(filter.armorThicknessMin(), filter.armorThicknessMax()))
-                        .and(TankSpecification.maxSpeedEquals(filter.maxSpeed()))
-                        .and(TankSpecification.crewSizeEquals(filter.crewSize())),
+        return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(criteria.searchQuery())
+                        .and(TankSpecification.containsNation(criteria.nationIds()))
+                        .and(TankSpecification.containsTankRole(criteria.tankRoleIds()))
+                        .and(TankSpecification.priceBetween(criteria.priceMin(), criteria.priceMax()))
+                        .and(TankSpecification.mainGunCalibreEquals(criteria.mainGunCalibre()))
+                        .and(TankSpecification.armorThicknessBetween(criteria.armorThicknessMin(), criteria.armorThicknessMax()))
+                        .and(TankSpecification.maxSpeedEquals(criteria.maxSpeed()))
+                        .and(TankSpecification.crewSizeEquals(criteria.crewSize())),
                         TankSpecification.sortByDeletedAndName())
                 .stream()
                 .map(this::toDto)
@@ -94,20 +94,20 @@ public class TankService {
                 .toList();
     }
 
-    private TankDto toDto(Tank tank) {
+    private TankDto toDto(Tank entity) {
         return TankDto.builder()
-                .id(tank.getId())
-                .name(tank.getName())
-                .description(tank.getDescription())
-                .imgPath(tank.getImgPath())
-                .price(tank.getPrice())
-                .mainGunCalibre(tank.getMainGunCalibre())
-                .armorThickness(tank.getArmorThickness())
-                .maxSpeed(tank.getMaxSpeed())
-                .crewSize(tank.getCrewSize())
-                .nation(tank.getNation())
-                .tankRole(tank.getTankRole())
-                .deleted(tank.isDeleted())
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .imgPath(entity.getImgPath())
+                .price(entity.getPrice())
+                .mainGunCalibre(entity.getMainGunCalibre())
+                .armorThickness(entity.getArmorThickness())
+                .maxSpeed(entity.getMaxSpeed())
+                .crewSize(entity.getCrewSize())
+                .nation(entity.getNation())
+                .tankRole(entity.getTankRole())
+                .deleted(entity.isDeleted())
                 .build();
     }
 
