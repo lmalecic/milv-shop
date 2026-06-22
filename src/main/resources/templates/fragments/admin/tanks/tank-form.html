@@ -7,8 +7,8 @@
     <input hidden th:field="*{id}">
     <div class="modal-header">
         <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}">CREATE_TANK</h3>
-        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !tankDto.deleted}">EDIT_TANK</h3>
-        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && tankDto.deleted}">DELETED_TANK</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !tankDto.deleted}" th:text="${'EDIT_TANK — ID ' + tankDto.id}">EDIT_TANK</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && tankDto.deleted}" th:text="${'DELETED_TANK — ID ' + tankDto.id}">DELETED_TANK</h3>
         <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
     </div>
     <div class="modal-body">
