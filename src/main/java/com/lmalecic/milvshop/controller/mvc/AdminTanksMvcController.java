@@ -154,7 +154,7 @@ public class AdminTanksMvcController {
     }
 
     private void buildCreateModel(Model model) {
-        this.buildDetailsModel(model, new TankDto());
+        this.buildDetailsModel(model, TankDto.builder().build());
         model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.CREATE);
     }
 

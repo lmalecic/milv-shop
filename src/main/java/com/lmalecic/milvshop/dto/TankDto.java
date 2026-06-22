@@ -17,50 +17,48 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class TankDto implements Displayable {
     private Long id;
 
     @Length(max = 46)
     @NotBlank
-    private String name;
+    private final String name;
 
     @Length(max = 1000)
-    private String description;
+    private final String description;
 
     @UrlOrPath
-    private String imgPath;
+    private final String imgPath;
 
     @NotNull(message = "required")
     @Positive
-    private BigDecimal price;
+    private final BigDecimal price;
 
     @NotNull(message = "required")
     @PositiveOrZero
-    private Integer mainGunCalibre;
+    private final Integer mainGunCalibre;
 
     @NotNull(message = "required")
     @PositiveOrZero
-    private Integer armorThickness;
+    private final Integer armorThickness;
 
     @NotNull(message = "required")
     @PositiveOrZero
-    private Integer maxSpeed;
+    private final Integer maxSpeed;
 
     @NotNull(message = "required")
     @PositiveOrZero
-    private Integer crewSize;
+    private final Integer crewSize;
 
     @NotNull(message = "required")
-    private Nation nation;
+    private final Nation nation;
 
     @NotNull(message = "required")
-    private TankRole tankRole;
+    private final TankRole tankRole;
 
     @Builder.Default
-    private boolean deleted = false;
+    private final boolean deleted = false;
 
     @Override
     public String getDisplayableType() {
