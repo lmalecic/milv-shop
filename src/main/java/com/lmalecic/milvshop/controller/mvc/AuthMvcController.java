@@ -50,7 +50,8 @@ public class AuthMvcController {
 
     @HxRequest
     @PostMapping("/register")
-    public String processRegister(@Valid @ModelAttribute UserAuthDto userAuthDto, BindingResult bindingResult, HtmxResponse htmxResponse) {
+    public String processRegister(Model model, @Valid @ModelAttribute UserAuthDto userAuthDto, BindingResult bindingResult, @RequestParam String redirect, HtmxResponse htmxResponse) {
+        model.addAttribute("redirectUrl", redirect);
         if (bindingResult.hasErrors()) {
             return FRAGMENT_AUTH_FORM;
         }
