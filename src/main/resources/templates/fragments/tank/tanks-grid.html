@@ -18,7 +18,7 @@
          class="px-2">
     </div>
     <div th:each="tank : ${results.tanks}"
-         th:insert="~{fragments/tank/tank-buttons :: item(${tank})}"
+         th:insert="~{fragments/tank/tank-buttons :: item}"
          class="px-2">
     </div>
 </div>

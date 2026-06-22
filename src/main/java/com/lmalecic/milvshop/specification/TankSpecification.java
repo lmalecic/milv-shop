@@ -3,6 +3,7 @@ package com.lmalecic.milvshop.specification;
 import com.lmalecic.milvshop.model.*;
 import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -62,8 +63,14 @@ public class TankSpecification {
         return equals(Tank_.crewSize, crewSize);
     }
 
-    public static Specification<Tank> deletedEquals(Boolean isDeleted) {
-        return equals(Tank_.deleted, isDeleted);
+    public static Specification<Tank> includeDeleted(Boolean include) {
+        return (root, query, builder) -> {
+            if (Boolean.TRUE.equals(include)) {
+                return builder.conjunction();
+            } else {
+                return root.get(Tank_.DELETED).equalTo(false);
+            }
+        };
     }
 
     private static <T extends Comparable<? super T>> Specification<Tank> between(SingularAttribute<Tank, T> attribute, T min, T max) {

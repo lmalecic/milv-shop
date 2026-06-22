@@ -9,6 +9,7 @@ public interface Displayable {
         }
     }
 
+    default String getDisplayName() { return this.toString(); }
     String getDisplayableType();
     List<DisplayElement> getDisplayElements();
 }

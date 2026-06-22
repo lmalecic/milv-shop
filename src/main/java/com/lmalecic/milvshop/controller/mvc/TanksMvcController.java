@@ -37,7 +37,7 @@ public class TanksMvcController {
         model.addAttribute("results", TankSearchResults.builder()
                 .tanks(tanksList)
                 .mainGunCalibres(this.tankService.findAllMainGunCalibres())
-                .nations(this.nationService.findAllOrdered())
+                .nations(this.nationService.findAllActive())
                 .tankRoles(this.tankRoleService.findAllOrdered())
                 .build());
         model.addAttribute("viewContext", ViewContext.VIEW);

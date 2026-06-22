@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<button th:fragment="create" class="tank-card btn btn-secondary w-100 h-100 d-flex flex-column border-2 rounded-4 p-2 text-decoration-none fw-bold"
+<button th:fragment="create" class="tank-card btn btn-secondary w-100 h-100 d-flex flex-column border-2 rounded-4 text-decoration-none fw-bold"
         hx:get="@{/admin/tanks/create}"
         hx-target="#tankModalContent"
         hx-trigger="click"
@@ -12,7 +12,7 @@
 </button>
 
 <!--/*@thymesVar id="tank" type="com.lmalecic.milvshop.dto.TankDto"*/-->
-<a th:fragment="item(tank)" href="#"
+<a th:fragment="item" href="#"
    hx:get="@{{itemClickPath}/{id}(itemClickPath=${itemClickPath}, id=${tank.id})}"
    hx-target="#tankModalContent"
    hx-trigger="click"
@@ -22,7 +22,7 @@
    th:classappend="${tank.deleted == true ? 'deleted' : ''}">
     <img th:src="${tank.imgPath}" class="card-img text-center" alt="[NO IMAGE]">
     <div class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
-        <div class="tank-card-stat rounded-3 fs-6 d-inline-flex flex-row"
+        <div class="card-stat rounded-3 fs-6 d-inline-flex flex-row"
              th:classappend="${tank.deleted == true ? 'deleted' : ''}">
             <img th:src="${tank.nation.imgPath}" alt="" class="rounded-1 icon">
             <span th:text="${tank.name}" class="fw-semibold" th:classappend="${tank.deleted == true ? 'text-decoration-line-through' : ''}"></span>

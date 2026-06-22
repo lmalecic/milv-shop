@@ -26,8 +26,13 @@ public record TankDto(
         @NotNull(message = "required") @PositiveOrZero Integer crewSize,
         @NotNull(message = "required") Nation nation,
         @NotNull(message = "required") TankRole tankRole,
-        boolean deleted
+        Boolean deleted
 ) implements Displayable {
+
+    @Override
+    public String getDisplayName() {
+        return this.name();
+    }
 
     @Override
     public String getDisplayableType() {

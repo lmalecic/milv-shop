@@ -145,7 +145,7 @@ public class AdminTanksMvcController {
         model.addAttribute("results", TankSearchResults.builder()
                 .tanks(this.tankService.findAllBySearchCriteria(criteria))
                 .mainGunCalibres(this.tankService.findAllMainGunCalibres())
-                .nations(this.nationService.findAllOrdered())
+                .nations(this.nationService.findAllActive())
                 .tankRoles(this.tankRoleService.findAllOrdered())
                 .build());
         model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
@@ -168,7 +168,7 @@ public class AdminTanksMvcController {
     }
 
     private void buildFormOptionsModel(Model model, ViewContext viewContext) {
-        model.addAttribute("nations", this.nationService.findAllOrdered());
+        model.addAttribute("nations", this.nationService.findAllActive());
         model.addAttribute("tankRoles", this.tankRoleService.findAllOrdered());
         model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, viewContext);
     }

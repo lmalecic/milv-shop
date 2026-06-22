@@ -73,13 +73,14 @@ public class TankService {
             return this.findAllActive();
         }
         return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(criteria.searchQuery())
-                        .and(TankSpecification.containsNation(criteria.nationIds()))
-                        .and(TankSpecification.containsTankRole(criteria.tankRoleIds()))
-                        .and(TankSpecification.priceBetween(criteria.priceMin(), criteria.priceMax()))
-                        .and(TankSpecification.mainGunCalibreEquals(criteria.mainGunCalibre()))
-                        .and(TankSpecification.armorThicknessBetween(criteria.armorThicknessMin(), criteria.armorThicknessMax()))
-                        .and(TankSpecification.maxSpeedEquals(criteria.maxSpeed()))
-                        .and(TankSpecification.crewSizeEquals(criteria.crewSize())),
+                                .and(TankSpecification.containsNation(criteria.nationIds()))
+                                .and(TankSpecification.containsTankRole(criteria.tankRoleIds()))
+                                .and(TankSpecification.priceBetween(criteria.priceMin(), criteria.priceMax()))
+                                .and(TankSpecification.mainGunCalibreEquals(criteria.mainGunCalibre()))
+                                .and(TankSpecification.armorThicknessBetween(criteria.armorThicknessMin(), criteria.armorThicknessMax()))
+                                .and(TankSpecification.maxSpeedEquals(criteria.maxSpeed()))
+                                .and(TankSpecification.crewSizeEquals(criteria.crewSize()))
+                                .and(TankSpecification.includeDeleted(criteria.showDeleted())),
                         TankSpecification.sortByDeletedAndName())
                 .stream()
                 .map(this::toDto)

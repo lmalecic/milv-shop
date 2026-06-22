@@ -176,7 +176,7 @@ body {
 }
 
 .tank-card {
-    aspect-ratio: var(--tank-card-aspect-ratio);
+    aspect-ratio: var(--tank-card-aspect-ratio) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -216,7 +216,7 @@ body {
     }
 }
 
-.tank-card-stat {
+.card-stat {
     background: var(--bs-border-color);
     padding: 0.2rem 0.4rem;
     gap: 0.3em;
@@ -440,4 +440,46 @@ label {
 
 .modal-pulse.modal-dialog {
     animation: modal-pulse 0.3s ease-in-out;
+}
+
+.nation-card {
+    aspect-ratio: var(--tank-card-aspect-ratio);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transform: translateY(0);
+    transition: transform var(--ease-out-expo) 0.3s, color var(--ease-out-expo) 0.3s, background-color var(--ease-out-expo) 0.3s !important;
+
+    .card-img {
+        width: 100% !important;
+        height: 100% !important;
+        transition: transform var(--ease-out-expo) 0.3s;
+        transform: scale(100%);
+        object-position: center !important;
+        object-fit: cover !important;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    &:is(a), &:is(button) {
+        &:active {
+            transform: translateY(0);
+
+            .card-img {
+                transform: scale(100%);
+            }
+        }
+
+        &:hover {
+            transform: translateY(-5%);
+
+            .card-img {
+                transform: scale(110%) !important;
+            }
+        }
+    }
+
+    &.deleted {
+        background-color: rgb(18, 8, 8) !important;
+    }
 }

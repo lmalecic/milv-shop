@@ -1,7 +1,12 @@
 package com.lmalecic.milvshop.service;
 
+import com.lmalecic.milvshop.dto.NationDto;
+import com.lmalecic.milvshop.dto.NationSearchCriteria;
+import com.lmalecic.milvshop.exception.NoContentException;
+import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.model.Nation;
 import com.lmalecic.milvshop.repository.NationRepository;
+import com.lmalecic.milvshop.specification.NationSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,31 +19,74 @@ public class NationService {
 
     private final NationRepository nationRepository;
 
-    public List<Nation> findAll() {
-        return this.nationRepository.findAll();
+    public List<NationDto> findAllActive() {
+        return this.nationRepository.findAllByDeleted(false, NationSpecification.sortByName())
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 
-    public List<Nation> findAllOrdered() { return this.nationRepository.findAllByOrderByNameAsc(); }
-
-    public Optional<Nation> findById(Long id) {
-        return this.nationRepository.findById(id);
+    public Optional<NationDto> findById(Long id) {
+        return this.nationRepository.findById(id)
+                .map(this::toDto);
     }
 
-    public Nation create(Nation nation) {
-        if (nation.getId() != null) {
-            throw new IllegalArgumentException("New nation cannot have an id.");
+    public NationDto create(NationDto dto) {
+        return this.toDto(this.nationRepository.save(this.toEntity(dto.withId(null))));
+    }
+
+    public NationDto update(NationDto dto) {
+        if (!this.nationRepository.existsById(dto.id())) {
+            throw new IllegalArgumentException("Nation with id " + dto.id() + " does not exist.");
         }
-        return this.nationRepository.save(nation);
+        return this.toDto(this.nationRepository.save(this.toEntity(dto)));
     }
 
-    public Nation update(Nation nation) {
-        if (!this.nationRepository.existsById(nation.getId())) {
-            throw new IllegalArgumentException("Nation with id " + nation.getId() + " does not exist.");
+    public NationDto deleteById(Long id) {
+        var entity = this.nationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Nation with id " + id + " does not exist."));
+        if (entity.isDeleted()) {
+            throw new NoContentException("Nation with id " + id + " is already deleted.");
         }
-        return this.nationRepository.save(nation);
+        entity.setDeleted(true);
+        return this.toDto(this.nationRepository.save(entity));
     }
 
-    public void deleteById(Long id) {
-        this.nationRepository.deleteById(id);
+    public NationDto recoverById(Long id) {
+        var entity = this.nationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Nation with id " + id + " does not exist."));
+        if (!entity.isDeleted()) {
+            throw new NoContentException("Nation with id " + id + " isn't deleted.");
+        }
+        entity.setDeleted(false);
+        return this.toDto(this.nationRepository.save(entity));
+    }
+
+    public List<NationDto> findAllBySearchCriteria(NationSearchCriteria searchCriteria) {
+        if (!searchCriteria.hasActiveFilters()) {
+            return this.findAllActive();
+        }
+        return this.nationRepository.findAll(NationSpecification.nameLike(searchCriteria.searchQuery())
+                                .and(NationSpecification.includeDeleted(searchCriteria.showDeleted())),
+                        NationSpecification.sortByDeletedAndName())
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    private NationDto toDto(Nation entity) {
+        return NationDto.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .imgPath(entity.getImgPath())
+                .build();
+    }
+
+    private Nation toEntity(NationDto dto) {
+        return Nation.builder()
+                .id(dto.id())
+                .name(dto.name())
+                .imgPath(dto.imgPath())
+                .build();
     }
 }
