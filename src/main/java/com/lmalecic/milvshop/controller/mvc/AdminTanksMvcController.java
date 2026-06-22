@@ -87,7 +87,7 @@ public class AdminTanksMvcController {
             this.buildDetailsModel(model, newTank);
             return MODEL_FORM_FRAGMENT;
         }
-        return REDIRECT_INDEX + newTank.getId();
+        return REDIRECT_INDEX + newTank.id();
     }
 
     @HxRequest
@@ -109,7 +109,7 @@ public class AdminTanksMvcController {
             this.buildDetailsModel(model, tank);
             return MODEL_FORM_FRAGMENT;
         }
-        return REDIRECT_INDEX + tank.getId();
+        return REDIRECT_INDEX + tank.id();
     }
 
     @PatchMapping("/recover/{id}")
@@ -121,7 +121,7 @@ public class AdminTanksMvcController {
             this.buildDetailsModel(model, tank);
             return MODEL_FORM_FRAGMENT;
         }
-        return REDIRECT_INDEX + tank.getId();
+        return REDIRECT_INDEX + tank.id();
     }
 
     @PatchMapping("/edit")
@@ -138,7 +138,7 @@ public class AdminTanksMvcController {
             this.buildDetailsModel(model, updated);
             return MODEL_FORM_FRAGMENT;
         }
-        return REDIRECT_INDEX + updated.getId();
+        return REDIRECT_INDEX + updated.id();
     }
 
     private void buildListModel(Model model, @ModelAttribute TankSearchCriteria filter, String requestUri) {

@@ -15,16 +15,20 @@ public record TankSearchCriteria(
         Integer maxSpeed,
         Integer crewSize,
         Boolean showDeleted
-) {
+) implements SearchCriteria {
+
+    @Override
     public boolean hasActiveFilters() {
-        return (this.searchQuery != null && !this.searchQuery.isEmpty()) ||
-                (this.nationIds != null && !this.nationIds.isEmpty()) ||
-                (this.tankRoleIds != null && !this.tankRoleIds.isEmpty()) ||
-                (this.priceMin != null) || (this.priceMax != null) ||
-                (this.mainGunCalibre != null) ||
-                (this.armorThicknessMin != null) || (this.armorThicknessMax != null) ||
-                (this.maxSpeed != null) ||
-                (this.crewSize != null) ||
-                (this.showDeleted != null);
+        return (this.searchQuery != null && !this.searchQuery.isBlank())
+                || (this.nationIds != null && !this.nationIds.isEmpty())
+                || (this.tankRoleIds != null && !this.tankRoleIds.isEmpty())
+                || (this.priceMin != null)
+                || (this.priceMax != null)
+                || (this.mainGunCalibre != null)
+                || (this.armorThicknessMin != null)
+                || (this.armorThicknessMax != null)
+                || (this.maxSpeed != null)
+                || (this.crewSize != null)
+                || (this.showDeleted != null);
     }
 }

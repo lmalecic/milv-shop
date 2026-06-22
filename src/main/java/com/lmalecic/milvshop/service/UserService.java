@@ -21,8 +21,8 @@ public class UserService {
 
     public UserDto register(UserAuthDto userAuthDto) {
         return this.toDto(this.userRepository.save(User.builder()
-                .username(userAuthDto.getUsername())
-                .pwdHash(this.passwordEncoder.encode(userAuthDto.getPassword()))
+                .username(userAuthDto.username())
+                .pwdHash(this.passwordEncoder.encode(userAuthDto.password()))
                 .roles(List.of(this.userRoleRepository.findByName("ROLE_USER")
                         .orElseThrow()))
                 .build()));

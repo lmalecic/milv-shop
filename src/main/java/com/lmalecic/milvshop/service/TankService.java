@@ -38,13 +38,12 @@ public class TankService {
     }
 
     public TankDto create(TankDto tankDto) {
-        tankDto.setId(null);
-        return this.toDto(this.tankRepository.save(this.toEntity(tankDto)));
+        return this.toDto(this.tankRepository.save(this.toEntity(tankDto.withId(null))));
     }
 
     public TankDto update(TankDto tankDto) {
-        if (!this.tankRepository.existsById(tankDto.getId())) {
-            throw new IllegalArgumentException("Tank with id " + tankDto.getId() + " does not exist.");
+        if (!this.tankRepository.existsById(tankDto.id())) {
+            throw new IllegalArgumentException("Tank with id " + tankDto.id() + " does not exist.");
         }
         return this.toDto(this.tankRepository.save(this.toEntity(tankDto)));
     }
@@ -89,7 +88,7 @@ public class TankService {
 
     public List<Integer> findAllMainGunCalibres() {
         return this.findAll().stream()
-                .map(TankDto::getMainGunCalibre)
+                .map(TankDto::mainGunCalibre)
                 .distinct()
                 .sorted()
                 .toList();
@@ -114,18 +113,18 @@ public class TankService {
 
     private Tank toEntity(TankDto dto) {
         return Tank.builder()
-                .id(dto.getId())
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .imgPath(dto.getImgPath())
-                .price(dto.getPrice())
-                .mainGunCalibre(dto.getMainGunCalibre())
-                .armorThickness(dto.getArmorThickness())
-                .maxSpeed(dto.getMaxSpeed())
-                .crewSize(dto.getCrewSize())
-                .nation(dto.getNation())
-                .tankRole(dto.getTankRole())
-                .deleted(dto.isDeleted())
+                .id(dto.id())
+                .name(dto.name())
+                .description(dto.description())
+                .imgPath(dto.imgPath())
+                .price(dto.price())
+                .mainGunCalibre(dto.mainGunCalibre())
+                .armorThickness(dto.armorThickness())
+                .maxSpeed(dto.maxSpeed())
+                .crewSize(dto.crewSize())
+                .nation(dto.nation())
+                .tankRole(dto.tankRole())
+                .deleted(dto.deleted())
                 .build();
     }
 }

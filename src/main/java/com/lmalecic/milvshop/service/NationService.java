@@ -15,30 +15,30 @@ public class NationService {
     private final NationRepository nationRepository;
 
     public List<Nation> findAll() {
-        return nationRepository.findAll();
+        return this.nationRepository.findAll();
     }
 
-    public List<Nation> findAllOrdered() { return nationRepository.findAllByOrderByNameAsc(); }
+    public List<Nation> findAllOrdered() { return this.nationRepository.findAllByOrderByNameAsc(); }
 
     public Optional<Nation> findById(Long id) {
-        return nationRepository.findById(id);
+        return this.nationRepository.findById(id);
     }
 
     public Nation create(Nation nation) {
         if (nation.getId() != null) {
             throw new IllegalArgumentException("New nation cannot have an id.");
         }
-        return nationRepository.save(nation);
+        return this.nationRepository.save(nation);
     }
 
     public Nation update(Nation nation) {
-        if (!nationRepository.existsById(nation.getId())) {
+        if (!this.nationRepository.existsById(nation.getId())) {
             throw new IllegalArgumentException("Nation with id " + nation.getId() + " does not exist.");
         }
-        return nationRepository.save(nation);
+        return this.nationRepository.save(nation);
     }
 
     public void deleteById(Long id) {
-        nationRepository.deleteById(id);
+        this.nationRepository.deleteById(id);
     }
 }

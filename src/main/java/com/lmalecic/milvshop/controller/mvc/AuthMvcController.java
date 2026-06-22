@@ -24,7 +24,7 @@ public class AuthMvcController {
     @HxRequest
     @GetMapping("/login")
     public String getLoginForm(Model model, @RequestParam(required = false) String redirect) {
-        model.addAttribute("userAuthDto", new UserAuthDto());
+        model.addAttribute("userAuthDto", UserAuthDto.empty());
         model.addAttribute("redirectUrl", redirect);
         return FRAGMENT_AUTH_FORM;
     }
@@ -56,7 +56,7 @@ public class AuthMvcController {
             return FRAGMENT_AUTH_FORM;
         }
 
-        if (this.userService.existsByUsername(userAuthDto.getUsername())) {
+        if (this.userService.existsByUsername(userAuthDto.username())) {
             bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
             return FRAGMENT_AUTH_FORM;
         }
