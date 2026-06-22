@@ -37,7 +37,7 @@ public class AdminTanksMvcController {
     private final TankRoleService tankRoleService;
 
     @GetMapping({"", "/"})
-    public String getTanksView(Model model, @ModelAttribute TankSearchCriteria filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
+    public String getIndex(Model model, @ModelAttribute TankSearchCriteria filter, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         this.buildListModel(model, filter, requestUri);
 
@@ -53,7 +53,7 @@ public class AdminTanksMvcController {
 
     @HxRequest
     @GetMapping("/search")
-    public String searchTanks(Model model, @ModelAttribute TankSearchCriteria filter, HtmxResponse htmxResponse) {
+    public String search(Model model, @ModelAttribute TankSearchCriteria filter, HtmxResponse htmxResponse) {
         this.buildListModel(model, filter, INDEX_URI);
         htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, filter).toUriString());
         return MODEL_LIST_FRAGMENT;
@@ -61,7 +61,7 @@ public class AdminTanksMvcController {
 
     @HxRequest
     @GetMapping("/{id}")
-    public String getTankForm(Model model, @PathVariable Long id) {
+    public String getDetailsForm(Model model, @PathVariable Long id) {
         this.buildDetailsModel(model, id);
         return MODEL_FORM_FRAGMENT;
     }
@@ -74,7 +74,7 @@ public class AdminTanksMvcController {
     }
 
     @PostMapping("/create")
-    public String createTank(Model model, @Valid @ModelAttribute TankDto tankDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+    public String create(Model model, @Valid @ModelAttribute TankDto tankDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             this.buildFormOptionsModel(model, ViewContext.CREATE);
             return MODEL_FORM_FRAGMENT;
@@ -101,7 +101,7 @@ public class AdminTanksMvcController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteTank(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+    public String delete(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         TankDto tank = this.tankService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
@@ -113,7 +113,7 @@ public class AdminTanksMvcController {
     }
 
     @PatchMapping("/recover/{id}")
-    public String recoverTank(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+    public String recover(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         TankDto tank = this.tankService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
@@ -125,7 +125,7 @@ public class AdminTanksMvcController {
     }
 
     @PatchMapping("/edit")
-    public String editTank(Model model, @Valid @ModelAttribute TankDto tankDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+    public String edit(Model model, @Valid @ModelAttribute TankDto tankDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             this.buildFormOptionsModel(model, ViewContext.ADMIN);
             return MODEL_FORM_FRAGMENT;
