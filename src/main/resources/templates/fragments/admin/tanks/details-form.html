@@ -173,21 +173,21 @@
             </button>
             <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() and isDeleted}"
                     hx:patch="@{tanks/recover/{id}(id=*{id})}"
-                    hx-target="#tankModalContent"
+                    hx-target="#detailsModalContent"
                     class="btn btn-secondary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-recycle"></i>
                 Recover
             </button>
             <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() and !isDeleted}"
                     hx:patch="@{tanks/edit}"
-                    hx-target="#tankModalContent"
+                    hx-target="#detailsModalContent"
                     class="btn btn-primary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-floppy-fill"></i>
                 Save
             </button>
             <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}"
                     hx:post="@{tanks/create}"
-                    hx-target="#tankModalContent"
+                    hx-target="#detailsModalContent"
                     class="btn btn-primary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-plus-lg"></i>
                 Create

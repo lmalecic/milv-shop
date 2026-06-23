@@ -8,9 +8,6 @@
         <form th:replace="~{fragments/tanks/search-form}"></form>
     </main>
     <footer th:replace="~{fragments/layout :: footer}"></footer>
-    <dialog id="tankModal" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">
-        <div id="tankModalContent" class="modal-dialog modal-dialog-centered modal-xl">
-        </div>
-    </dialog>
+    <dialog th:replace="~{fragments/dialog-modal :: modalXl('detailsModal')}"></dialog>
 </body>
 </html>

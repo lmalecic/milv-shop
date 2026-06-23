@@ -21,7 +21,7 @@
    data-bs-target="#detailsModal"
    class="nation-card card border-2 text-decoration-none w-100 h-100 p-0"
    th:classappend="*{deleted} ? 'deleted'">
-    <span class="nation-card-img-container w-100 h-100 overflow-hidden">
+    <span class="nation-card-img-container w-100 h-100 overflow-hidden d-flex align-items-center justify-content-center">
         <img th:src="*{imgPath}" class="card-img text-center" alt="[NO IMAGE]">
     </span>
     <span class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">

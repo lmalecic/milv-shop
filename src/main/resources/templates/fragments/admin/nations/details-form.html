@@ -5,8 +5,14 @@
 <form method="post" class="modal-content form-group"
       th:action="@{#}" th:object="${nationDto}"
       th:with="isDeleted=${nationDto.deleted}">
-    <label hidden for="id">Id</label>
-    <input hidden th:field="*{id}">
+    <label hidden>
+        <span>Id</span>
+        <input hidden th:field="*{id}">
+    </label>
+    <label hidden>
+        <span>Deleted</span>
+        <input hidden th:field="*{deleted}">
+    </label>
     <div class="modal-header">
         <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}">CREATE_NATION</h3>
         <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !isDeleted}" th:text="${'EDIT_NATION — ID ' + nationDto.id}">EDIT_NATION</h3>

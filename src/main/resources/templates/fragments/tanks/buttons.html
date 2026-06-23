@@ -3,10 +3,10 @@
 
 <button th:fragment="create" class="tank-card btn btn-secondary w-100 h-100 p-0 d-flex flex-column border-2 text-decoration-none fw-bold"
         hx:get="@{/admin/tanks/create}"
-        hx-target="#tankModalContent"
+        hx-target="#detailsModalContent"
         hx-trigger="click"
         data-bs-toggle="modal"
-        data-bs-target="#tankModal">
+        data-bs-target="#detailsModal">
     <span class="fs-1 card-img">&plus;</span>
     <span class="fs-5 text-uppercase card-img">&lsqb;Create&rsqb;</span>
 </button>
@@ -15,10 +15,10 @@
 <button th:fragment="item"
    th:object="${tank}"
    hx:get="@{{itemClickPath}/{id}(itemClickPath=${itemClickPath}, id=*{id})}"
-   hx-target="#tankModalContent"
+   hx-target="#detailsModalContent"
    hx-trigger="click"
    data-bs-toggle="modal"
-   data-bs-target="#tankModal"
+   data-bs-target="#detailsModal"
    class="tank-card card border-2 p-2 text-decoration-none  w-100 h-100 p-0"
    th:classappend="*{deleted} ? 'deleted'">
     <img th:src="*{imgPath}" class="card-img text-center" alt="[NO IMAGE]">
