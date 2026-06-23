@@ -6,6 +6,7 @@
     --bs-secondary-rgb: 190,192,190;
     --bs-secondary-color: rgba(255,255,255,66%);
     --bs-border-color-translucent: rgba(255,255,255,10%);
+    --bs-border-color-translucent-secondary: rgba(120,120,120,10%);
     --bs-border-width: 2px;
     --bs-modal-header-border-width: 0;
     --bs-modal-footer-border-width: 0;
@@ -21,6 +22,8 @@
     --tank-card-aspect-ratio: 1.8335187661;
     --nation-card-aspect-ratio: 100/68;
     --active-text-color: var(--bs-yellow);
+
+    --table-border-radius: 0.4rem;
 }
 
 .btn-primary {
@@ -507,4 +510,42 @@ label {
 
 .modal-pulse.modal-dialog {
     animation: modal-pulse 0.3s ease-in-out;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding-top: 0;
+    padding-bottom: 0.4rem;
+    padding-right: 0.4rem;
+
+    &:last-child {
+        padding-right: 0;
+    }
+}
+
+tr:nth-child(odd) .table-cell {
+    background: rgba(255, 255, 255, 5%);
+}
+
+tr:nth-child(even) .table-cell {
+    background: none;
+}
+
+th .table-header {
+    width: 100%;
+    padding: 0.1rem 0.6rem;
+    background-color: #009e00;
+    border-radius: var(--table-border-radius);
+}
+
+td .table-cell {
+    width: 100%;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--table-border-radius);
 }

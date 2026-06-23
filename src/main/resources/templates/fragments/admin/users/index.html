@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en"
-      th:with="searchPath=@{/admin/tank-roles/search}">
-<head th:replace="~{fragments/layout :: head('Admin | Tank Roles')}"></head>
+      th:with="searchPath=@{/admin/users/search}">
+<head th:replace="~{fragments/layout :: head('Admin | Users')}"></head>
 
-<h1 class="fw-bold">Tank Roles Department</h1>
-<form th:replace="~{fragments/admin/basic-search-form}"></form>
+<h1 class="fw-bold">Users Department</h1>
+<form th:replace="~{fragments/admin/users/search-form}"></form>
 
 <dialog th:replace="~{fragments/dialog-modal :: modal('detailsModal')}"></dialog>
 <dialog th:replace="~{fragments/dialog-modal :: modal('confirmDeleteModal')}"></dialog>

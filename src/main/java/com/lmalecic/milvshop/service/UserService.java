@@ -1,23 +1,53 @@
 package com.lmalecic.milvshop.service;
 
+import com.lmalecic.milvshop.criteria.UserSearchCriteria;
 import com.lmalecic.milvshop.dto.UserAuthDto;
 import com.lmalecic.milvshop.dto.UserDto;
+import com.lmalecic.milvshop.exception.NoContentException;
+import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.model.User;
 import com.lmalecic.milvshop.repository.UserRepository;
 import com.lmalecic.milvshop.repository.UserRoleRepository;
+import com.lmalecic.milvshop.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
+    private final UserRoleService userRoleService;
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public List<UserDto> findAllActive() {
+        return this.userRepository.findAllByDeleted(false, UserSpecification.sortByDeletedAndId())
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    public Optional<UserDto> findById(Long id) {
+        return this.userRepository.findById(id)
+                .map(this::toDto);
+    }
+
+    public UserDto update(UserDto dto) {
+        var user = this.userRepository.findByUsername(dto.username())
+                .orElseThrow(() -> new IllegalArgumentException("User with username " + dto.username() + " does not exist."));
+
+        user.setUsername(dto.username());
+        user.setRoles(dto.roles().stream()
+                .map(this.userRoleService::toEntity)
+                .toList());
+
+        return this.toDto(this.userRepository.save(user));
+    }
 
     public UserDto register(UserAuthDto userAuthDto) {
         return this.toDto(this.userRepository.save(User.builder()
@@ -28,11 +58,52 @@ public class UserService {
                 .build()));
     }
 
+    public UserDto deleteById(Long id) {
+        var entity = this.userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Nation with id " + id + " does not exist."));
+        if (entity.isDeleted()) {
+            throw new NoContentException("Nation with id " + id + " is already deleted.");
+        }
+        entity.setDeleted(true);
+        return this.toDto(this.userRepository.save(entity));
+    }
+
+    public UserDto recoverById(Long id) {
+        var entity = this.userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Nation with id " + id + " does not exist."));
+        if (!entity.isDeleted()) {
+            throw new NoContentException("Nation with id " + id + " isn't deleted.");
+        }
+        entity.setDeleted(false);
+        return this.toDto(this.userRepository.save(entity));
+    }
+
+    public List<UserDto> findAllBySearchCriteria(UserSearchCriteria searchCriteria) {
+        if (!searchCriteria.hasActiveFilters()) {
+            return this.findAllActive();
+        }
+        return this.userRepository.findAll(UserSpecification.includeDeleted(searchCriteria.showDeleted())
+                                .and(UserSpecification.idEquals(searchCriteria.query())
+                                        .or(UserSpecification.usernameLike(searchCriteria.query())))
+                                .and(UserSpecification.containsRoles(searchCriteria.roleIds())),
+                        UserSpecification.sortByDeletedAndId())
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
     public boolean existsByUsername(String username) {
         return this.userRepository.existsByUsername(username);
     }
 
     private UserDto toDto(User user) {
-        return new UserDto(user.getId(), user.getUsername(), user.getRoles());
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .roles(user.getRoles().stream()
+                        .map(this.userRoleService::toDto)
+                        .toList())
+                .deleted(user.isDeleted())
+                .build();
     }
 }

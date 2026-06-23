@@ -22,7 +22,7 @@ public class NationSpecification {
 
     public static Specification<Nation> nameLike(String name) {
         return (root, query, builder) -> {
-            if (name == null) {
+            if (name == null || name.isBlank()) {
                 return builder.conjunction();
             }
             return builder.like(builder.lower(root.get(Nation_.NAME)), "%" + name.toLowerCase() + "%");

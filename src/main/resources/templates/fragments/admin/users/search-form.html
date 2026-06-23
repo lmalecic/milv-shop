@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<!--/*@thymesVar id="searchCriteria" type="com.lmalecic.milvshop.criteria.UserSearchCriteria"*/-->
+<!--/*@thymesVar id="results" type="com.lmalecic.milvshop.results.UserSearchResults"*/-->
+<form class="d-flex flex-column gap-3 mt-3" th:action="@{#}"
+      th:object="${searchCriteria}"
+      hx:get="${searchPath}"
+      hx-trigger="load, submit, change delay:100ms, input delay:200ms, refreshList from:body"
+      hx-target="#searchResults">
+    <div class="d-flex flex-column gap-2">
+        <div class="d-flex flex-row gap-2 align-items-center">
+            <label class="d-flex flex-column gap-1">
+                <span hidden>Roles</span>
+                <span class="d-inline-flex align-items-center flex-wrap gap-2">
+                    <label class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3"
+                           th:each="role : ${results.roles}">
+                            <input type="checkbox" th:field="*{roleIds}" th:value="${role.id}">
+                            <span th:text="${role.getDisplayName()}" style="padding-left: 0.6rem;">Role</span>
+                    </label>
+                </span>
+            </label>
+            <label class="form-check form-switch d-inline-flex flex-row align-items-center gap-2" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name()}">
+                <input type="checkbox" class="form-check-input my-0" th:field="*{showDeleted}">
+                <span class="from-check-label">Show deleted</span>
+            </label>
+        </div>
+        <label class="d-inline-flex flex-row gap-3">
+            <span hidden>Name or id</span>
+            <input type="text" class="form-control" placeholder="Search by username or id..." th:field="*{query}">
+        </label>
+    </div>
+    <div id="searchResults" class="col"></div>
+</form>
+
+</html>

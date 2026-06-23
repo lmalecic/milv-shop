@@ -1,22 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en"
       th:with="searchPath=@{/admin/nations/search}">
-<head th:replace="~{fragments/layout :: head('Admin | Nations')}"></head>
+<head th:replace="~{fragments/layout :: head('Admin | Nations')}" title="Admin | Nations"></head>
 
 <h1 class="fw-bold">Nations Department</h1>
 <form th:replace="~{fragments/admin/basic-search-form}"></form>
 
 <dialog th:replace="~{fragments/dialog-modal :: modal('detailsModal')}"></dialog>
 <dialog th:replace="~{fragments/dialog-modal :: modal('confirmDeleteModal')}"></dialog>
-
-<script>
-    (() => {
-        const navBtns = $(".admin-nav-btn");
-        navBtns.on("click", function () {
-            navBtns.removeClass("active");
-            $(this).addClass("active");
-        })
-    })();
-</script>
 
 </html>

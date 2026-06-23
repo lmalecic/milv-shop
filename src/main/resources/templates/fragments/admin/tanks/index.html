@@ -9,14 +9,4 @@
 <dialog th:replace="~{fragments/dialog-modal :: modalXl('detailsModal')}"></dialog>
 <dialog th:replace="~{fragments/dialog-modal :: modal('confirmDeleteModal')}"></dialog>
 
-<script>
-    (() => {
-        const navBtns = $(".admin-nav-btn");
-        navBtns.on("click", function () {
-            navBtns.removeClass("active");
-            $(this).addClass("active");
-        })
-    })();
-</script>
-
 </html>

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +35,11 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable
     private List<UserRole> roles;
+
+    @Builder.Default
+    @ColumnDefault("false")
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     @Override
     @NullMarked

@@ -1,7 +1,5 @@
 package com.lmalecic.milvshop.specification;
 
-import com.lmalecic.milvshop.model.Nation;
-import com.lmalecic.milvshop.model.Nation_;
 import com.lmalecic.milvshop.model.TankRole;
 import com.lmalecic.milvshop.model.TankRole_;
 import org.springframework.data.domain.Sort;
@@ -24,7 +22,7 @@ public class TankRoleSpecification {
 
     public static Specification<TankRole> nameLike(String name) {
         return (root, query, builder) -> {
-            if (name == null) {
+            if (name == null || name.isBlank()) {
                 return builder.conjunction();
             }
             return builder.like(builder.lower(root.get(TankRole_.NAME)), "%" + name.toLowerCase() + "%");
