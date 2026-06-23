@@ -23,17 +23,17 @@ public class AuthMvcController {
 
     @HxRequest
     @GetMapping("/login")
-    public String getLoginForm(Model model, @RequestParam(required = false) String redirect) {
+    public String getLoginForm(Model model, @RequestParam(required = false) String redirectUrl) {
         model.addAttribute("userAuthDto", UserAuthDto.empty());
-        model.addAttribute("redirectUrl", redirect);
+        model.addAttribute("redirectUrl", redirectUrl);
         return FRAGMENT_AUTH_FORM;
     }
 
     @HxRequest
     @PostMapping("/login-success")
-    public String loginSuccess(@RequestParam(required = false) String redirect) {
-        if (redirect != null && !redirect.isBlank()) {
-            return "redirect:htmx:" + redirect;
+    public String loginSuccess(@RequestParam(required = false) String redirectUrl) {
+        if (redirectUrl != null && !redirectUrl.isBlank()) {
+            return "redirect:htmx:" + redirectUrl;
         }
         return "refresh:htmx";
     }
@@ -50,8 +50,8 @@ public class AuthMvcController {
 
     @HxRequest
     @PostMapping("/register")
-    public String processRegister(Model model, @Valid @ModelAttribute UserAuthDto userAuthDto, BindingResult bindingResult, @RequestParam String redirect, HtmxResponse htmxResponse) {
-        model.addAttribute("redirectUrl", redirect);
+    public String processRegister(Model model, @Valid @ModelAttribute UserAuthDto userAuthDto, BindingResult bindingResult, @RequestParam(required = false) String redirectUrl, HtmxResponse htmxResponse) {
+        model.addAttribute("redirectUrl", redirectUrl);
         if (bindingResult.hasErrors()) {
             return FRAGMENT_AUTH_FORM;
         }

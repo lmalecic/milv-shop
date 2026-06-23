@@ -8,17 +8,16 @@
       hx:get="${searchPath}"
       hx-trigger="load, submit, change delay:100ms, input delay:200ms, refreshList from:body"
       hx-target="#searchResults">
-    <div th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name()}"
-         class="form-check form-switch">
-        <label class="form-check-label">
-            <span>Show deleted</span>
+    <div class="d-flex flex-column gap-2">
+        <label class="form-check form-switch" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name()}">
             <input type="checkbox" class="form-check-input" th:field="*{showDeleted}">
+            <span class="from-check-label">Show deleted</span>
+        </label>
+        <label class="d-inline-flex flex-row gap-3">
+            <span hidden>Name or description</span>
+            <input type="text" class="form-control" placeholder="Search by name or description..." th:field="*{query}">
         </label>
     </div>
-    <label class="d-inline-flex flex-row gap-3">
-        <span hidden>Name or description</span>
-        <input type="text" class="form-control" placeholder="Search by name or description..." th:field="*{searchQuery}">
-    </label>
     <div class="row">
         <div class="col d-flex flex-column gap-3" style="max-width: 300px;">
             <div class="d-flex flex-row gap-3">

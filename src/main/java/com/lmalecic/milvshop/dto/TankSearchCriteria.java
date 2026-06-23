@@ -1,12 +1,10 @@
 package com.lmalecic.milvshop.dto;
 
-import org.jspecify.annotations.Nullable;
-
 import java.math.BigDecimal;
 import java.util.List;
 
 public record TankSearchCriteria(
-        String searchQuery,
+        String query,
         List<Long> nationIds,
         List<Long> tankRoleIds,
         BigDecimal priceMin,
@@ -21,7 +19,7 @@ public record TankSearchCriteria(
 
     @Override
     public boolean hasActiveFilters() {
-        return this.searchQuery != null && !this.searchQuery.isBlank()
+        return this.query != null && !this.query.isBlank()
                 || this.nationIds != null && !this.nationIds.isEmpty()
                 || this.tankRoleIds != null && !this.tankRoleIds.isEmpty()
                 || this.priceMin != null

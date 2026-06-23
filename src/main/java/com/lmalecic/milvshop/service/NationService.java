@@ -66,7 +66,7 @@ public class NationService {
         if (!searchCriteria.hasActiveFilters()) {
             return this.findAllActive();
         }
-        return this.nationRepository.findAll(NationSpecification.nameLike(searchCriteria.searchQuery())
+        return this.nationRepository.findAll(NationSpecification.nameLike(searchCriteria.query())
                                 .and(NationSpecification.includeDeleted(searchCriteria.showDeleted())),
                         NationSpecification.sortByDeletedAndName())
                 .stream()

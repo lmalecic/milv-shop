@@ -1,48 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<form th:fragment="form(searchPath)"
-      class="d-flex flex-column gap-3 mt-3" method="get"
+<form class="d-flex flex-column gap-3 mt-3" method="get"
       hx:get="${searchPath}"
-      hx-trigger="load queue:all, submit, change delay:100ms, input delay:200ms, refreshList from:body"
+      hx-trigger="load, submit, change delay:100ms, input delay:200ms, refreshList from:body"
       hx-target="#searchResults">
-    <div class="form-check form-switch">
-        <input id="showDeleted" type="checkbox" name="showDeleted" class="form-check-input" value="true" th:checked="${searchCriteria.showDeleted}">
-        <label for="showDeleted" class="from-check-label">
-            Show deleted
+    <div class="d-flex flex-column gap-2">
+        <label class="form-check form-switch">
+            <input type="checkbox" class="form-check-input" th:field="${searchCriteria.showDeleted}">
+            <span class="from-check-label">Show deleted</span>
         </label>
-    </div>
-    <div class="d-inline-flex flex-row gap-3">
-        <label hidden for="search">Name</label>
-        <input name="searchQuery" id="search" type="text" class="form-control" placeholder="Search by name..." th:value="${searchCriteria.searchQuery}">
+        <label class="d-inline-flex flex-row gap-3">
+            <span hidden>Name</span>
+            <input type="text" class="form-control" placeholder="Search by name..." th:field="${searchCriteria.query}">
+        </label>
     </div>
     <div class="row">
         <div id="searchResults" class="col"></div>
     </div>
-    <script>
-        $(".filter-btn").on("click", function () {
-            $(this).toggleClass("checked");
-
-            const type = $(this).data("filter-type");
-            const value = Number($(this).data("filter-value"));
-
-            const hidden = $(`#${type === "nations" ? "nationFilters" : "tankRoleFilters"}`);
-
-            let values = hidden.val()
-                ? hidden.val().split(",").map(Number).filter(Boolean)
-                : [];
-
-            if ($(this).hasClass("checked")) {
-                if (!values.includes(value)) values.push(value);
-            } else {
-                values = values.filter(v => v !== value);
-            }
-
-            hidden.val(values.join(","));
-
-            // htmx.trigger("#filterForm", "change");
-        });
-    </script>
 </form>
 
 </html>

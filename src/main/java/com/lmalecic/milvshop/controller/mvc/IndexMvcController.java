@@ -21,14 +21,15 @@ public class IndexMvcController {
     @GetMapping
     public String getIndex(Model model,
                            @RequestParam(required = false) String auth,
-                           @RequestParam(required = false) String redirect,
-                           HtmxResponse htmxResponse) {
+                           @RequestParam(required = false) String redirectUrl,
+                           HtmxResponse htmxResponse
+    ) {
         model.addAttribute("nationsList", this.nationRepository.findAll());
         model.addAttribute("tankRolesList", this.tankRoleRepository.findAll());
 
         if (auth != null) {
             model.addAttribute("promptAuth", true);
-            model.addAttribute("redirectUrl", redirect);
+            model.addAttribute("redirectUrl", redirectUrl);
         }
 
         return "index";

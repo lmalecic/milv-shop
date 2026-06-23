@@ -44,10 +44,9 @@ public class SecurityConfig {
                 .exceptionHandling(configurer -> configurer
                         .authenticationEntryPoint((request, response, authException) -> {
                             String redirectUrl = request.getRequestURI();
-                            System.out.println("Redirect to after login success: " + redirectUrl);
                             response.sendRedirect(UriComponentsBuilder.fromPath("/")
                                     .queryParam("auth")
-                                    .queryParam("redirect", redirectUrl).toUriString());
+                                    .queryParam("redirectUrl", redirectUrl).toUriString());
                         })
                         .defaultAuthenticationEntryPointFor(entryPoint, requestMatcher));
 

@@ -2,31 +2,33 @@
 <html lang="en"
       xmlns:th="https://www.thymeleaf.org">
 <form id="authForm" th:object="${userAuthDto}" th:action="@{/auth/login}" class="modal-content form-group needs-validation">
-    <label hidden for="redirect"></label>
-    <input hidden id="redirect" name="redirect" th:value="${redirectUrl}">
+    <label hidden>
+        <span>Redirect</span>
+        <input name="redirectUrl" th:value="${redirectUrl}">
+    </label>
     <div class="modal-header">
         <h4 class="modal-title me-auto text-uppercase">&gt; Log_in / Register</h4>
         <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
     </div>
     <div class="modal-body d-flex flex-column gap-2">
-        <div class="d-flex flex-column gap-1">
-            <label for="username" class="text-uppercase">Username</label>
-            <input id="username" th:field="*{username}" type="text" class="form-control"
-                   th:classappend="${#fields.hasErrors('username') ? 'is-invalid' : ''}"
+        <label class="d-flex flex-column gap-1">
+            <span class="text-uppercase">Username</span>
+            <input th:field="*{username}" type="text" class="form-control"
+                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
                    placeholder="Enter username" required autofocus>
-            <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback d-block">
+            <span th:if="${#fields.hasErrors('username')}" class="invalid-feedback d-block">
                 <span th:errors="*{username}"></span>
-            </div>
-        </div>
-        <div class="d-flex flex-column gap-1">
-            <label for="password" class="text-uppercase">Password</label>
-            <input id="password" th:field="*{password}" type="password" class="form-control"
-                   th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}"
+            </span>
+        </label>
+        <label class="d-flex flex-column gap-1">
+            <span class="text-uppercase">Password</span>
+            <input th:field="*{password}" type="password" class="form-control"
+                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
                    placeholder="Enter password" required>
-            <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block">
+            <span th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block">
                 <span th:errors="*{password}"></span>
-            </div>
-        </div>
+            </span>
+        </label>
     </div>
     <div class="modal-footer d-flex flex-column gap-2">
         <button type="submit"

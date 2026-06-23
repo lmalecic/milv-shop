@@ -5,7 +5,7 @@
 <head th:fragment="head(title)"
       th:with="
         appTitle=${T(com.lmalecic.milvshop.util.Constants).APP_TITLE},
-        pageTitle=${title != null ? title.trim() : ''}
+        pageTitle=${title} ? ${title.trim()}
       ">
     <title th:text="${#strings.isEmpty(pageTitle) ? '🪖 ' + appTitle : '🪖 ' + pageTitle + ' | ' + appTitle}">
         MilV Shop
@@ -86,7 +86,7 @@
             <div style="margin-right: var(--page-margin-right)" class="position-absolute d-flex gap-3 end-0 fs-5">
                 <div sec:authorize="isAnonymous()" class="d-flex gap-2 fs-5 justify-content-center">
                     <a id="loginButton" href="#" class="navbar-item d-flex align-items-center gap-sm-2"
-                       hx:get="@{/auth/login(redirect=${redirectUrl})}"
+                       hx:get="@{/auth/login(redirectUrl=${redirectUrl})}"
                        hx-target="#authModalContent"
                        hx-trigger="click"
                        data-bs-toggle="modal"

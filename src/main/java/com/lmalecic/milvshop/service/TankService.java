@@ -72,7 +72,7 @@ public class TankService {
         if (!criteria.hasActiveFilters()) {
             return this.findAllActive();
         }
-        return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(criteria.searchQuery())
+        return this.tankRepository.findAll(TankSpecification.containsNameOrDescription(criteria.query())
                                 .and(TankSpecification.containsNation(criteria.nationIds()))
                                 .and(TankSpecification.containsTankRole(criteria.tankRoleIds()))
                                 .and(TankSpecification.priceBetween(criteria.priceMin(), criteria.priceMax()))

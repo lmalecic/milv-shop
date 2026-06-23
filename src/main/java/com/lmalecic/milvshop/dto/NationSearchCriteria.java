@@ -1,13 +1,13 @@
 package com.lmalecic.milvshop.dto;
 
 public record NationSearchCriteria(
-        String searchQuery,
+        String query,
         Boolean showDeleted
 ) implements SearchCriteria {
 
     @Override
     public boolean hasActiveFilters() {
-        return this.searchQuery != null && !this.searchQuery.isBlank()
+        return this.query != null && !this.query.isBlank()
                 || Boolean.TRUE.equals(this.showDeleted);
     }
 }
