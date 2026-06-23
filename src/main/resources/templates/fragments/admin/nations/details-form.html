@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<!--/*@thymesVar id="nationDto" type="com.lmalecic.milvshop.dto.NationDto"*/-->
+<form method="post" class="modal-content form-group"
+      th:action="@{#}" th:object="${nationDto}"
+      th:with="isDeleted=${nationDto.deleted}">
+    <label hidden for="id">Id</label>
+    <input hidden th:field="*{id}">
+    <div class="modal-header">
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}">CREATE_NATION</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !isDeleted}" th:text="${'EDIT_NATION — ID ' + nationDto.id}">EDIT_NATION</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && isDeleted}" th:text="${'DELETED_NATION — ID ' + nationDto.id}">DELETED_NATION</h3>
+        <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row g-3">
+            <div class="col d-flex flex-column gap-3">
+                <div class="row g-3">
+                    <div class="col">
+                        <label for="name" class="form-label">Name</label>
+                        <input th:field="*{name}" class="form-control" type="text" placeholder="Enter tank name..."
+                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                               th:disabled="*{deleted}">
+                        <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block">
+                            <span th:errors="*{name}"></span>
+                        </div>
+                        <label for="imgPath" class="form-label">Image url</label>
+                        <input th:field="*{imgPath}" id="imgPath" class="form-control" type="text" placeholder="Enter image url..."
+                               th:classappend="${#fields.hasErrors('imgPath')} ? 'is-invalid'"
+                               th:disabled="*{deleted}">
+                        <div th:if="${#fields.hasErrors('imgPath')}" class="invalid-feedback d-block">
+                            <span th:errors="*{imgPath}"></span>
+                        </div>
+                        <div class="nation-card card overflow-hidden">
+                            <img id="itemImg" class="card-img text-center my-auto" th:src="*{imgPath}" alt="[NO IMAGE]">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer pt-0">
+        <div class="col d-inline-flex justify-content-end gap-3">
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !isDeleted}"
+                    hx:get="@{nations/delete/{id}(id=*{id})}"
+                    hx-target="#confirmDeleteModalContent"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirmDeleteModal"
+                    class="btn btn-danger text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-trash-fill"></i>
+                Delete
+            </button>
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && isDeleted}"
+                    hx:patch="@{nations/recover/{id}(id=*{id})}"
+                    hx-target="#detailsModalContent"
+                    class="btn btn-secondary text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-recycle"></i>
+                Recover
+            </button>
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !isDeleted}"
+                    hx:patch="@{nations/edit}"
+                    hx-target="#detailsModalContent"
+                    class="btn btn-primary text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-floppy-fill"></i>
+                Save
+            </button>
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}"
+                    hx:post="@{nations/create}"
+                    hx-target="#detailsModalContent"
+                    class="btn btn-primary text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-plus-lg"></i>
+                Create
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    (() => {
+        const itemImg = $("#itemImg");
+        const imgPathInput = $("#imgPath");
+
+        imgPathInput.on("input", function() {
+            const url = $(this).val();
+            itemImg.attr("src", url || "");
+        });
+    })();
+</script>
+
+</html>

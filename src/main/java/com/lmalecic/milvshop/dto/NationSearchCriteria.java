@@ -7,7 +7,7 @@ public record NationSearchCriteria(
 
     @Override
     public boolean hasActiveFilters() {
-        return (this.searchQuery != null && !this.searchQuery.isBlank())
-                || (this.showDeleted != null);
+        return this.searchQuery != null && !this.searchQuery.isBlank()
+                || Boolean.TRUE.equals(this.showDeleted);
     }
 }

@@ -2,8 +2,6 @@ package com.lmalecic.milvshop.specification;
 
 import com.lmalecic.milvshop.model.Nation;
 import com.lmalecic.milvshop.model.Nation_;
-import com.lmalecic.milvshop.model.Tank;
-import com.lmalecic.milvshop.model.Tank_;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -31,12 +29,12 @@ public class NationSpecification {
         };
     }
 
-    public static Specification<Nation> includeDeleted(Boolean include) {
+    public static Specification<Nation> includeDeleted(boolean include) {
         return (root, query, builder) -> {
-            if (Boolean.TRUE.equals(include)) {
+            if (include) {
                 return builder.conjunction();
             } else {
-                return root.get(Tank_.DELETED).equalTo(false);
+                return root.get(Nation_.DELETED).equalTo(false);
             }
         };
     }

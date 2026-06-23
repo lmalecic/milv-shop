@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<!--/*@thymesVar id="searchCriteria" type="com.lmalecic.milvshop.dto.TankSearchCriteria"*/-->
+<!--/*@thymesVar id="results" type="com.lmalecic.milvshop.dto.TankSearchResults"*/-->
+<form class="d-flex flex-column gap-3 mt-3" th:action="@{#}"
+      th:object="${searchCriteria}"
+      hx:get="${searchPath}"
+      hx-trigger="load, submit, change delay:100ms, input delay:200ms, refreshList from:body"
+      hx-target="#searchResults">
+    <div th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name()}"
+         class="form-check form-switch">
+        <label class="form-check-label">
+            <span>Show deleted</span>
+            <input type="checkbox" class="form-check-input" th:field="*{showDeleted}">
+        </label>
+    </div>
+    <label class="d-inline-flex flex-row gap-3">
+        <span hidden>Name or description</span>
+        <input type="text" class="form-control" placeholder="Search by name or description..." th:field="*{searchQuery}">
+    </label>
+    <div class="row">
+        <div class="col d-flex flex-column gap-3" style="max-width: 300px;">
+            <div class="d-flex flex-row gap-3">
+                <label class="d-flex flex-column gap-1" style="max-width: 40%;">
+                    <span>Crew size</span>
+                    <input class="form-control" type="number" placeholder="any" th:field="*{crewSize}" step="1">
+                </label>
+                <label class="d-flex flex-column flex-fill gap-1">
+                    <span>Gun calibre</span>
+                    <select class="form-select input" th:field="*{mainGunCalibre}">
+                        <option value="" th:selected="${searchCriteria.mainGunCalibre == null}">any</option>
+                        <option th:each="calibre : ${results.mainGunCalibres}"
+                                th:value="${calibre}"
+                                th:text="${calibre + 'mm'}"
+                                th:selected="${searchCriteria.mainGunCalibre != null and searchCriteria.mainGunCalibre.equals(calibre)}">
+                        </option>
+                    </select>
+                </label>
+            </div>
+            <label class="d-flex flex-column gap-1">
+                <span>Price range</span>
+                <span class="input-group">
+                    <span class="input-group-text">€</span>
+                    <input class="form-control" type="number" placeholder="min" th:field="*{priceMin}">
+                    <span class="input-group-text">-</span>
+                    <input class="form-control" type="number" placeholder="max" th:field="*{priceMax}">
+                </span>
+            </label>
+            <label class="d-flex flex-column gap-1">
+                <span>Armour thickness</span>
+                <span class="input-group">
+                    <input class="form-control" type="number" placeholder="min" th:field="*{armorThicknessMin}">
+                    <span class="input-group-text">-</span>
+                    <input class="form-control" type="number" placeholder="max" th:field="*{armorThicknessMax}">
+                    <span class="input-group-text text-lowercase">mm</span>
+                </span>
+            </label>
+            <label class="d-flex flex-column gap-1">
+                <span>Max speed</span>
+                <span class="input-group">
+                    <input class="form-control" type="number" placeholder="any" th:field="*{maxSpeed}">
+                    <span class="input-group-text text-lowercase">km&sol;h</span>
+                </span>
+            </label>
+            <label class="d-flex flex-column gap-1">
+                <span>Nations</span>
+                <span class="d-inline-flex align-items-center flex-wrap gap-2">
+                        <label class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3"
+                               th:each="nation : ${results.nations}">
+                            <input type="checkbox" th:field="*{nationIds}" th:value="${nation.id}">
+                            <img class="rounded-1 flag-sm" th:src="${nation.imgPath}" th:alt="${nation.name}">
+                            <span th:text="${nation.name}">Nation</span>
+                        </label>
+                    </span>
+            </label>
+            <label class="d-flex flex-column gap-1">
+                <span>Tank roles</span>
+                <span class="d-inline-flex align-items-center flex-wrap gap-2">
+                    <label class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3"
+                           th:each="role : ${results.tankRoles}">
+                            <input type="checkbox" th:field="*{tankRoleIds}" th:value="${role.id}">
+                            <img class="flag-sm" th:src="${role.imgPath}" th:alt="${role.name}">
+                            <span th:text="${role.name}">Role</span>
+                    </label>
+                </span>
+            </label>
+        </div>
+        <div id="searchResults" class="col"></div>
+    </div>
+</form>
+
+</html>

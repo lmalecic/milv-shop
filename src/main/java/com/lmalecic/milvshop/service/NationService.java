@@ -79,6 +79,7 @@ public class NationService {
                 .id(entity.getId())
                 .name(entity.getName())
                 .imgPath(entity.getImgPath())
+                .deleted(entity.isDeleted())
                 .build();
     }
 
@@ -87,6 +88,7 @@ public class NationService {
                 .id(dto.id())
                 .name(dto.name())
                 .imgPath(dto.imgPath())
+                .deleted(dto.deleted())
                 .build();
     }
 }

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<!--/*@thymesVar id="tankDto" type="com.lmalecic.milvshop.dto.TankDto"*/-->
+<form method="post" class="modal-content form-group"
+      th:object="${tankDto}" th:action="@{#}"
+      th:with="isDeleted=${#bools.isTrue(tankDto.deleted)}">
+    <label hidden>
+        <span>Id</span>
+        <input hidden th:field="*{id}">
+    </label>
+    <label hidden>
+        <span>Deleted</span>
+        <input hidden th:field="*{deleted}">
+    </label>
+    <div class="modal-header">
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}">CREATE_TANK</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() and !isDeleted}" th:text="${'EDIT_TANK — ID ' + tankDto.id}">EDIT_TANK</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() and isDeleted}" th:text="${'DELETED_TANK — ID ' + tankDto.id}">DELETED_TANK</h3>
+        <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row g-3">
+            <div class="col d-flex flex-column gap-3">
+                <div class="row g-3">
+                    <label class="col d-flex flex-column">
+                        <span class="form-label">Name</span>
+                        <input th:field="*{name}" class="form-control" type="text" placeholder="Enter tank name..."
+                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                               th:disabled="${isDeleted}">
+                        <span th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block">
+                            <span th:errors="*{name}"></span>
+                        </span>
+                    </label>
+                    <label class="col-3 d-flex flex-column">
+                        <span class="form-label">Nation</span>
+                        <select th:field="*{nation}" class="form-select input"
+                                th:classappend="${#fields.hasErrors('nation')} ? 'is-invalid'"
+                                th:disabled="${isDeleted}">
+                            <option th:value="${null}" th:text="'Select...'" hidden></option>
+                            <option th:each="nation : ${nations}"
+                                    th:value="${nation.id}"
+                                    th:text="${nation.name}">
+                            </option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('nation')}" class="invalid-feedback d-block">
+                            <span th:errors="*{nation}"></span>
+                        </span>
+                    </label>
+                    <label class="col-3 d-flex flex-column">
+                        <span class="form-label">Main role</span>
+                        <select required class="form-select input"
+                                th:field="*{tankRole}"
+                                th:classappend="${#fields.hasErrors('tankRole')} ? 'is-invalid'"
+                                th:disabled="${isDeleted}">
+                            <option th:value="${null}" th:text="'Select...'" hidden></option>
+                            <option th:each="tankRole : ${tankRoles}"
+                                    th:value="${tankRole.id}"
+                                    th:text="${tankRole.name}">
+                            </option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('tankRole')}" class="invalid-feedback d-block">
+                            <span th:errors="*{tankRole}"></span>
+                        </span>
+                    </label>
+                </div>
+                <div class="row g-3">
+                    <label class="col d-flex flex-column">
+                        <span class="form-label">Gun calibre</span>
+                        <span class="input-group" th:classappend="${#fields.hasErrors('mainGunCalibre')} ? 'has-validation'">
+                            <input th:field="*{mainGunCalibre}" class="form-control" type="number" min="0"
+                                   th:classappend="${#fields.hasErrors('mainGunCalibre')} ? 'is-invalid'"
+                                   th:disabled="${isDeleted}">
+                            <span class="input-group-text text-lowercase">mm</span>
+                            <span th:if="${#fields.hasErrors('mainGunCalibre')}" class="invalid-feedback d-block">
+                                <span th:errors="*{mainGunCalibre}"></span>
+                            </span>
+                        </span>
+                    </label>
+                    <label class="col d-flex flex-column">
+                        <span class="form-label">Max speed</span>
+                        <span class="input-group" th:classappend="${#fields.hasErrors('maxSpeed')} ? 'has-validation'">
+                            <input th:field="*{maxSpeed}" class="form-control" type="number" min="0"
+                                   th:classappend="${#fields.hasErrors('maxSpeed')} ? 'is-invalid'"
+                                   th:disabled="${isDeleted}">
+                            <span class="input-group-text text-lowercase">km&sol;h</span>
+                            <span th:if="${#fields.hasErrors('maxSpeed')}" class="invalid-feedback d-block">
+                                <span th:errors="*{maxSpeed}"></span>
+                            </span>
+                        </span>
+                    </label>
+                    <label class="col d-flex flex-column">
+                        <span class="form-label">Armor thickness</span>
+                        <span class="input-group" th:classappend="${#fields.hasErrors('armorThickness')} ? 'has-validation'">
+                            <input th:field="*{armorThickness}" class="form-control" min="0" type="number"
+                                   th:classappend="${#fields.hasErrors('armorThickness')} ? 'is-invalid'"
+                                   th:disabled="${isDeleted}">
+                            <span class="input-group-text text-lowercase">mm</span>
+                            <span th:if="${#fields.hasErrors('armorThickness')}" class="invalid-feedback d-block">
+                                <span th:errors="*{armorThickness}"></span>
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="row g-3 flex-fill">
+                    <label class="col d-flex flex-column">
+                        <span class="form-label">Description</span>
+                        <textarea th:field="*{description}" class="form-control flex-fill mb-0" rows="4" placeholder="Enter tank description..."
+                                  th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
+                                  th:disabled="${isDeleted}">
+                        </textarea>
+                        <span th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block">
+                            <span th:errors="*{description}"></span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div class="col d-flex flex-column gap-3" style="max-width: 30%">
+                <div class="row g-3">
+                    <label class="col-5 d-flex flex-column">
+                        <span class="form-label">Crew size</span>
+                        <span class="input-group" th:classappend="${#fields.hasErrors('crewSize')} ? 'has-validation'">
+                            <input th:field="*{crewSize}" class="form-control" type="number" min="0" step="1"
+                                   th:classappend="${#fields.hasErrors('crewSize')} ? 'is-invalid'"
+                                   th:disabled="${isDeleted}">
+                            <span class="input-group-text text-lowercase">ppl</span>
+                            <span th:if="${#fields.hasErrors('crewSize')}" class="invalid-feedback d-block">
+                                <span th:errors="*{crewSize}"></span>
+                            </span>
+                        </span>
+                    </label>
+
+                    <label class="col d-flex flex-column">
+                        <span class="form-label">Price</span>
+                        <span class="input-group" th:classappend="${#fields.hasErrors('price')} ? 'has-validation'">
+                            <input th:field="*{price}" class="form-control" type="number" placeholder="0.00" min="0"
+                                   th:classappend="${#fields.hasErrors('price')} ? 'is-invalid'"
+                                   th:disabled="${isDeleted}">
+                            <span class="input-group-text">&euro;</span>
+                            <span th:if="${#fields.hasErrors('price')}" class="invalid-feedback d-block">
+                                <span th:errors="*{price}"></span>
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="row g-3">
+                    <label class="col d-flex flex-column">
+                        <span class="form-label">Image url</span>
+                        <input th:field="*{imgPath}" id="imgPath" class="form-control" type="text" placeholder="Enter image url..."
+                               th:classappend="${#fields.hasErrors('imgPath')} ? 'is-invalid'"
+                               th:disabled="${isDeleted}">
+                        <span th:if="${#fields.hasErrors('imgPath')}" class="invalid-feedback d-block">
+                            <span th:errors="*{imgPath}"></span>
+                        </span>
+                        <span class="tank-card card p-2">
+                            <img id="tankImg" class="card-img text-center my-auto" th:src="*{imgPath}" alt="[NO IMAGE]">
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer pt-0">
+        <div class="col d-inline-flex justify-content-end gap-3">
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() and !isDeleted}"
+                    hx:get="@{tanks/delete/{id}(id=*{id})}"
+                    hx-target="#confirmDeleteModalContent"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirmDeleteModal"
+                    class="btn btn-danger text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-trash-fill"></i>
+                Delete
+            </button>
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() and isDeleted}"
+                    hx:patch="@{tanks/recover/{id}(id=*{id})}"
+                    hx-target="#tankModalContent"
+                    class="btn btn-secondary text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-recycle"></i>
+                Recover
+            </button>
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() and !isDeleted}"
+                    hx:patch="@{tanks/edit}"
+                    hx-target="#tankModalContent"
+                    class="btn btn-primary text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-floppy-fill"></i>
+                Save
+            </button>
+            <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}"
+                    hx:post="@{tanks/create}"
+                    hx-target="#tankModalContent"
+                    class="btn btn-primary text-uppercase d-inline-flex gap-1">
+                <i class="bi bi-plus-lg"></i>
+                Create
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    (() => {
+        const tankImg = $("#tankImg");
+        const imgPathInput = $("#imgPath");
+
+        imgPathInput.on("input", function() {
+            const url = $(this).val();
+            tankImg.attr("src", url || "");
+        });
+    })();
+</script>
+
+</html>

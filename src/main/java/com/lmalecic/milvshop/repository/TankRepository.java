@@ -11,6 +11,5 @@ import java.util.List;
 @Repository
 public interface TankRepository extends JpaRepository<Tank, Long>, JpaSpecificationExecutor<Tank> {
     boolean existsByName(String name);
-    List<Tank> findAllByDeleted(boolean deleted);
     List<Tank> findAllByDeleted(boolean deleted, Sort sort);
 }

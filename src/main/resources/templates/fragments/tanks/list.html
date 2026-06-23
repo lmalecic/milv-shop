@@ -7,18 +7,18 @@
     <div th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name()}"
          class="px-2"
          style="min-width: 25% !important; max-width: 100%"
-         th:insert="~{fragments/tank/tank-buttons :: create}">
+         th:insert="~{fragments/tanks/buttons :: create}">
     </div>
 </div>
 
 <!--With results-->
 <div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 row-cols-1 g-3" th:unless="${#lists.isEmpty(results.tanks)}">
     <div th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name()}"
-         th:insert="~{fragments/tank/tank-buttons :: create}"
+         th:insert="~{fragments/tanks/buttons :: create}"
          class="px-2">
     </div>
     <div th:each="tank : ${results.tanks}"
-         th:insert="~{fragments/tank/tank-buttons :: item}"
+         th:insert="~{fragments/tanks/buttons :: item}"
          class="px-2">
     </div>
 </div>

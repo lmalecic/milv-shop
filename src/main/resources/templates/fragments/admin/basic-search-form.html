@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<form th:fragment="form(searchPath)" method="get"
-      class="d-flex flex-column gap-3 mt-3"
+<form th:fragment="form(searchPath)"
+      class="d-flex flex-column gap-3 mt-3" method="get"
       hx:get="${searchPath}"
       hx-trigger="load queue:all, submit, change delay:100ms, input delay:200ms, refreshList from:body"
       hx-target="#searchResults">
@@ -40,7 +40,7 @@
 
             hidden.val(values.join(","));
 
-            htmx.trigger("#filterForm", "change");
+            // htmx.trigger("#filterForm", "change");
         });
     </script>
 </form>

@@ -26,7 +26,7 @@ public record TankDto(
         @NotNull(message = "required") @PositiveOrZero Integer crewSize,
         @NotNull(message = "required") Nation nation,
         @NotNull(message = "required") TankRole tankRole,
-        Boolean deleted
+        boolean deleted
 ) implements Displayable {
 
     @Override

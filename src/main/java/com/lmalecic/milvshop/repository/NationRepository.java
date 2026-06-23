@@ -17,7 +17,5 @@ public interface NationRepository extends JpaRepository<Nation, Long>, JpaSpecif
 
     @Query("select name from Nation")
     List<String> findAllNames();
-    Nation findByName(String usa);
-
-    List<Nation> findAllByDeleted(Boolean deleted, Sort sort);
+    List<Nation> findAllByDeleted(boolean deleted, Sort sort);
 }

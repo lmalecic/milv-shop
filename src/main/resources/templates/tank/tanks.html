@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/layout :: head('Tanks')}"></head>
-<body th:with="searchFormPath=@{/tanks}">
+<body th:with="searchPath=@{/tanks}">
     <header th:replace="~{fragments/layout :: header}"></header>
     <main>
         <h1 class="fw-bold">Tanks</h1>
-        <form th:replace="~{fragments/tank/search-form :: form(${searchFormPath})}"></form>
+        <form th:replace="~{fragments/tanks/search-form}"></form>
     </main>
     <footer th:replace="~{fragments/layout :: footer}"></footer>
     <dialog id="tankModal" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">

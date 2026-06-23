@@ -2,6 +2,18 @@
 <html lang="en"
       xmlns:th="https://www.thymeleaf.org">
 
+<dialog th:fragment="modal(id)" th:id="${id}" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">
+    <div th:id="${id + 'Content'}" class="modal-dialog modal-dialog-centered modal-replaced-pulse"></div>
+</dialog>
+
+<dialog th:fragment="modalLg(id)" th:id="${id}" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">
+    <div th:id="${id + 'Content'}" class="modal-dialog modal-dialog-centered modal-lg modal-replaced-pulse"></div>
+</dialog>
+
+<dialog th:fragment="modalXl(id)" th:id="${id}" class="modal fade" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-hidden="true">
+    <div th:id="${id + 'Content'}" class="modal-dialog modal-dialog-centered modal-xl modal-replaced-pulse"></div>
+</dialog>
+
 <button th:fragment="close-btn" type="button" class="close bg-transparent border-0 ratio-1x1 p-0 closeButton align-self-start ms-auto" data-bs-dismiss="modal" aria-label="Close">
     <img src="/img/close.png" alt="">
 </button>

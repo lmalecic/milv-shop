@@ -45,7 +45,7 @@ public class TanksMvcController {
 
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setReplaceUrl(UrlUtils.urlWithParams(requestUri, searchCriteria).toUriString());
-            return "/fragments/tank/tanks-grid";
+            return "fragments/tanks/list";
         }
 
         return "/tank/tanks";
@@ -60,6 +60,6 @@ public class TanksMvcController {
         model.addAttribute("tank", tank);
         model.addAttribute("viewContext", ViewContext.VIEW);
 
-        return "fragments/tank/tank-form";
+        return "fragments/tanks/details-form";
     }
 }

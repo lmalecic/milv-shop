@@ -13,7 +13,7 @@ public record NationDto(
         @With Long id,
         @Length(max = 32) @NotBlank String name,
         @UrlOrPath String imgPath,
-        Boolean deleted
+        boolean deleted
 ) implements Displayable {
     public static NationDto empty() {
         return NationDto.builder().build();

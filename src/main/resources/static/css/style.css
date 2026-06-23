@@ -19,6 +19,7 @@
     --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
 
     --tank-card-aspect-ratio: 1.8335187661;
+    --nation-card-aspect-ratio: 100/68;
     --active-text-color: var(--bs-yellow);
 }
 
@@ -147,27 +148,42 @@ body {
     background-color: rgba(255,255,255,10%) !important;
     padding: 0 .6rem 0 0 !important;
     height: 2rem !important;
-    transition: background-color var(--ease-out-expo) 0.3s, outline var(--ease-out-expo) 0.3s;
+    cursor: pointer;
+    user-select: none;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+
+    transition: background-color var(--ease-out-expo) 0.3s,
+    outline var(--ease-out-expo) 0.3s;
+
+    input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
 
     &:hover {
-        background-color: rgba(255,255,255, 20%) !important;
+        background-color: rgba(255,255,255,20%) !important;
     }
 
     &:active {
-        background-color: rgba(255,255,255, 15%) !important;
-    }
-}
-
-.filter-btn.checked {
-    outline: #0f0 2px solid !important;
-    background-color: rgba(0,255,0,20%) !important;
-
-    &:hover {
-        background-color: rgba(0,255,0,40%) !important;
+        background-color: rgba(255,255,255,15%) !important;
     }
 
-    &:active {
-        background-color: rgba(0,255,0,30%) !important;
+    &:has(input:checked) {
+        outline: #0f0 2px solid !important;
+        background-color: rgba(0,255,0,20%) !important;
+
+        &:hover {
+            background-color: rgba(0,255,0,40%) !important;
+        }
+
+        &:active {
+            background-color: rgba(0,255,0,30%) !important;
+        }
     }
 }
 
@@ -443,7 +459,7 @@ label {
 }
 
 .nation-card {
-    aspect-ratio: var(--tank-card-aspect-ratio);
+    aspect-ratio: var(--nation-card-aspect-ratio);
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;

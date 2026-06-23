@@ -28,8 +28,8 @@ public class AdminTanksMvcController {
 
     private static final String INDEX_URI = "/admin/tanks";
     private static final String REDIRECT_INDEX = "redirect:/admin/tanks/";
-    private static final String MODEL_FORM_FRAGMENT = "fragments/admin/tanks/tank-form";
-    private static final String MODEL_LIST_FRAGMENT = "fragments/tank/tanks-grid";
+    private static final String MODEL_FORM_FRAGMENT = "fragments/admin/tanks/details-form";
+    private static final String MODEL_LIST_FRAGMENT = "fragments/tanks/list";
     private static final String MODEL_CONFIRM_DELETE_FRAGMENT = "fragments/admin/confirm-delete";
 
     private final TankService tankService;
