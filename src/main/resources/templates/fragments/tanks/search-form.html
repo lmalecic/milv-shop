@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<!--/*@thymesVar id="searchCriteria" type="com.lmalecic.milvshop.dto.TankSearchCriteria"*/-->
-<!--/*@thymesVar id="results" type="com.lmalecic.milvshop.dto.TankSearchResults"*/-->
+<!--/*@thymesVar id="searchCriteria" type="com.lmalecic.milvshop.criteria.TankSearchCriteria"*/-->
+<!--/*@thymesVar id="results" type="com.lmalecic.milvshop.results.TankSearchResults"*/-->
 <form class="d-flex flex-column gap-3 mt-3" th:action="@{#}"
       th:object="${searchCriteria}"
       hx:get="${searchPath}"

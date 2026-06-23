@@ -1,14 +1,13 @@
 package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.dto.TankDto;
-import com.lmalecic.milvshop.dto.TankSearchCriteria;
+import com.lmalecic.milvshop.criteria.TankSearchCriteria;
 import com.lmalecic.milvshop.exception.NoContentException;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.model.Tank;
 import com.lmalecic.milvshop.repository.TankRepository;
 import com.lmalecic.milvshop.specification.TankSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,8 @@
-package com.lmalecic.milvshop.dto;
+package com.lmalecic.milvshop.criteria;
 
-public record NationSearchCriteria(
+import com.lmalecic.milvshop.dto.SearchCriteria;
+
+public record TankRoleSearchCriteria(
         String query,
         Boolean showDeleted
 ) implements SearchCriteria {

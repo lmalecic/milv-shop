@@ -9,15 +9,15 @@ import org.hibernate.validator.constraints.Length;
 import java.util.List;
 
 @Builder
-public record NationDto(
+public record TankRoleDto(
         @With Long id,
         @Length(max = 32) @NotBlank String name,
         @UrlOrPath String imgPath,
         boolean deleted
 ) implements Displayable {
-    
-    public static NationDto empty() {
-        return NationDto.builder().build();
+
+    public static TankRoleDto empty() {
+        return TankRoleDto.builder().build();
     }
 
     @Override
@@ -27,7 +27,7 @@ public record NationDto(
 
     @Override
     public String getDisplayableType() {
-        return "Nation";
+        return "Tank Role";
     }
 
     @Override

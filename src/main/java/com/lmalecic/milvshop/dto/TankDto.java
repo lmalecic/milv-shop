@@ -29,6 +29,10 @@ public record TankDto(
         boolean deleted
 ) implements Displayable {
 
+    public TankDto empty() {
+        return TankDto.builder().build();
+    }
+
     @Override
     public String getDisplayName() {
         return this.name();

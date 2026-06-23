@@ -1,6 +1,8 @@
-package com.lmalecic.milvshop.dto;
+package com.lmalecic.milvshop.results;
 
-import com.lmalecic.milvshop.model.Nation;
+import com.lmalecic.milvshop.dto.NationDto;
+import com.lmalecic.milvshop.dto.TankDto;
+import com.lmalecic.milvshop.dto.TankRoleDto;
 import com.lmalecic.milvshop.model.TankRole;
 import lombok.Builder;
 
@@ -11,5 +13,5 @@ public record TankSearchResults(
         List<TankDto> tanks,
         List<Integer> mainGunCalibres,
         List<NationDto> nations,
-        List<TankRole> tankRoles
+        List<TankRoleDto> tankRoles
 ) {}

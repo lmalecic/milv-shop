@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<!--/*@thymesVar id="nationDto" type="com.lmalecic.milvshop.dto.NationDto"*/-->
+<!--/*@thymesVar id="tankRoleDto" type="com.lmalecic.milvshop.dto.TankRoleDto"*/-->
 <form method="post" class="modal-content form-group"
-      th:action="@{#}" th:object="${nationDto}"
-      th:with="isDeleted=${nationDto.deleted}">
+      th:action="@{#}" th:object="${tankRoleDto}"
+      th:with="isDeleted=${tankRoleDto.deleted}">
     <label hidden>
         <span>Id</span>
         <input hidden th:field="*{id}">
@@ -14,9 +14,9 @@
         <input hidden th:field="*{deleted}">
     </label>
     <div class="modal-header">
-        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}">CREATE_NATION</h3>
-        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !isDeleted}" th:text="${'EDIT_NATION — ID ' + nationDto.id}">EDIT_NATION</h3>
-        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && isDeleted}" th:text="${'DELETED_NATION — ID ' + nationDto.id}">DELETED_NATION</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}">CREATE_tankRole</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !isDeleted}" th:text="${'EDIT_ROLE — ID ' + tankRoleDto.id}">EDIT_TANK_ROLE</h3>
+        <h3 class="modal-title command-text" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && isDeleted}" th:text="${'DELETED_ROLE — ID ' + tankRoleDto.id}">DELETED_TANK_ROLE</h3>
         <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
     </div>
     <div class="modal-body">
@@ -42,7 +42,7 @@
                                 <span th:errors="*{imgPath}"></span>
                             </span>
                         </label>
-                        <div class="nation-card card overflow-hidden">
+                        <div class="tank-role-card card overflow-hidden">
                             <img id="itemImg" class="card-img text-center my-auto" th:src="*{imgPath}" alt="[NO IMAGE]">
                         </div>
                     </div>
@@ -53,7 +53,7 @@
     <div class="modal-footer pt-0">
         <div class="col d-inline-flex justify-content-end gap-3">
             <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !isDeleted}"
-                    hx:get="@{nations/delete/{id}(id=*{id})}"
+                    hx:get="@{tank-roles/delete/{id}(id=*{id})}"
                     hx-target="#confirmDeleteModalContent"
                     data-bs-toggle="modal"
                     data-bs-target="#confirmDeleteModal"
@@ -62,21 +62,21 @@
                 Delete
             </button>
             <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && isDeleted}"
-                    hx:patch="@{nations/recover/{id}(id=*{id})}"
+                    hx:patch="@{tank-roles/recover/{id}(id=*{id})}"
                     hx-target="#detailsModalContent"
                     class="btn btn-secondary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-recycle"></i>
                 Recover
             </button>
             <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() && !isDeleted}"
-                    hx:patch="@{nations/edit}"
+                    hx:patch="@{tank-roles/edit}"
                     hx-target="#detailsModalContent"
                     class="btn btn-primary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-floppy-fill"></i>
                 Save
             </button>
             <button type="button" th:if="${viewContext.name() == T(com.lmalecic.milvshop.viewmodel.ViewContext).CREATE.name()}"
-                    hx:post="@{nations/create}"
+                    hx:post="@{tank-roles/create}"
                     hx-target="#detailsModalContent"
                     class="btn btn-primary text-uppercase d-inline-flex gap-1">
                 <i class="bi bi-plus-lg"></i>

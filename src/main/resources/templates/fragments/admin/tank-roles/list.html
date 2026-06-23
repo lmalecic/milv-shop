@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<!--No results-->
+<div class="d-flex flex-column align-items-center w-100 h-100 gap-3" th:if="${#lists.isEmpty(results)}">
+    <p class="text-center fs-4 mt-5">No matching tanks found :(</p>
+    <div class="px-2" style="min-width: 25% !important; max-width: 100%" th:insert="~{fragments/admin/tank-roles/buttons :: create}"></div>
+</div>
+
+<!--With results-->
+<div class="row row-cols-xxl-6 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-3" th:unless="${#lists.isEmpty(results)}">
+    <div th:insert="~{fragments/admin/tank-roles/buttons :: create}" class="px-2"></div>
+    <div th:each="tankRoleDto : ${results}"
+         th:insert="~{fragments/admin/tank-roles/buttons :: item}"
+         class="px-2">
+    </div>
+</div>
+
+</html>

@@ -2,13 +2,13 @@ package com.lmalecic.milvshop.controller.mvc;
 
 import com.lmalecic.milvshop.viewmodel.ViewContext;
 import com.lmalecic.milvshop.dto.TankDto;
-import com.lmalecic.milvshop.dto.TankSearchCriteria;
+import com.lmalecic.milvshop.criteria.TankSearchCriteria;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.service.NationService;
 import com.lmalecic.milvshop.service.TankRoleService;
 import com.lmalecic.milvshop.service.TankService;
 import com.lmalecic.milvshop.util.UrlUtils;
-import com.lmalecic.milvshop.dto.TankSearchResults;
+import com.lmalecic.milvshop.results.TankSearchResults;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
@@ -38,7 +38,7 @@ public class TanksMvcController {
                 .tanks(tanksList)
                 .mainGunCalibres(this.tankService.findAllMainGunCalibres())
                 .nations(this.nationService.findAllActive())
-                .tankRoles(this.tankRoleService.findAllOrdered())
+                .tankRoles(this.tankRoleService.findAllActive())
                 .build());
         model.addAttribute("viewContext", ViewContext.VIEW);
         model.addAttribute("itemClickPath", requestUri);

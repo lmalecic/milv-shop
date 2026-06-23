@@ -237,7 +237,7 @@ body {
     }
 }
 
-.tank-card {
+.tank-card, .tank-role-card {
     aspect-ratio: var(--tank-card-aspect-ratio) !important;
     display: flex !important;
     align-items: center !important;
@@ -277,6 +277,10 @@ body {
     &.deleted {
         background-color: rgb(18, 8, 8) !important;
     }
+}
+
+.tank-role-card .card-img:is(img) {
+    height: 50% !important;
 }
 
 .card-stat {

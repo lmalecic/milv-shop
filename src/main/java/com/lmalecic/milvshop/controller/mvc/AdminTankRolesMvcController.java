@@ -1,9 +1,10 @@
 package com.lmalecic.milvshop.controller.mvc;
 
-import com.lmalecic.milvshop.criteria.NationSearchCriteria;
-import com.lmalecic.milvshop.dto.*;
+import com.lmalecic.milvshop.criteria.TankRoleSearchCriteria;
+import com.lmalecic.milvshop.dto.Displayable;
+import com.lmalecic.milvshop.dto.TankRoleDto;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
-import com.lmalecic.milvshop.service.NationService;
+import com.lmalecic.milvshop.service.TankRoleService;
 import com.lmalecic.milvshop.util.Constants;
 import com.lmalecic.milvshop.util.UrlUtils;
 import com.lmalecic.milvshop.viewmodel.Toast;
@@ -21,26 +22,26 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/nations")
-public class AdminNationsMvcController {
+@RequestMapping("/admin/tank-roles")
+public class AdminTankRolesMvcController {
 
-    private static final String INDEX_URI = "/admin/nations";
-    private static final String REDIRECT_INDEX = "redirect:/admin/nations/";
-    private static final String MODEL_FORM_FRAGMENT = "fragments/admin/nations/details-form";
-    private static final String MODEL_LIST_FRAGMENT = "fragments/admin/nations/list";
+    private static final String INDEX_URI = "/admin/tank-roles";
+    private static final String REDIRECT_INDEX = "redirect:/admin/tank-roles/";
+    private static final String MODEL_FORM_FRAGMENT = "fragments/admin/tank-roles/details-form";
+    private static final String MODEL_LIST_FRAGMENT = "fragments/admin/tank-roles/list";
     private static final String MODEL_CONFIRM_DELETE_FRAGMENT = "fragments/admin/confirm-delete";
 
-    private final NationService nationService;
+    private final TankRoleService tankRoleService;
 
     @GetMapping({"", "/"})
-    public String getIndex(Model model, @ModelAttribute("searchCriteria") NationSearchCriteria searchCriteria, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
+    public String getIndex(Model model, @ModelAttribute("searchCriteria") TankRoleSearchCriteria searchCriteria, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         this.buildListModel(model, searchCriteria, requestUri);
 
         String sectionUrl = UrlUtils.urlWithParams(requestUri, searchCriteria).toUriString();
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(sectionUrl);
-            return "/fragments/admin/nations/index";
+            return "/fragments/admin/tank-roles/index";
         }
 
         model.addAttribute("sectionUrl", sectionUrl);
@@ -49,7 +50,7 @@ public class AdminNationsMvcController {
 
     @HxRequest
     @GetMapping("/search")
-    public String search(Model model, @ModelAttribute("searchCriteria") NationSearchCriteria searchCriteria, HtmxResponse htmxResponse) {
+    public String search(Model model, @ModelAttribute("searchCriteria") TankRoleSearchCriteria searchCriteria, HtmxResponse htmxResponse) {
         this.buildListModel(model, searchCriteria, INDEX_URI);
         htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, searchCriteria).toUriString());
         return MODEL_LIST_FRAGMENT;
@@ -70,16 +71,16 @@ public class AdminNationsMvcController {
     }
 
     @PostMapping("/create")
-    public String create(Model model, @Valid @ModelAttribute NationDto nationDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+    public String create(Model model, @Valid @ModelAttribute TankRoleDto tankRoleDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.CREATE);
             return MODEL_FORM_FRAGMENT;
         }
 
-        var created = this.nationService.create(nationDto);
+        var created = this.tankRoleService.create(tankRoleDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Nation updated successfully."));
+            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank Role updated successfully."));
             this.buildDetailsModel(model, created);
             return MODEL_FORM_FRAGMENT;
         }
@@ -89,19 +90,19 @@ public class AdminNationsMvcController {
     @HxRequest
     @GetMapping("/delete/{id}")
     public String getDeleteForm(Model model, @PathVariable Long id) {
-        model.addAttribute("targetObject", this.nationService.findById(id)
+        model.addAttribute("targetObject", this.tankRoleService.findById(id)
                         .map(Displayable.class::cast)
-                .orElseThrow(() -> new ResourceNotFoundException("Nation with id " + id + " not found.")));
-        model.addAttribute("formAction", "/admin/nations/delete/" + id);
+                .orElseThrow(() -> new ResourceNotFoundException("tankRole with id " + id + " not found.")));
+        model.addAttribute("formAction", "/admin/tank-roles/delete/" + id);
         return MODEL_CONFIRM_DELETE_FRAGMENT;
     }
 
     @DeleteMapping("/delete/{id}")
     public String delete(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
-        var deleted = this.nationService.deleteById(id);
+        var deleted = this.tankRoleService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Nation deleted successfully."));
+            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank Role deleted successfully."));
             this.buildDetailsModel(model, deleted);
             return MODEL_FORM_FRAGMENT;
         }
@@ -110,10 +111,10 @@ public class AdminNationsMvcController {
 
     @PatchMapping("/recover/{id}")
     public String recover(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
-        var recovered = this.nationService.recoverById(id);
+        var recovered = this.tankRoleService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Nation recovered successfully."));
+            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank Role recovered successfully."));
             this.buildDetailsModel(model, recovered);
             return MODEL_FORM_FRAGMENT;
         }
@@ -121,40 +122,40 @@ public class AdminNationsMvcController {
     }
 
     @PatchMapping("/edit")
-    public String edit(Model model, @Valid @ModelAttribute NationDto nationDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
+    public String edit(Model model, @Valid @ModelAttribute TankRoleDto tankRoleDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
             return MODEL_FORM_FRAGMENT;
         }
 
-        var updated = this.nationService.update(nationDto);
+        var updated = this.tankRoleService.update(tankRoleDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Nation updated successfully."));
+            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank Role updated successfully."));
             this.buildDetailsModel(model, updated);
             return MODEL_FORM_FRAGMENT;
         }
         return REDIRECT_INDEX + updated.id();
     }
 
-    private void buildListModel(Model model, NationSearchCriteria searchCriteria, String requestUri) {
-        model.addAttribute("results", this.nationService.findAllBySearchCriteria(searchCriteria));
+    private void buildListModel(Model model, TankRoleSearchCriteria searchCriteria, String requestUri) {
+        model.addAttribute("results", this.tankRoleService.findAllBySearchCriteria(searchCriteria));
         model.addAttribute("itemClickPath", requestUri);
         model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
     }
 
     private void buildCreateModel(Model model) {
-        this.buildDetailsModel(model, NationDto.empty());
+        this.buildDetailsModel(model, TankRoleDto.empty());
         model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.CREATE);
     }
 
-    private void buildDetailsModel(Model model, Long nationId) {
-        this.buildDetailsModel(model, this.nationService.findById(nationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Nation with id " + nationId + " not found.")));
+    private void buildDetailsModel(Model model, Long tankRoleId) {
+        this.buildDetailsModel(model, this.tankRoleService.findById(tankRoleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank Role with id " + tankRoleId + " not found.")));
     }
 
-    private void buildDetailsModel(Model model, NationDto nationDto) {
-        model.addAttribute("nationDto", nationDto);
+    private void buildDetailsModel(Model model, TankRoleDto tankRoleDto) {
+        model.addAttribute("tankRoleDto", tankRoleDto);
         model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
     }
 }

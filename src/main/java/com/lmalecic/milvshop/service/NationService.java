@@ -1,7 +1,7 @@
 package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.dto.NationDto;
-import com.lmalecic.milvshop.dto.NationSearchCriteria;
+import com.lmalecic.milvshop.criteria.NationSearchCriteria;
 import com.lmalecic.milvshop.exception.NoContentException;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.model.Nation;

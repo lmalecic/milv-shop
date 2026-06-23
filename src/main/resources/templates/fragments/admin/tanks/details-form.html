@@ -25,7 +25,7 @@
                 <div class="row g-3">
                     <label class="col d-flex flex-column">
                         <span class="form-label">Name</span>
-                        <input th:field="*{name}" class="form-control" type="text" placeholder="Enter tank name..."
+                        <input th:field="*{name}" class="form-control" type="text" placeholder="Enter name..."
                                th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
                                th:disabled="${isDeleted}">
                         <span th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block">
@@ -68,7 +68,7 @@
                     <label class="col d-flex flex-column">
                         <span class="form-label">Gun calibre</span>
                         <span class="input-group" th:classappend="${#fields.hasErrors('mainGunCalibre')} ? 'has-validation'">
-                            <input th:field="*{mainGunCalibre}" class="form-control" type="number" min="0"
+                            <input th:field="*{mainGunCalibre}" class="form-control" type="number" min="0" placeholder="0"
                                    th:classappend="${#fields.hasErrors('mainGunCalibre')} ? 'is-invalid'"
                                    th:disabled="${isDeleted}">
                             <span class="input-group-text text-lowercase">mm</span>
@@ -80,7 +80,7 @@
                     <label class="col d-flex flex-column">
                         <span class="form-label">Max speed</span>
                         <span class="input-group" th:classappend="${#fields.hasErrors('maxSpeed')} ? 'has-validation'">
-                            <input th:field="*{maxSpeed}" class="form-control" type="number" min="0"
+                            <input th:field="*{maxSpeed}" class="form-control" type="number" min="0" placeholder="0"
                                    th:classappend="${#fields.hasErrors('maxSpeed')} ? 'is-invalid'"
                                    th:disabled="${isDeleted}">
                             <span class="input-group-text text-lowercase">km&sol;h</span>
@@ -92,7 +92,7 @@
                     <label class="col d-flex flex-column">
                         <span class="form-label">Armor thickness</span>
                         <span class="input-group" th:classappend="${#fields.hasErrors('armorThickness')} ? 'has-validation'">
-                            <input th:field="*{armorThickness}" class="form-control" min="0" type="number"
+                            <input th:field="*{armorThickness}" class="form-control" min="0" type="number" placeholder="0"
                                    th:classappend="${#fields.hasErrors('armorThickness')} ? 'is-invalid'"
                                    th:disabled="${isDeleted}">
                             <span class="input-group-text text-lowercase">mm</span>
@@ -105,7 +105,7 @@
                 <div class="row g-3 flex-fill">
                     <label class="col d-flex flex-column">
                         <span class="form-label">Description</span>
-                        <textarea th:field="*{description}" class="form-control flex-fill mb-0" rows="4" placeholder="Enter tank description..."
+                        <textarea th:field="*{description}" class="form-control flex-fill mb-0" rows="4" placeholder="Enter description..."
                                   th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
                                   th:disabled="${isDeleted}">
                         </textarea>
@@ -120,7 +120,7 @@
                     <label class="col-5 d-flex flex-column">
                         <span class="form-label">Crew size</span>
                         <span class="input-group" th:classappend="${#fields.hasErrors('crewSize')} ? 'has-validation'">
-                            <input th:field="*{crewSize}" class="form-control" type="number" min="0" step="1"
+                            <input th:field="*{crewSize}" class="form-control" type="number" min="0" step="1" placeholder="0"
                                    th:classappend="${#fields.hasErrors('crewSize')} ? 'is-invalid'"
                                    th:disabled="${isDeleted}">
                             <span class="input-group-text text-lowercase">ppl</span>
@@ -146,7 +146,7 @@
                 <div class="row g-3">
                     <label class="col d-flex flex-column">
                         <span class="form-label">Image url</span>
-                        <input th:field="*{imgPath}" id="imgPath" class="form-control" type="text" placeholder="Enter image url..."
+                        <input th:field="*{imgPath}" id="imgPath" class="form-control" type="text" placeholder="Enter url..."
                                th:classappend="${#fields.hasErrors('imgPath')} ? 'is-invalid'"
                                th:disabled="${isDeleted}">
                         <span th:if="${#fields.hasErrors('imgPath')}" class="invalid-feedback d-block">

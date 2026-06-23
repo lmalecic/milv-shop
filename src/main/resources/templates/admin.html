@@ -13,35 +13,35 @@
         <div class="admin-navbar">
             <button class="card admin-nav-btn text-center px-4 fs-4"
                     th:classappend="${@viewUtils.activeClass('/admin/tanks')}"
-                    hx:get="@{/admin/tanks}"
+                    hx:get="@{tanks}"
                     hx-trigger="click"
                     hx-target="#selected-view">
                 <img src="/img/tank.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Tanks<br/>Department
             </button>
             <button class="card admin-nav-btn text-center px-4 fs-4"
-                    hx:get="@{/admin/nations}"
+                    hx:get="@{nations}"
                     hx-trigger="click"
                     hx-target="#selected-view">
                 <img src="/img/world.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Nations<br/>Department
             </button>
             <button class="card admin-nav-btn text-center px-4 fs-4"
-                    hx:get="@{/admin/tankroles}"
+                    hx:get="@{tank-roles}"
                     hx-trigger="click"
                     hx-target="#selected-view">
                 <img src="/img/tankrole/heavy_tank.svg" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Tank Roles<br/>Department
             </button>
             <button class="card admin-nav-btn text-center px-4 fs-4"
-                    hx:get="@{/admin/users}"
+                    hx:get="@{users}"
                     hx-trigger="click"
                     hx-target="#selected-view">
                 <img src="/img/user.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
                 Users<br/>Department
             </button>
             <button class="card admin-nav-btn text-center px-4 fs-4"
-                    hx:get="@{/admin/orders}"
+                    hx:get="@{orders}"
                     hx-trigger="click"
                     hx-target="#selected-view">
                 <img src="/img/orders.png" class="card-img text-center mb-3" alt="[NO IMAGE]">

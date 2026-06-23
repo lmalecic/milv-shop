@@ -1,4 +1,6 @@
-package com.lmalecic.milvshop.dto;
+package com.lmalecic.milvshop.criteria;
+
+import com.lmalecic.milvshop.dto.SearchCriteria;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<button th:fragment="create" class="tank-role-card btn btn-secondary w-100 h-100 p-0 d-flex flex-column border-2 text-decoration-none fw-bold"
+        hx:get="@{/admin/tank-roles/create}"
+        hx-target="#detailsModalContent"
+        hx-trigger="click"
+        data-bs-toggle="modal"
+        data-bs-target="#detailsModal">
+    <span class="fs-1 card-img">&plus;</span>
+    <span class="fs-5 text-uppercase card-img">&lsqb;Create&rsqb;</span>
+</button>
+
+<!--/*@thymesVar id="tankRoleDto" type="com.lmalecic.milvshop.dto.TankRoleDto"*/-->
+<button th:fragment="item"
+   th:object="${tankRoleDto}"
+   hx:get="@{{itemClickPath}/{id}(itemClickPath=${itemClickPath}, id=*{id})}"
+   hx-target="#detailsModalContent"
+   hx-trigger="click"
+   data-bs-toggle="modal"
+   data-bs-target="#detailsModal"
+   class="tank-role-card card border-2 text-decoration-none w-100 h-100 p-0"
+   th:classappend="*{deleted} ? 'deleted'">
+    <img th:src="*{imgPath}" class="card-img text-center" alt="[NO IMAGE]">
+    <span class="top-left-corner d-flex align-items-start flex-row gap-1" style="max-width: 90%;">
+        <span class="card-stat rounded-3 fs-6 d-inline-flex flex-row"
+             th:classappend="*{deleted} ? 'deleted'">
+            <span th:text="*{getDisplayName()}" class="fw-semibold" th:classappend="*{deleted} ? 'text-decoration-line-through'"></span>
+        </span>
+    </span>
+</button>
+
+</html>
