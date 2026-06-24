@@ -1,7 +1,7 @@
 package com.lmalecic.milvshop.dto;
 
-import com.lmalecic.milvshop.model.Nation;
-import com.lmalecic.milvshop.model.TankRole;
+import com.lmalecic.milvshop.entity.Nation;
+import com.lmalecic.milvshop.entity.TankRole;
 import com.lmalecic.milvshop.validation.UrlOrPath;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

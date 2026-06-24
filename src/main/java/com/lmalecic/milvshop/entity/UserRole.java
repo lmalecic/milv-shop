@@ -1,4 +1,4 @@
-package com.lmalecic.milvshop.model;
+package com.lmalecic.milvshop.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

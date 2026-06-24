@@ -1,7 +1,7 @@
 package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.dto.AuthLogDto;
-import com.lmalecic.milvshop.model.AuthLog;
+import com.lmalecic.milvshop.entity.AuthLog;
 import com.lmalecic.milvshop.repository.AuthLogRepository;
 import com.lmalecic.milvshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,6 @@
 package com.lmalecic.milvshop.repository;
 
-import com.lmalecic.milvshop.dto.NationDto;
-import com.lmalecic.milvshop.model.Nation;
-import com.lmalecic.milvshop.model.Tank;
+import com.lmalecic.milvshop.entity.Nation;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

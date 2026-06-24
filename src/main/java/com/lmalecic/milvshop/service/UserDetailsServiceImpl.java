@@ -1,6 +1,6 @@
 package com.lmalecic.milvshop.service;
 
-import com.lmalecic.milvshop.model.User;
+import com.lmalecic.milvshop.entity.User;
 import com.lmalecic.milvshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;

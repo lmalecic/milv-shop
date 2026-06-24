@@ -1,7 +1,7 @@
 package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.dto.UserRoleDto;
-import com.lmalecic.milvshop.model.UserRole;
+import com.lmalecic.milvshop.entity.UserRole;
 import com.lmalecic.milvshop.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

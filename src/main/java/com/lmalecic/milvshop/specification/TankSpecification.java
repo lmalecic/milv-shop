@@ -1,9 +1,9 @@
 package com.lmalecic.milvshop.specification;
 
-import com.lmalecic.milvshop.model.*;
+import com.lmalecic.milvshop.entity.Tank;
+import com.lmalecic.milvshop.entity.*;
 import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;

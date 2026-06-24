@@ -6,7 +6,7 @@
 
 <!--/*@thymesVar id="results" type="com.lmalecic.milvshop.results.UserSearchResults"*/-->
 <table class="w-100" th:object="${results.users}">
-    <tr th:with="userMetadata=${T(com.lmalecic.milvshop.model.User_)}">
+    <tr th:with="userMetadata=${T(com.lmalecic.milvshop.entity.User_)}">
         <th class="col-1 text-uppercase">
             <div class="table-header" th:text="${userMetadata.id.getName()}"></div>
         </th>

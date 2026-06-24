@@ -5,7 +5,7 @@ import com.lmalecic.milvshop.criteria.TankRoleSearchCriteria;
 import com.lmalecic.milvshop.dto.TankRoleDto;
 import com.lmalecic.milvshop.exception.NoContentException;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
-import com.lmalecic.milvshop.model.TankRole;
+import com.lmalecic.milvshop.entity.TankRole;
 import com.lmalecic.milvshop.repository.TankRoleRepository;
 import com.lmalecic.milvshop.specification.NationSpecification;
 import com.lmalecic.milvshop.specification.TankRoleSpecification;

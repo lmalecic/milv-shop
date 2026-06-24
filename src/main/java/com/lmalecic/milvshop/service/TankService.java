@@ -4,7 +4,7 @@ import com.lmalecic.milvshop.dto.TankDto;
 import com.lmalecic.milvshop.criteria.TankSearchCriteria;
 import com.lmalecic.milvshop.exception.NoContentException;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
-import com.lmalecic.milvshop.model.Tank;
+import com.lmalecic.milvshop.entity.Tank;
 import com.lmalecic.milvshop.repository.TankRepository;
 import com.lmalecic.milvshop.specification.TankSpecification;
 import lombok.RequiredArgsConstructor;

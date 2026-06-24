@@ -1,4 +1,4 @@
-package com.lmalecic.milvshop.model;
+package com.lmalecic.milvshop.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class Nation {
+public final class TankRole {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

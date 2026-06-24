@@ -5,7 +5,7 @@ import com.lmalecic.milvshop.dto.UserAuthDto;
 import com.lmalecic.milvshop.dto.UserDto;
 import com.lmalecic.milvshop.exception.NoContentException;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
-import com.lmalecic.milvshop.model.User;
+import com.lmalecic.milvshop.entity.User;
 import com.lmalecic.milvshop.repository.UserRepository;
 import com.lmalecic.milvshop.repository.UserRoleRepository;
 import com.lmalecic.milvshop.specification.UserSpecification;

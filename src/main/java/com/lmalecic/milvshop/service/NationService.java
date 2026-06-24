@@ -4,7 +4,7 @@ import com.lmalecic.milvshop.dto.NationDto;
 import com.lmalecic.milvshop.criteria.NationSearchCriteria;
 import com.lmalecic.milvshop.exception.NoContentException;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
-import com.lmalecic.milvshop.model.Nation;
+import com.lmalecic.milvshop.entity.Nation;
 import com.lmalecic.milvshop.repository.NationRepository;
 import com.lmalecic.milvshop.specification.NationSpecification;
 import lombok.RequiredArgsConstructor;

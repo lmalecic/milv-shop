@@ -1,8 +1,8 @@
 package com.lmalecic.milvshop.specification;
 
-import com.lmalecic.milvshop.model.User;
-import com.lmalecic.milvshop.model.UserRole_;
-import com.lmalecic.milvshop.model.User_;
+import com.lmalecic.milvshop.entity.User;
+import com.lmalecic.milvshop.entity.UserRole_;
+import com.lmalecic.milvshop.entity.User_;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;

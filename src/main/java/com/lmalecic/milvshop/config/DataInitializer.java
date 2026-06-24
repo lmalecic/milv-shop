@@ -1,6 +1,6 @@
 package com.lmalecic.milvshop.config;
 
-import com.lmalecic.milvshop.model.*;
+import com.lmalecic.milvshop.entity.*;
 import com.lmalecic.milvshop.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

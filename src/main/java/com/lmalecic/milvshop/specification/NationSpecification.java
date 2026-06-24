@@ -1,7 +1,7 @@
 package com.lmalecic.milvshop.specification;
 
-import com.lmalecic.milvshop.model.Nation;
-import com.lmalecic.milvshop.model.Nation_;
+import com.lmalecic.milvshop.entity.Nation;
+import com.lmalecic.milvshop.entity.Nation_;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 

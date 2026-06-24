@@ -1,6 +1,6 @@
 package com.lmalecic.milvshop.repository;
 
-import com.lmalecic.milvshop.model.UserRole;
+import com.lmalecic.milvshop.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

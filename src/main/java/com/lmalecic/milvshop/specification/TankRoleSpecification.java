@@ -1,7 +1,7 @@
 package com.lmalecic.milvshop.specification;
 
-import com.lmalecic.milvshop.model.TankRole;
-import com.lmalecic.milvshop.model.TankRole_;
+import com.lmalecic.milvshop.entity.TankRole;
+import com.lmalecic.milvshop.entity.TankRole_;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
