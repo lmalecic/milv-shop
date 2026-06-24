@@ -29,7 +29,7 @@ public class TanksMvcController {
     private final NationService nationService;
     private final TankRoleService tankRoleService;
 
-    @GetMapping({"", "/"})
+    @GetMapping
     public String getIndex(Model model, @ModelAttribute("searchCriteria") TankSearchCriteria searchCriteria, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         List<TankDto> tanksList = this.tankService.findAllBySearchCriteria(searchCriteria);

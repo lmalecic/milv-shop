@@ -7,12 +7,12 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("/api/format")
+@RequestMapping("api/format")
 public class FormatRestController {
 
     public static String CURRENCY = " €";
 
-    @GetMapping("/price")
+    @GetMapping("price")
     public String price(@RequestParam Double value, @Nullable @RequestParam Double amount, @Nullable @RequestParam String locale) {
         Double totalPrice = amount == null ? value : amount * value;
         Locale effectiveLocale = Locale.forLanguageTag(locale != null ? locale : "hr-HR");

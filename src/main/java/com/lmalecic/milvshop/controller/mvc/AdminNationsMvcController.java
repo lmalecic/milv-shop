@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/nations")
+@RequestMapping("admin/nations")
 public class AdminNationsMvcController {
 
     private static final String INDEX_URI = "/admin/nations";
@@ -32,7 +32,7 @@ public class AdminNationsMvcController {
 
     private final NationService nationService;
 
-    @GetMapping({"", "/"})
+    @GetMapping
     public String getIndex(Model model, @ModelAttribute("searchCriteria") NationSearchCriteria searchCriteria, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         this.buildListModel(model, searchCriteria, requestUri);
@@ -48,7 +48,7 @@ public class AdminNationsMvcController {
     }
 
     @HxRequest
-    @GetMapping("/search")
+    @GetMapping("search")
     public String search(Model model, @ModelAttribute("searchCriteria") NationSearchCriteria searchCriteria, HtmxResponse htmxResponse) {
         this.buildListModel(model, searchCriteria, INDEX_URI);
         htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, searchCriteria).toUriString());
@@ -56,20 +56,20 @@ public class AdminNationsMvcController {
     }
 
     @HxRequest
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public String getDetailsForm(Model model, @PathVariable Long id) {
         this.buildDetailsModel(model, id);
         return MODEL_FORM_FRAGMENT;
     }
 
     @HxRequest
-    @GetMapping("/create")
+    @GetMapping("create")
     public String getCreateForm(Model model) {
         this.buildCreateModel(model);
         return MODEL_FORM_FRAGMENT;
     }
 
-    @PostMapping("/create")
+    @PostMapping("create")
     public String create(Model model, @Valid @ModelAttribute NationDto nationDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.CREATE);
@@ -87,7 +87,7 @@ public class AdminNationsMvcController {
     }
 
     @HxRequest
-    @GetMapping("/delete/{id}")
+    @GetMapping("delete/{id}")
     public String getDeleteForm(Model model, @PathVariable Long id) {
         model.addAttribute("targetObject", this.nationService.findById(id)
                         .map(Displayable.class::cast)
@@ -96,7 +96,7 @@ public class AdminNationsMvcController {
         return MODEL_CONFIRM_DELETE_FRAGMENT;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("delete/{id}")
     public String delete(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         var deleted = this.nationService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
@@ -108,7 +108,7 @@ public class AdminNationsMvcController {
         return REDIRECT_INDEX + deleted.id();
     }
 
-    @PatchMapping("/recover/{id}")
+    @PatchMapping("recover/{id}")
     public String recover(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         var recovered = this.nationService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
@@ -120,7 +120,7 @@ public class AdminNationsMvcController {
         return REDIRECT_INDEX + recovered.id();
     }
 
-    @PatchMapping("/edit")
+    @PatchMapping("edit")
     public String edit(Model model, @Valid @ModelAttribute NationDto nationDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);

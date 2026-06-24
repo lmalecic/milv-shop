@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("admin")
 @RequiredArgsConstructor
 public class AdminMvcController {
 
     public static final String INDEX_VIEW = "admin";
 
-    @GetMapping({"", "/"})
+    @GetMapping
     public String getIndexView(Model model) {
         model.addAttribute("sectionUrl", null);
         return INDEX_VIEW;

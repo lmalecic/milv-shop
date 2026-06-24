@@ -12,7 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/auth")
+@RequestMapping("auth")
 @RequiredArgsConstructor
 public class AuthMvcController {
 
@@ -22,7 +22,7 @@ public class AuthMvcController {
     private final UserService userService;
 
     @HxRequest
-    @GetMapping("/login")
+    @GetMapping("login")
     public String getLoginForm(Model model, @RequestParam(required = false) String redirectUrl) {
         model.addAttribute("userAuthDto", UserAuthDto.empty());
         model.addAttribute("redirectUrl", redirectUrl);
@@ -30,7 +30,7 @@ public class AuthMvcController {
     }
 
     @HxRequest
-    @PostMapping("/login-success")
+    @PostMapping("login-success")
     public String loginSuccess(@RequestParam(required = false) String redirectUrl) {
         if (redirectUrl != null && !redirectUrl.isBlank()) {
             return "redirect:htmx:" + redirectUrl;
@@ -39,7 +39,7 @@ public class AuthMvcController {
     }
 
     @HxRequest
-    @PostMapping("/login-failed")
+    @PostMapping("login-failed")
     public String loginFailed(@Valid @ModelAttribute UserAuthDto userAuthDto, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             bindingResult.rejectValue("username", "error.auth", "");
@@ -49,7 +49,7 @@ public class AuthMvcController {
     }
 
     @HxRequest
-    @PostMapping("/register")
+    @PostMapping("register")
     public String processRegister(Model model, @Valid @ModelAttribute UserAuthDto userAuthDto, BindingResult bindingResult, @RequestParam(required = false) String redirectUrl, HtmxResponse htmxResponse) {
         model.addAttribute("redirectUrl", redirectUrl);
         if (bindingResult.hasErrors()) {

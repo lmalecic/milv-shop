@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/tank-roles")
+@RequestMapping("admin/tank-roles")
 public class AdminTankRolesMvcController {
 
     private static final String INDEX_URI = "/admin/tank-roleIds";
@@ -33,7 +33,7 @@ public class AdminTankRolesMvcController {
 
     private final TankRoleService tankRoleService;
 
-    @GetMapping({"", "/"})
+    @GetMapping
     public String getIndex(Model model, @ModelAttribute("searchCriteria") TankRoleSearchCriteria searchCriteria, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         this.buildListModel(model, searchCriteria, requestUri);
@@ -49,7 +49,7 @@ public class AdminTankRolesMvcController {
     }
 
     @HxRequest
-    @GetMapping("/search")
+    @GetMapping("search")
     public String search(Model model, @ModelAttribute("searchCriteria") TankRoleSearchCriteria searchCriteria, HtmxResponse htmxResponse) {
         this.buildListModel(model, searchCriteria, INDEX_URI);
         htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, searchCriteria).toUriString());
@@ -57,20 +57,20 @@ public class AdminTankRolesMvcController {
     }
 
     @HxRequest
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public String getDetailsForm(Model model, @PathVariable Long id) {
         this.buildDetailsModel(model, id);
         return MODEL_FORM_FRAGMENT;
     }
 
     @HxRequest
-    @GetMapping("/create")
+    @GetMapping("create")
     public String getCreateForm(Model model) {
         this.buildCreateModel(model);
         return MODEL_FORM_FRAGMENT;
     }
 
-    @PostMapping("/create")
+    @PostMapping("create")
     public String create(Model model, @Valid @ModelAttribute TankRoleDto tankRoleDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.CREATE);
@@ -88,7 +88,7 @@ public class AdminTankRolesMvcController {
     }
 
     @HxRequest
-    @GetMapping("/delete/{id}")
+    @GetMapping("delete/{id}")
     public String getDeleteForm(Model model, @PathVariable Long id) {
         model.addAttribute("targetObject", this.tankRoleService.findById(id)
                         .map(Displayable.class::cast)
@@ -97,7 +97,7 @@ public class AdminTankRolesMvcController {
         return MODEL_CONFIRM_DELETE_FRAGMENT;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("delete/{id}")
     public String delete(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         var deleted = this.tankRoleService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
@@ -109,7 +109,7 @@ public class AdminTankRolesMvcController {
         return REDIRECT_INDEX + deleted.id();
     }
 
-    @PatchMapping("/recover/{id}")
+    @PatchMapping("recover/{id}")
     public String recover(Model model, @PathVariable Long id, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         var recovered = this.tankRoleService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
@@ -121,7 +121,7 @@ public class AdminTankRolesMvcController {
         return REDIRECT_INDEX + recovered.id();
     }
 
-    @PatchMapping("/edit")
+    @PatchMapping("edit")
     public String edit(Model model, @Valid @ModelAttribute TankRoleDto tankRoleDto, BindingResult bindingResult, HtmxRequest htmxRequest, HtmxResponse htmxResponse) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);

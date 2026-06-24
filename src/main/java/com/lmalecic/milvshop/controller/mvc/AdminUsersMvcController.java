@@ -1,6 +1,5 @@
 package com.lmalecic.milvshop.controller.mvc;
 
-import com.lmalecic.milvshop.criteria.TankSearchCriteria;
 import com.lmalecic.milvshop.criteria.UserSearchCriteria;
 import com.lmalecic.milvshop.dto.UserRoleDto;
 import com.lmalecic.milvshop.results.UserSearchResults;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin/users")
+@RequestMapping("admin/users")
 @RequiredArgsConstructor
 public class AdminUsersMvcController {
 
@@ -30,7 +29,7 @@ public class AdminUsersMvcController {
     private final UserService userService;
     private final UserRoleService userRoleService;
 
-    @GetMapping({"", "/"})
+    @GetMapping
     public String getIndexView(Model model, @ModelAttribute("searchCriteria") UserSearchCriteria searchCriteria, HtmxRequest htmxRequest, HtmxResponse htmxResponse, HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         this.buildListModel(model, searchCriteria, requestUri);
@@ -46,7 +45,7 @@ public class AdminUsersMvcController {
     }
 
     @HxRequest
-    @GetMapping("/search")
+    @GetMapping("search")
     public String search(Model model, @ModelAttribute("searchCriteria") UserSearchCriteria searchCriteria, HtmxResponse htmxResponse) {
         this.buildListModel(model, searchCriteria, INDEX_URI);
         htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, searchCriteria).toUriString());
