@@ -16,6 +16,7 @@
     --bs-backdrop-opacity: 0.7 !important;
     --bs-dropdown-link-hover-color: var(--bs-yellow) !important;
     --bs-tertiary-bg: rgba(255,255,255,10%) !important;
+
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
 
@@ -548,4 +549,10 @@ td .table-cell {
     width: 100%;
     padding: 0.2rem 0.6rem;
     border-radius: var(--table-border-radius);
+}
+
+.dropdown-menu {
+    border: 2px solid var(--bs-border-color-translucent) !important;
+    border-radius: 0.5em !important;
+
 }

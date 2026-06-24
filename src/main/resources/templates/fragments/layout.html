@@ -57,13 +57,6 @@
                     <img class="h-75" src="/img/tank.png" alt="">
                     Tanks
                 </a>
-                <span class="navbar-item-separator"></span>
-                <a id="navbar-cart" class="navbar-item d-flex align-items-center gap-sm-2"
-                   th:classappend="${@viewUtils.activeClass('/cart')}"
-                   th:href="@{/cart}">
-                    <img class="h-75" src="/img/cart.png" alt="">
-                    Cart
-                </a>
                 <span class="d-inline-flex gap-3" sec:authorize="isAuthenticated()">
                     <span class="navbar-item-separator"></span>
                     <a id="navbar-orders" class="navbar-item d-flex align-items-center gap-sm-2"
@@ -83,40 +76,41 @@
                     </a>
                 </span>
             </div>
-            <div style="margin-right: var(--page-margin-right)" class="position-absolute d-flex gap-3 end-0 fs-5">
-                <div sec:authorize="isAnonymous()" class="d-flex gap-2 fs-5 justify-content-center">
-                    <a id="loginButton" href="#" class="navbar-item d-flex align-items-center gap-sm-2"
-                       hx:get="@{/auth/login(redirectUrl=${redirectUrl})}"
-                       hx-target="#authModalContent"
-                       hx-trigger="click"
-                       data-bs-toggle="modal"
-                       data-bs-target="#authModal">
-                        <img style="transform: rotate(225deg)" class="h-75" src="/img/login.png" alt="">
-                        Login
-                    </a>
-                </div>
-                <div sec:authorize="isAuthenticated()" class="dropdown">
-                    <a href="#" id="userDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
-                       class="navbar-item d-flex align-items-center gap-sm-2">
-                        <img height="24" width="24" src="/img/user.png" alt="">
-                        <span style="text-transform: none !important;" sec:authentication="name"></span>
-                    </a>
-
-                    <form class="dropdown-menu dropdown-menu-end text-end border-0 rounded-0" style="background-color: var(--bs-body-bg) !important;" aria-labelledby="userDropdownMenuLink" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
-                        <button type="submit" class="dropdown-item navbar-item fw-bolder bg-transparent border-0 d-flex align-items-center gap-sm-1 p-0 justify-content-end">
-                            <img height="24" width="24" src="/img/close.png" alt="">
-                            Logout
-                        </button>
+            <div class="position-absolute d-flex gap-3 end-0 fs-5 me-5">
+                <button sec:authorize="isAnonymous()"
+                        id="loginButton" class="navbar-item bg-transparent border-0"
+                        hx:get="@{/auth/login(redirectUrl=${redirectUrl})}"
+                        hx-target="#authModalContent"
+                        hx-trigger="click"
+                        data-bs-toggle="modal"
+                        data-bs-target="#authModal">
+                    <img src="/img/user.png" alt="User">
+                </button>
+                <div sec:authorize="isAuthenticated()" class="dropdown-center">
+                    <button id="userDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
+                            data-bs-offset="0,10"
+                            class="navbar-item bg-transparent border-0">
+                        <img src="/img/user.png" alt="User">
+                    </button>
+                    <form class="dropdown-menu overflow-hidden border-0 rounded-0 pb-0 text-center" aria-labelledby="userDropdownMenuLink" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                        <div class="pb-2 px-3" style="text-transform: none !important;" sec:authentication="name"></div>
+                        <div class="dropdown-item p-0 border-top">
+                            <button type="submit" class="btn w-100 bg-transparent border-0 p-1">Sign out</button>
+                        </div>
                     </form>
                 </div>
+                <button class="navbar-item bg-transparent border-0"
+                        hx:get="@{/cart}"
+                        hx-target="#cartModalContent"
+                        data-bs-toggle="modal"
+                        data-bs-target="#cartModal">
+                    <img src="/img/cart.png" alt="Cart">
+                </button>
             </div>
         </div>
     </nav>
-    <!-- Auth Modal -->
-    <dialog class="modal fade" id="authModal" style="background-color: rgba(0,0,0,0)" tabindex="-1" aria-labelledby="loginModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" id="authModalContent">
-        </div>
-    </dialog>
+    <dialog th:replace="~{fragments/dialog-modal :: modal('authModal')}"></dialog>
+    <dialog th:replace="~{fragments/dialog-modal :: modalXl('cartModal')}"></dialog>
     <div th:replace="~{fragments/toasts}"></div>
     <script th:if="${promptAuth}">
         $(document).ready(function() {
