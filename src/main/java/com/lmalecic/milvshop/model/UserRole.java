@@ -13,7 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Builder
 @Entity
 @Table
-public class UserRole implements GrantedAuthority {
+public final class UserRole implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

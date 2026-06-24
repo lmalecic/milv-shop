@@ -538,7 +538,7 @@ tr:nth-child(even) .table-cell {
 }
 
 th .table-header {
-    width: 100%;
+    width: fit-content;
     padding: 0.1rem 0.6rem;
     background-color: #009e00;
     border-radius: var(--table-border-radius);

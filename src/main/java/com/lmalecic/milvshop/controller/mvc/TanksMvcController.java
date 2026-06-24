@@ -48,7 +48,7 @@ public class TanksMvcController {
             return "fragments/tanks/list";
         }
 
-        return "/tank/tanks";
+        return "tanks";
     }
 
     @HxRequest
