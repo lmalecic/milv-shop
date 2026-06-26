@@ -66,17 +66,33 @@
                     <h1 class="modal-title me-auto" th:text="*{name}">Tank name</h1>
                     <p th:text="*{description}" class="text-secondary" style="text-align: justify"></p>
                 </div>
-                <div class="col-auto mt-2">
-                    <label class="d-flex flex-column gap-2">
-                    <span class="input-group">
-                        <button type="button" id="decrementQuantity" class="input-group-text fw-bolder">&minus;</button>
-                        <input id="quantity" name="quantity" class="form-control text-center" type="number" value="1" min="1" max="99">
-                        <button type="button" id="incrementQuantity" class="input-group-text fw-bolder">&plus;</button>
-                    </span>
+                <div class="col-auto mt-2" th:with="purchasableType=${T(com.lmalecic.milvshop.cart.PurchasableType).TANK}">
+                    <label hidden>
+                        Type
+                        <input name="itemType" th:value="${purchasableType}">
                     </label>
-                    <button type="submit" class="btn btn-primary text-uppercase d-inline-flex gap-1">
+                    <label hidden>
+                        Id
+                        <input name="itemId" th:value="*{id}">
+                    </label>
+                    <label class="d-flex flex-column gap-2">
+                        <span class="input-group">
+                            <button type="button" id="decrementQuantity" class="input-group-text fw-bolder">&minus;</button>
+                            <input id="quantity" name="quantity" class="form-control text-center" type="number" value="1" min="1" max="99">
+                            <button type="button" id="incrementQuantity" class="input-group-text fw-bolder">&plus;</button>
+                        </span>
+                    </label>
+                    <button type="button" class="btn btn-primary text-uppercase d-inline-flex gap-1"
+                            hx:post="@{/cart}"
+                            hx-disabled-elt="this">
                         <i class="bi bi-cart-plus-fill"></i>Add to cart
                     </button>
+                    <div class="text-center" id="inCartIndicator" th:hidden="${session.cart == null or !session.cart.contains(purchasableType, tank.id)}">
+                        <div class="badge text-center mt-2 text-bg-success text-uppercase rounded-1">
+                            <i class="bi bi-check-lg"></i>
+                            In cart
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,6 +105,9 @@
         const decrementBtn = $("#decrementQuantity");
         const incrementBtn = $("#incrementQuantity");
         const price = $("#price");
+
+        const currentLocale = /*[[${#locale.toLanguageTag()}]]*/ "de-DE";
+        const currentCurrency = /*[[${T(java.util.Currency).getInstance(#locale).getCurrencyCode()}]]*/ "EUR";
 
         quantityInput.on('keydown', (e) => {
             if (e.key.length === 1 && /\D/.test(e.key)) {
@@ -112,15 +131,15 @@
             decrementBtn.prop("disabled", value <= min);
             incrementBtn.prop("disabled", value >= max);
 
-            $.ajax("/api/format/price", {
-                data: {
-                    value: Number.parseFloat(price.data("price")),
-                    amount: value,
-                    locale: "hr-HR"
-                },
-            }).done(data => {
-                price.text(data);
-            })
+            const basePrice = Number.parseFloat(price.data("price"));
+            const totalPrice = basePrice * value;
+
+            const formatter = new Intl.NumberFormat(currentLocale, {
+                style: 'currency',
+                currency: currentCurrency
+            });
+
+            price.text(formatter.format(totalPrice));
         }
 
         quantityInput.on('focusout', validateQuantity);
@@ -135,6 +154,12 @@
         incrementBtn.on("click", () => {
             quantityInput.get(0).stepUp();
             validateQuantity();
+        });
+
+        const inCartIndicator = $("#inCartIndicator");
+        htmx.on("cart-size-changed", event => {
+            const size = event.detail.value;
+            inCartIndicator.attr("hidden", size === 0);
         });
     })();
 </script>

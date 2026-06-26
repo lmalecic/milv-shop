@@ -79,7 +79,7 @@ public class AdminNationsMvcController {
         var created = this.nationService.create(nationDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Nation updated successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Nation updated successfully."));
             this.buildDetailsModel(model, created);
             return MODEL_FORM_FRAGMENT;
         }
@@ -101,7 +101,7 @@ public class AdminNationsMvcController {
         var deleted = this.nationService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Nation deleted successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Nation deleted successfully."));
             this.buildDetailsModel(model, deleted);
             return MODEL_FORM_FRAGMENT;
         }
@@ -113,7 +113,7 @@ public class AdminNationsMvcController {
         var recovered = this.nationService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Nation recovered successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Nation recovered successfully."));
             this.buildDetailsModel(model, recovered);
             return MODEL_FORM_FRAGMENT;
         }
@@ -130,7 +130,7 @@ public class AdminNationsMvcController {
         var updated = this.nationService.update(nationDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Nation updated successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Nation updated successfully."));
             this.buildDetailsModel(model, updated);
             return MODEL_FORM_FRAGMENT;
         }

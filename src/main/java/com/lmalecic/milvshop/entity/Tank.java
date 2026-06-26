@@ -1,11 +1,15 @@
 package com.lmalecic.milvshop.entity;
 
+import com.lmalecic.milvshop.cart.BadgeAttribute;
 import com.lmalecic.milvshop.cart.Purchasable;
+import com.lmalecic.milvshop.cart.PurchasableAttributes;
+import com.lmalecic.milvshop.cart.PurchasableType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Table
@@ -56,8 +60,8 @@ public final class Tank implements Purchasable {
     }
 
     @Override
-    public String getPurchasableType() {
-        return "Tank";
+    public PurchasableType getPurchasableType() {
+        return PurchasableType.TANK;
     }
 
     @Override
@@ -68,5 +72,15 @@ public final class Tank implements Purchasable {
     @Override
     public String getPurchasableImageUrl() {
         return this.imgPath;
+    }
+
+    @Override
+    public PurchasableAttributes getPurchasableAttributes() {
+        return PurchasableAttributes.builder()
+                .badges(List.of(
+                        new BadgeAttribute(this.nation.getName(), this.nation.getImgPath()),
+                        new BadgeAttribute(this.tankRole.getName(), this.tankRole.getImgPath())
+                ))
+                .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.lmalecic.milvshop.controller.mvc;
 
+import com.lmalecic.milvshop.cart.Cart;
 import com.lmalecic.milvshop.viewmodel.ViewContext;
 import com.lmalecic.milvshop.dto.TankDto;
 import com.lmalecic.milvshop.criteria.TankSearchCriteria;
@@ -53,7 +54,7 @@ public class TanksMvcController {
 
     @HxRequest
     @GetMapping("/{id}")
-    public String getDetailsForm(Model model, @PathVariable Long id) {
+    public String getDetailsForm(Model model, @PathVariable Long id, @ModelAttribute("cart") Cart cart) {
         TankDto tank = this.tankService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tank with id " + id + " not found."));
 

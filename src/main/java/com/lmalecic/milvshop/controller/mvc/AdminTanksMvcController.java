@@ -83,7 +83,7 @@ public class AdminTanksMvcController {
         var created = this.tankService.create(tankDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank updated successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Tank updated successfully."));
             this.buildDetailsModel(model, created);
             return MODEL_FORM_FRAGMENT;
         }
@@ -105,7 +105,7 @@ public class AdminTanksMvcController {
         var deleted = this.tankService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank deleted successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Tank deleted successfully."));
             this.buildDetailsModel(model, deleted);
             return MODEL_FORM_FRAGMENT;
         }
@@ -117,7 +117,7 @@ public class AdminTanksMvcController {
         var recovered = this.tankService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank recovered successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Tank recovered successfully."));
             this.buildDetailsModel(model, recovered);
             return MODEL_FORM_FRAGMENT;
         }
@@ -134,7 +134,7 @@ public class AdminTanksMvcController {
         TankDto updated = this.tankService.update(tankDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank updated successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Tank updated successfully."));
             this.buildDetailsModel(model, updated);
             return MODEL_FORM_FRAGMENT;
         }

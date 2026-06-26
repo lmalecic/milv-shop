@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public record Toast(String message, ToastType type) {
 
+    public static final String PUSH_TOAST_EVENT = "pushToast";
+
     public enum ToastType {
         SUCCESS,
         ERROR,

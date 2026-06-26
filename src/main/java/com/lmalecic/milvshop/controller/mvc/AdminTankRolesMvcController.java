@@ -80,7 +80,7 @@ public class AdminTankRolesMvcController {
         var created = this.tankRoleService.create(tankRoleDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank Role updated successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Tank Role updated successfully."));
             this.buildDetailsModel(model, created);
             return MODEL_FORM_FRAGMENT;
         }
@@ -102,7 +102,7 @@ public class AdminTankRolesMvcController {
         var deleted = this.tankRoleService.deleteById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank Role deleted successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Tank Role deleted successfully."));
             this.buildDetailsModel(model, deleted);
             return MODEL_FORM_FRAGMENT;
         }
@@ -114,7 +114,7 @@ public class AdminTankRolesMvcController {
         var recovered = this.tankRoleService.recoverById(id);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank Role recovered successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Tank Role recovered successfully."));
             this.buildDetailsModel(model, recovered);
             return MODEL_FORM_FRAGMENT;
         }
@@ -131,7 +131,7 @@ public class AdminTankRolesMvcController {
         var updated = this.tankRoleService.update(tankRoleDto);
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.addTrigger(Constants.REFRESH_LIST_EVENT);
-            htmxResponse.addTrigger(Constants.PUSH_TOAST_EVENT, Toast.success("Tank Role updated successfully."));
+            htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Tank Role updated successfully."));
             this.buildDetailsModel(model, updated);
             return MODEL_FORM_FRAGMENT;
         }

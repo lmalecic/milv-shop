@@ -1,5 +1,7 @@
 package com.lmalecic.milvshop.util;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -7,11 +9,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UrlUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(UrlUtils.class);
-
-    private UrlUtils() {}
 
     public static UriComponentsBuilder urlWithParams(String path, Object params) {
         return paramsFromObject(params).path(path);

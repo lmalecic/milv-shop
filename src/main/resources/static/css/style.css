@@ -554,5 +554,18 @@ td .table-cell {
 .dropdown-menu {
     border: 2px solid var(--bs-border-color-translucent) !important;
     border-radius: 0.5em !important;
+}
 
+.cart-item {
+    height: 8rem;
+
+    .cart-item-img {
+        background: rgba(255,255,255,4%) !important;
+    }
+}
+
+.badge-image {
+    height: 1em;
+    object-fit: contain;
+    object-position: center;
 }

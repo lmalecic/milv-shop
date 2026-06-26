@@ -2,6 +2,8 @@
 <html lang="en"
       xmlns:th="https://www.thymeleaf.org">
 
+<!--/*@thymesVar id="cart" type="com.lmalecic.milvshop.cart.Cart"*/-->
+
 <head th:fragment="head(title)"
       th:with="
         appTitle=${T(com.lmalecic.milvshop.util.Constants).APP_TITLE},
@@ -99,12 +101,18 @@
                         </div>
                     </form>
                 </div>
-                <button class="navbar-item bg-transparent border-0"
+                <button id="cartButton" class="navbar-item bg-transparent border-0"
+                        th:with="cartSize=${session.cart != null ? session.cart.getTotalQuantity() : 0}"
                         hx:get="@{/cart}"
                         hx-target="#cartModalContent"
                         data-bs-toggle="modal"
                         data-bs-target="#cartModal">
                     <img src="/img/cart.png" alt="Cart">
+                    <span class="cartSizeBadge position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-light px-2 py-1"
+                          th:hidden="${cartSize == 0}">
+                        <span class="cartSizeLabel" th:text="${cartSize}">0</span>
+                        <span class="visually-hidden">cart items</span>
+                    </span>
                 </button>
             </div>
         </div>
@@ -116,6 +124,22 @@
         $(document).ready(function() {
             $("#loginButton")[0].click();
         })
+    </script>
+    <script th:if="${promptCart}">
+        $(document).ready(function() {
+            $("#cartButton")[0].click();
+        })
+    </script>
+    <script>
+        (() => {
+            const cartSizeBadge = $(".cartSizeBadge");
+            const cartSizeLabel = $(".cartSizeLabel");
+            htmx.on("cart-size-changed", event => {
+                const size = event.detail.value;
+                cartSizeLabel.text(size || 0);
+                cartSizeBadge.attr("hidden", size === 0);
+            });
+        })();
     </script>
 </header>
 

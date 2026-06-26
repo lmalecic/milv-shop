@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<div class="modal-content" style="min-height: 60vh;">
+    <div class="modal-header">
+        <h3 class="modal-title command-text text-uppercase"
+            th:text="'Cart — ' + ${session.cart?.items.size() ?: 0} + ${session.cart?.items.size() > 1 or session.cart?.items.size() == 0 ? ' Products' : ' Product'}">
+            Cart
+        </h3>
+        <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row" th:if="${session.cart?.items.size() > 0}">
+            <div class="col d-flex flex-column gap-3">
+                <div th:each="item : ${session.cart.items.values()}" th:insert="~{fragments/cart/item}"></div>
+            </div>
+            <div class="col-3">
+                <div class="mb-1 text-center fs-5 text-uppercase fw-semibold text-secondary">Summary</div>
+                <div class="d-flex flex-row w-100 mb-2">
+                    <div class="align-self-start text-uppercase" th:text="${session.cart.getTotalQuantity()} + ' Items'">Items</div>
+                    <div class="separator-dots flex-grow-1 mx-1"></div>
+                    <div th:text="${session.cart.getTotalFormatted()}" class="align-self-end"></div>
+                </div>
+                <div class="d-flex flex-row w-100 mb-2">
+                    <div class="align-self-start text-uppercase">Shipping</div>
+                    <div class="separator-dots flex-grow-1 mx-1"></div>
+                    <div th:text="${@formats.price(0, #locale)}" class="align-self-end"></div>
+                </div>
+                <div class="d-flex flex-row w-100 mb-2">
+                    <div class="align-self-start text-uppercase">Tax</div>
+                    <div class="separator-dots flex-grow-1 mx-1"></div>
+                    <div th:text="${@formats.price(0, #locale)}" class="align-self-end"></div>
+                </div>
+                <div class="d-flex flex-row w-100 mb-2 mt-3">
+                    <div class="align-self-start text-uppercase">Total</div>
+                    <div class="separator-dots flex-grow-1 mx-1"></div>
+                    <div th:text="${session.cart.getTotalFormatted()}" class="align-self-end"></div>
+                </div>
+                <button type="submit" class="btn btn-primary text-uppercase w-100 mt-2">Proceed to payment</button>
+                <div class="text-center text-secondary mt-2">
+                    <i class="bi bi-cash-coin"></i>
+                    <i class="bi bi-paypal"></i>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center fw-bold" th:if="${session.cart?.items.size() == 0}">
+            <div class="fs-2 text-uppercase">Your cart is empty!</div>
+            <div class="fs-4 text-secondary">Add products to get started</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const itemImg = $("#itemImg");
+        const imgPathInput = $("#imgPath");
+
+        imgPathInput.on("input", function() {
+            const url = $(this).val();
+            itemImg.attr("src", url || "");
+        });
+    })();
+</script>
+
+</html>

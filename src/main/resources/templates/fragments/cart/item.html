@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--/*@thymesVar id="item" type="com.lmalecic.milvshop.cart.CartItem"*/-->
+<form class="cart-item d-flex flex-row gap-3" th:object="${item}">
+    <label hidden>
+        <span>Item id</span>
+        <input th:name="itemId" th:value="*{itemId}">
+    </label>
+    <label hidden>
+        <span>Item type</span>
+        <input th:name="itemType" th:value="*{itemType}">
+    </label>
+    <img class="cart-item-img border border-2 rounded-3 p-2 h-100" th:src="*{getImageUrl()}" alt="Item Image">
+    <div class="d-flex flex-column gap-2 w-100">
+        <div class="d-flex flex-row gap-3">
+            <div class="d-flex flex-column gap-1">
+                <div class="d-flex gap-2">
+                    <div class="badge text-bg-light d-inline-flex gap-1" th:text="*{itemType.displayName}"></div>
+                    <div class="badge text-bg-light d-inline-flex gap-1" th:each="badge : *{attributes.badges}">
+                        <img th:if="${badge.imgUrl != null}" th:src="${badge.imgUrl}" alt="[?]" class="badge-image" style="border-radius: 3px;">
+                        <span th:text="${badge.text}"></span>
+                    </div>
+                </div>
+                <div class="fs-4 fw-bold" th:text="*{name}"></div>
+            </div>
+            <button type="button" class="text-danger bg-transparent border-0 p-0 ms-auto" style="width: fit-content; height: fit-content;"
+                    hx:delete="@{/cart}"
+                    hx-target="#cartModalContent">
+                <i class="bi bi-trash-fill"></i>
+            </button>
+        </div>
+        <div class="d-flex flex-row mt-auto align-items-end gap-2">
+            <label class="d-flex flex-row align-items-center gap-2">
+                <span class="input-group">
+                    <button type="button" class="input-group-text fw-bolder mb-0" th:disabled="*{quantity <= 1}"
+                            hx:patch="@{/cart/decrement}" hx-target="#cartModalContent">
+                        &minus;
+                    </button>
+                    <input name="quantity" class="form-control text-center mb-0" type="number" th:value="${item.quantity}"
+                           min="1" max="99" step="1"
+                           hx:patch="@{/cart}" hx-target="#cartModalContent">
+                    <button type="button" class="input-group-text fw-bolder mb-0" th:disabled="*{quantity >= 99}"
+                            hx:patch="@{/cart/increment}" hx-target="#cartModalContent">
+                        &plus;
+                    </button>
+                </span>
+            </label>
+            <div class="ms-auto text-end">
+                <div class="fw-semibold" th:text="${@formats.price(item.getPrice().multiply(item.getQuantity()), #locale)}" style="font-size: 1.2em;"></div>
+                <div class="text-secondary fw-semibold" th:text="'each ' + ${@formats.price(item.price, #locale)}" th:if="${item.quantity > 1}"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+</html>
