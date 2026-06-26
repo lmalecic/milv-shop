@@ -42,11 +42,11 @@ public final class Tank implements Purchasable {
     private boolean deleted = false;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "nation_id")
+    @JoinColumn(name = "nation_id", nullable = false)
     private Nation nation;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "tank_role_id")
+    @JoinColumn(name = "tank_role_id", nullable = false)
     private TankRole tankRole;
 
     @Override

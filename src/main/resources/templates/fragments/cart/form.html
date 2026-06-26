@@ -31,16 +31,38 @@
                     <div class="separator-dots flex-grow-1 mx-1"></div>
                     <div th:text="${@formats.price(0, #locale)}" class="align-self-end"></div>
                 </div>
-                <div class="d-flex flex-row w-100 mb-2 mt-3">
+                <div class="d-flex flex-row w-100 mb-3 mt-3">
                     <div class="align-self-start text-uppercase">Total</div>
                     <div class="separator-dots flex-grow-1 mx-1"></div>
                     <div th:text="${session.cart.getTotalFormatted()}" class="align-self-end"></div>
                 </div>
-                <button type="submit" class="btn btn-primary text-uppercase w-100 mt-2">Proceed to payment</button>
-                <div class="text-center text-secondary mt-2">
-                    <i class="bi bi-cash-coin"></i>
-                    <i class="bi bi-paypal"></i>
-                </div>
+                <form>
+                    <label class="d-flex flex-column gap-2">
+                        <span class="text-center text-secondary fw-semibold">Payment type</span>
+                        <span class="d-flex flex-row w-100 justify-content-center gap-4">
+                            <span class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentType" id="paymentTypeCash" checked
+                                       th:value="${T(com.lmalecic.milvshop.entity.PaymentType).CASH}">
+                                <label class="form-check-label" for="paymentTypeCash">
+                                    <i class="bi bi-cash-coin"></i>
+                                    Cash
+                                </label>
+                            </span>
+                            <span class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentType" id="paymentTypePayPal"
+                                       th:value="${T(com.lmalecic.milvshop.entity.PaymentType).PAYPAL}">
+                                <label class="form-check-label" for="paymentTypePayPal">
+                                    <i class="bi bi-paypal"></i>
+                                    PayPal
+                                </label>
+                            </span>
+                        </span>
+                    </label>
+                    <button type="button" class="btn btn-primary text-uppercase w-100 mt-2"
+                            hx:post="@{/checkout}">
+                        Check out
+                    </button>
+                </form>
             </div>
         </div>
         <div class="d-flex flex-column align-items-center justify-content-center fw-bold" th:if="${session.cart?.items.size() == 0}">
