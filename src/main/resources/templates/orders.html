@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Orders')}"></head>
+<body th:with="searchPath=@{/orders}">
+    <header th:replace="~{fragments/layout :: header}"></header>
+    <main>
+        <h1 class="fw-bold">Order history</h1>
+        <form th:replace="~{fragments/orders/search-form}"></form>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <dialog th:replace="~{fragments/dialog-modal :: modalXl('detailsModal')}"></dialog>
+</body>
+</html>

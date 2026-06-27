@@ -5,7 +5,7 @@ import com.lmalecic.milvshop.entity.TankRole_;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-public class TankRoleSpecification {
+public final class TankRoleSpecification {
 
     private TankRoleSpecification() {}
 

@@ -4,7 +4,6 @@ import com.lmalecic.milvshop.cart.Purchasable;
 import com.lmalecic.milvshop.cart.PurchasableType;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.repository.TankRepository;
-import com.lmalecic.milvshop.service.TankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

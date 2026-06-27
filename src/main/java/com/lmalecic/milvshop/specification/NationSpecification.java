@@ -5,7 +5,7 @@ import com.lmalecic.milvshop.entity.Nation_;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-public class NationSpecification {
+public final class NationSpecification {
 
     private NationSpecification() {}
 

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<!--No results-->
+<div class="d-flex flex-column align-items-center w-100 h-100 gap-3" th:if="${#lists.isEmpty(orders)}">
+    <p class="text-center fs-4 mt-5">No orders found</p>
+</div>
+
+<!--With results-->
+<div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 row-cols-1 g-3" th:unless="${#lists.isEmpty(orders)}">
+    <div th:each="order : ${orders}" class="px-2 w-100">
+        <div class="card p-3">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="mb-2">
+                        <span class="badge text-uppercase fs-6" style="width: fit-content;" th:classappend="${order.status.getBadgeClass()}">
+                            <i class="bi bi-clock-fill" th:if="${T(com.lmalecic.milvshop.entity.OrderStatus).PENDING.name() == order.status.name()}"></i>
+                            <i class="bi bi-x" th:if="${T(com.lmalecic.milvshop.entity.OrderStatus).CANCELLED.name() == order.status.name()}"></i>
+                            <i class="bi bi-check" th:if="${T(com.lmalecic.milvshop.entity.OrderStatus).COMPLETE.name() == order.status.name()}"></i>
+                            <span th:text="${order.status.getDisplayName()}"></span>
+                        </span>
+                        <span class="badge text-uppercase fs-6" style="width: fit-content;">
+                            <i class="bi bi-cash-coin" th:if="${T(com.lmalecic.milvshop.entity.PaymentType).CASH.name() == order.paymentType.name()}"></i>
+                            <i class="bi bi-paypal" th:if="${T(com.lmalecic.milvshop.entity.PaymentType).PAYPAL.name() == order.paymentType.name()}"></i>
+                            <span th:text="${order.paymentType.name()}"></span>
+                        </span>
+                    </div>
+                    <div class="text-secondary fw-medium">
+                        <span th:text="${#temporals.format(order.orderDate(), 'MMMM d, yyyy HH:mm', #locale.ENGLISH)}"></span>
+                        <span>&vert;</span>
+                        <span th:text="'Order No: ' + ${order.id}"></span>
+                    </div>
+                </div>
+                <div class="col-auto d-flex gap-2 me-2">
+                    <span class="text-secondary fw-medium text-uppercase pt-1">Total</span>
+                    <span class="fs-4 fw-medium" th:text="${@formats.price(order.getTotal(), #locale)}"></span>
+                </div>
+            </div>
+            <div class="row d-flex gap-3">
+                <div class="cart-item d-flex gap-3" th:each="item : ${order.items()}">
+                    <div class="col d-flex gap-3">
+                        <img class="cart-item-img border border-2 rounded-3 p-2 h-100" th:src="${item.item().getPurchasableImageUrl()}" alt="Item Image">
+                        <div class="d-flex flex-column gap-2 w-100">
+                            <div class="d-flex flex-row gap-3">
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex gap-2 mb-1">
+                                        <div class="badge text-bg-light d-inline-flex gap-1" th:text="${item.item().getPurchasableType().getDisplayName()}"></div>
+                                        <div class="badge text-bg-light d-inline-flex gap-1" th:each="badge : ${item.item().getPurchasableAttributes().badges}">
+                                            <img th:if="${badge.imgUrl != null}" th:src="${badge.imgUrl}" alt="[?]" class="badge-image" style="border-radius: 3px;">
+                                            <span th:text="${badge.text}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="fs-4 fw-bold" th:text="${item.item().getPurchasableName()}"></div>
+                                    <div class="fw-medium text-secondary" th:text="'Quantity: x' + ${item.quantity}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="d-flex flex-row mt-auto align-items-end gap-2 h-100">
+                            <div class="ms-auto text-end">
+                                <div class="fw-semibold" th:text="${@formats.price(item.item.getPurchasablePrice().multiply(item.quantity), #locale)}" style="font-size: 1.2em;"></div>
+                                <div class="text-secondary fw-semibold" th:text="'each ' + ${@formats.price(item.item.getPurchasablePrice(), #locale)}" th:if="${item.quantity > 1}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

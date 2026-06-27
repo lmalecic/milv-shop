@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class TankSpecification {
+public final class TankSpecification {
 
     private TankSpecification() {}
 

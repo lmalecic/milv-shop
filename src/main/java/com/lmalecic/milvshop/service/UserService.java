@@ -96,7 +96,7 @@ public class UserService {
         return this.userRepository.existsByUsername(username);
     }
 
-    private UserDto toDto(User user) {
+    public UserDto toDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -105,5 +105,10 @@ public class UserService {
                         .toList())
                 .deleted(user.isDeleted())
                 .build();
+    }
+
+    public User toEntity(UserDto userDto) {
+        return this.userRepository.findById(userDto.id())
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userDto.id() + " does not exist."));
     }
 }

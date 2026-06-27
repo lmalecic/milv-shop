@@ -1,7 +1,5 @@
 package com.lmalecic.milvshop.criteria;
 
-import com.lmalecic.milvshop.dto.SearchCriteria;
-
 public record NationSearchCriteria(
         String query,
         Boolean showDeleted

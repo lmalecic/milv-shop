@@ -5,6 +5,7 @@ import com.lmalecic.milvshop.entity.PaymentType;
 import lombok.Builder;
 import lombok.With;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,4 +17,11 @@ public record OrderDto (
     PaymentType paymentType,
     OrderStatus status,
     List<OrderItemDto> items
-) {}
+) {
+
+    public BigDecimal getTotal() {
+        return this.items.stream()
+                .map(OrderItemDto::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+}

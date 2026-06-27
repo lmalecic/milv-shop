@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+
+<form class="modal-content from-group" th:object="${tank}">
+    <div class="modal-header">
+        <h4 class="modal-title command-text">VIEW_TANK</h4>
+        <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
+    </div>
+    <div class="modal-body row">
+        <div class="col d-inline-flex flex-column gap-2" style="max-width: 30%" th:if="*{imgPath != null}">
+            <div class="tank-card card p-2 border-2 rounded-4">
+                <img class="card-img" th:src="*{imgPath}" alt="[NO IMAGE]">
+            </div>
+            <p class="text-uppercase text-center mb-0">Stat card</p>
+            <div class="d-inline-flex flex-column align-items-stretch flex-wrap gap-2">
+                <a th:href="@{/tanks(crewSize=*{crewSize})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row gap-1 rounded-3 text-decoration-none"
+                   style="font-size: 0.9em;">
+                    <img class="rounded-1 flag-sm" src="/img/stats/crewSize.png" alt="">
+                    <span class="text-uppercase me-auto">Crew size</span>
+                    <span th:text="*{crewSize}"></span>
+                </a>
+                <a th:href="@{/tanks(mainGunCalibre=*{mainGunCalibre})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row gap-1 rounded-3 text-decoration-none"
+                   style="font-size: 0.9em;">
+                    <img class="rounded-1 flag-sm" src="/img/stats/mainGunCalibre.png" alt="">
+                    <span class="text-uppercase me-auto">Cannon calibre</span>
+                    <span th:text="*{mainGunCalibre + 'mm'}"></span>
+                </a>
+                <a th:href="@{/tanks(armorThicknessMin=*{armorThickness}, armorThicknessMax=*{armorThickness})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row gap-1 rounded-3 text-decoration-none"
+                   style="font-size: 0.9em;">
+                    <img class="rounded-1 flag-sm" src="/img/stats/armorThickness.png" alt="">
+                    <span class="text-uppercase me-auto">Armour thickness</span>
+                    <span th:text="*{armorThickness + 'mm'}"></span>
+                </a>
+                <a th:href="@{/tanks(maxSpeed=*{maxSpeed})}"
+                   class="filter-btn border border-0 text-white d-inline-flex flex-row gap-1 rounded-3 text-decoration-none"
+                   style="font-size: 0.9em;">
+                    <img class="rounded-1 flag-sm" src="/img/stats/maxSpeed.png" alt="">
+                    <span class="text-uppercase me-auto">Max speed</span>
+                    <span th:text="*{maxSpeed + 'km/h'}"></span>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="d-inline-flex gap-2 w-100">
+                    <a type="button"
+                       th:href="@{/tanks(nationIds=*{nation.id})}"
+                       class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3 text-decoration-none">
+                        <img class="rounded-1 flag-sm" th:src="*{nation.imgPath}" alt="">
+                        <span class="fs-6" th:text="*{nation.name}"></span>
+                    </a>
+                    <a type="button"
+                       th:href="@{/tanks(tankRoleIds=*{tankRole.id})}"
+                       class="filter-btn border border-0 text-white d-inline-flex flex-row align-items-center gap-2 rounded-3 text-decoration-none">
+                        <img class="rounded-1 flag-sm" th:src="*{tankRole.imgPath}" alt="">
+                        <span class="fs-6" th:text="*{tankRole.name}"></span>
+                    </a>
+                    <div id="price" class="text-end fs-4 text-secondary fw-bold ms-auto mb-0" th:text="${@formatUtils.getPriceString(tank.price.floatValue())}" th:data-price="*{price.floatValue()}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h1 class="modal-title me-auto" th:text="*{name}">Tank name</h1>
+                    <p th:text="*{description}" class="text-secondary" style="text-align: justify"></p>
+                </div>
+                <div class="col-auto mt-2" th:with="purchasableType=${T(com.lmalecic.milvshop.cart.PurchasableType).TANK}">
+                    <label hidden>
+                        Type
+                        <input name="itemType" th:value="${purchasableType}">
+                    </label>
+                    <label hidden>
+                        Id
+                        <input name="itemId" th:value="*{id}">
+                    </label>
+                    <label class="d-flex flex-column gap-2">
+                        <span class="input-group">
+                            <button type="button" id="decrementQuantity" class="input-group-text fw-bolder">&minus;</button>
+                            <input id="quantity" name="quantity" class="form-control text-center" type="number" value="1" min="1" max="99">
+                            <button type="button" id="incrementQuantity" class="input-group-text fw-bolder">&plus;</button>
+                        </span>
+                    </label>
+                    <button type="button" class="btn btn-primary text-uppercase d-inline-flex gap-1"
+                            hx:post="@{/cart}"
+                            hx-disabled-elt="this">
+                        <i class="bi bi-cart-plus-fill"></i>Add to cart
+                    </button>
+                    <div class="text-center" id="inCartIndicator" th:hidden="${session.cart == null or !session.cart.contains(purchasableType, tank.id)}">
+                        <div class="badge text-center mt-2 text-bg-success text-uppercase rounded-1">
+                            <i class="bi bi-check-lg"></i>
+                            In cart
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script th:inline="javascript" type="text/javascript">
+    (() => {
+        const quantityInput = $("#quantity");
+        const decrementBtn = $("#decrementQuantity");
+        const incrementBtn = $("#incrementQuantity");
+        const price = $("#price");
+
+        const currentLocale = /*[[${#locale.toLanguageTag()}]]*/ "de-DE";
+        const currentCurrency = /*[[${T(java.util.Currency).getInstance(#locale).getCurrencyCode()}]]*/ "EUR";
+
+        quantityInput.on('keydown', (e) => {
+            if (e.key.length === 1 && /\D/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        function validateQuantity() {
+            let value = Number.parseInt(quantityInput.val());
+            const min = Number.parseInt(quantityInput.attr('min'));
+            const max = Number.parseInt(quantityInput.attr('max'));
+
+            if (Number.isNaN(value) || value < min) {
+                quantityInput.val(min);
+                value = min;
+            } else if (value > max) {
+                quantityInput.val(max);
+                value = max;
+            }
+
+            decrementBtn.prop("disabled", value <= min);
+            incrementBtn.prop("disabled", value >= max);
+
+            const basePrice = Number.parseFloat(price.data("price"));
+            const totalPrice = basePrice * value;
+
+            const formatter = new Intl.NumberFormat(currentLocale, {
+                style: 'currency',
+                currency: currentCurrency
+            });
+
+            price.text(formatter.format(totalPrice));
+        }
+
+        quantityInput.on('focusout', validateQuantity);
+        quantityInput.on('load', validateQuantity);
+        price.on('load', validateQuantity);
+
+        decrementBtn.on("click", () => {
+            quantityInput.get(0).stepDown();
+            validateQuantity();
+        });
+
+        incrementBtn.on("click", () => {
+            quantityInput.get(0).stepUp();
+            validateQuantity();
+        });
+
+        const inCartIndicator = $("#inCartIndicator");
+        htmx.on("cart-size-changed", event => {
+            const size = event.detail.value;
+            inCartIndicator.attr("hidden", size === 0);
+        });
+    })();
+</script>
+
+</html>

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
-public class UserSpecification {
+public final class UserSpecification {
 
     private UserSpecification() {}
 
