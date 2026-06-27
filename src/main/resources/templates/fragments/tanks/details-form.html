@@ -58,7 +58,7 @@
                         <img class="rounded-1 flag-sm" th:src="*{tankRole.imgPath}" alt="">
                         <span class="fs-6" th:text="*{tankRole.name}"></span>
                     </a>
-                    <div id="price" class="text-end fs-4 text-secondary fw-bold ms-auto mb-0" th:text="${@formatUtils.getPriceString(tank.price.floatValue())}" th:data-price="*{price.floatValue()}"></div>
+                    <div id="price" class="text-end fs-4 text-secondary fw-bold ms-auto mb-0" th:text="${@formats.price(tank.price, #locale)}" th:data-price="*{price.floatValue()}"></div>
                 </div>
             </div>
             <div class="row">

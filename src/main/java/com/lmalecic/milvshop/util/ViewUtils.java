@@ -1,4 +1,4 @@
-package com.lmalecic.milvshop.component;
+package com.lmalecic.milvshop.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

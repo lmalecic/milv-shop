@@ -15,8 +15,6 @@ public class FormatUtils {
 
     public static String price(BigDecimal value, Locale locale) {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale != null ? locale : DEFAULT_LOCALE);
-//        numberFormat.setMinimumFractionDigits(2);
-//        numberFormat.setMaximumFractionDigits(2);
         return numberFormat.format(value);
     }
 }
