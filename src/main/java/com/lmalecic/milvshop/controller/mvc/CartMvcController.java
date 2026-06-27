@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 @Validated
 @Controller
@@ -61,6 +62,7 @@ public class CartMvcController {
 
         cart.removeItem(purchasable);
         htmxResponse.addTrigger("cart-size-changed", cart.getTotalQuantity());
+        htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Removed " + purchasable.getPurchasableName() + " from cart."));
         return "fragments/cart/form";
     }
 
@@ -96,6 +98,15 @@ public class CartMvcController {
         var quantity = Math.clamp(itemDto.quantity().longValue() - 1L, CartItemDto.MIN_QUANTITY, CartItemDto.MAX_QUANTITY);
         cart.setItemQuantity(purchasable, quantity);
         htmxResponse.addTrigger("cart-size-changed", cart.getTotalQuantity());
+        return "fragments/cart/form";
+    }
+
+    @HxRequest
+    @DeleteMapping("all")
+    public String removeAllFromCart(@ModelAttribute("cart") Cart cart, HtmxResponse htmxResponse, SessionStatus sessionStatus) {
+        sessionStatus.setComplete();
+        htmxResponse.addTrigger("cart-size-changed", 0);
+        htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Removed all items from cart."));
         return "fragments/cart/form";
     }
 }

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 
-<div class="modal-content" style="min-height: 60vh;">
+<div class="modal-content" style="min-height: 60vh;" th:with="paypalPaymentType=${T(com.lmalecic.milvshop.entity.PaymentType).PAYPAL.name()}">
     <div class="modal-header">
         <h3 class="modal-title command-text text-uppercase"
-            th:text="'Cart — ' + ${session.cart?.items.size() ?: 0} + ${session.cart?.items.size() > 1 or session.cart?.items.size() == 0 ? ' Products' : ' Product'}">
+            th:text="'Cart — ' + ${session.cart?.items?.size() ?: 0} + ${(session.cart == null or session.cart?.items?.size() == 0 or session.cart?.items?.size() > 1) ? ' Products' : ' Product'}">
             Cart
         </h3>
         <button th:replace="~{fragments/dialog-modal :: close-btn}"></button>
     </div>
     <div class="modal-body">
-        <div class="row" th:if="${session.cart?.items.size() > 0}">
+        <div class="row" th:if="${session.cart != null and session.cart?.items?.size() > 0}">
             <div class="col d-flex flex-column gap-3">
                 <div th:each="item : ${session.cart.items.values()}" th:insert="~{fragments/cart/item}"></div>
             </div>
@@ -45,15 +45,20 @@
                     </button>
                     <button type="button" class="btn btn-warning text-uppercase fw-semibold w-100"
                             hx:post="@{/checkout}" hx-target="#cartModalContent"
-                            hx-vals='{"paymentType": "PAYPAL"}'
+                            hx:vals="${ { paymentType: paypalPaymentType } }"
                             data-paypal-checkout-launcher>
                         <i class="bi bi-paypal"></i>
                         Pay with PayPal
                     </button>
+                    <button type="button" class="btn btn-danger text-uppercase fw-semibold w-100 mt-3"
+                            hx:delete="@{/cart/all}" hx-target="#cartModalContent">
+                        <i class="bi bi-trash-fill"></i>
+                        Remove all items
+                    </button>
                 </form>
             </div>
         </div>
-        <div class="d-flex flex-column align-items-center justify-content-center fw-bold" th:if="${session.cart?.items.size() == 0}">
+        <div class="d-flex flex-column align-items-center justify-content-center fw-bold" th:if="${session.cart == null or session.cart?.items?.size() == 0}">
             <div class="fs-2 text-uppercase">Your cart is empty!</div>
             <div class="fs-4 text-secondary">Add products to get started</div>
         </div>
