@@ -44,6 +44,14 @@
                 Users<br/>Department
             </button>
             <button class="card admin-nav-btn text-center px-4 fs-4"
+                    th:classappend="${@viewUtils.activeClass('/admin/auth-logs')}"
+                    hx:get="@{/admin/auth-logs}"
+                    hx-trigger="click"
+                    hx-target="#selected-view">
+                <img src="/img/auth_logs.png" class="card-img text-center mb-3" alt="[NO IMAGE]">
+                Auth Logs<br/>Department
+            </button>
+            <button class="card admin-nav-btn text-center px-4 fs-4"
                     th:classappend="${@viewUtils.activeClass('/admin/orders')}"
                     hx:get="@{/admin/orders}"
                     hx-trigger="click"

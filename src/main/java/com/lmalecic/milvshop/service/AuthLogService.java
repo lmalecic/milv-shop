@@ -5,7 +5,11 @@ import com.lmalecic.milvshop.entity.AuthLog;
 import com.lmalecic.milvshop.repository.AuthLogRepository;
 import com.lmalecic.milvshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +29,11 @@ public class AuthLogService {
 
     private AuthLogDto toDto(AuthLog authLog) {
         return new AuthLogDto(authLog.getId(), authLog.getTimestamp(), authLog.getUser().getUsername(), authLog.getIpAddress());
+    }
+
+    public List<AuthLogDto> findAll() {
+        return this.authLogRepository.findAllByOrderByTimestampDesc()
+                .stream().map(this::toDto)
+                .toList();
     }
 }
