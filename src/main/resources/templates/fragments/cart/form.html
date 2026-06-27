@@ -36,31 +36,19 @@
                     <div class="separator-dots flex-grow-1 mx-1"></div>
                     <div th:text="${session.cart.getTotalFormatted()}" class="align-self-end"></div>
                 </div>
-                <form>
-                    <label class="d-flex flex-column gap-2">
-                        <span class="text-center text-secondary fw-semibold">Payment type</span>
-                        <span class="d-flex flex-row w-100 justify-content-center gap-4">
-                            <span class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentType" id="paymentTypeCash" checked
-                                       th:value="${T(com.lmalecic.milvshop.entity.PaymentType).CASH}">
-                                <label class="form-check-label" for="paymentTypeCash">
-                                    <i class="bi bi-cash-coin"></i>
-                                    Cash
-                                </label>
-                            </span>
-                            <span class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentType" id="paymentTypePayPal"
-                                       th:value="${T(com.lmalecic.milvshop.entity.PaymentType).PAYPAL}">
-                                <label class="form-check-label" for="paymentTypePayPal">
-                                    <i class="bi bi-paypal"></i>
-                                    PayPal
-                                </label>
-                            </span>
-                        </span>
-                    </label>
+                <form class="d-flex flex-column gap-2">
                     <button type="button" class="btn btn-primary text-uppercase w-100 mt-2"
-                            hx:post="@{/checkout}">
+                            hx:post="@{/checkout}" hx-target="#cartModalContent"
+                            hx-vals='{"paymentType": "CASH"}'>
+                        <i class="bi bi-cash-coin"></i>
                         Check out
+                    </button>
+                    <button type="button" class="btn btn-warning text-uppercase fw-semibold w-100"
+                            hx:post="@{/checkout}" hx-target="#cartModalContent"
+                            hx-vals='{"paymentType": "PAYPAL"}'
+                            data-paypal-checkout-launcher>
+                        <i class="bi bi-paypal"></i>
+                        Pay with PayPal
                     </button>
                 </form>
             </div>

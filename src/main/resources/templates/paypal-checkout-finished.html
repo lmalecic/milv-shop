@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PayPal checkout</title>
+</head>
+<body>
+<script th:inline="javascript">
+    const redirectUrl = /*[[${redirectUrl}]]*/ "/orders";
+
+    if (window.opener && !window.opener.closed) {
+        window.opener.location.href = redirectUrl;
+        window.close();
+    } else {
+        window.location.href = redirectUrl;
+    }
+</script>
+</body>
+</html>

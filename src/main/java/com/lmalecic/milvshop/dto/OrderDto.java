@@ -16,6 +16,7 @@ public record OrderDto (
     LocalDateTime orderDate,
     PaymentType paymentType,
     OrderStatus status,
+    String paypalOrderId,
     List<OrderItemDto> items
 ) {
 

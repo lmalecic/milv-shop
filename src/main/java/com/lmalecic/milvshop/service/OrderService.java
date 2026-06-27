@@ -53,6 +53,49 @@ public class OrderService {
         return this.toDto(this.orderRepository.save(order));
     }
 
+    @Transactional
+    public Order attachPayPalOrderId(Long orderId, String paypalOrderId) {
+        Order order = this.orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order with Id " + orderId + " not found."));
+        order.setPaypalOrderId(paypalOrderId);
+        return this.orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order completePayPalOrder(Long orderId, Long userId, String paypalOrderId) {
+        Order order = this.findPendingPayPalOrderForUser(orderId, userId, paypalOrderId);
+        order.setStatus(OrderStatus.COMPLETED);
+        return this.orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order cancelPayPalOrder(Long orderId, Long userId, String paypalOrderId) {
+        Order order = this.findPendingPayPalOrderForUser(orderId, userId, paypalOrderId);
+        order.setStatus(OrderStatus.CANCELLED);
+        return this.orderRepository.save(order);
+    }
+
+    public Order findPendingPayPalOrderForUser(Long orderId, Long userId, String paypalOrderId) {
+        Order order = this.findPayPalOrderForUser(orderId, userId, paypalOrderId);
+
+        if (order.getStatus() != OrderStatus.PENDING) {
+            throw new ResourceNotFoundException("Pending PayPal order " + paypalOrderId + " not found.");
+        }
+
+        return order;
+    }
+
+    private Order findPayPalOrderForUser(Long orderId, Long userId, String paypalOrderId) {
+        Order order = this.orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order with Id " + orderId + " not found."));
+
+        if (order.getPaymentType() != PaymentType.PAYPAL || !paypalOrderId.equals(order.getPaypalOrderId())) {
+            throw new ResourceNotFoundException("PayPal order " + paypalOrderId + " not found.");
+        }
+
+        return order;
+    }
+
     public List<OrderDto> findAllOrders() {
         return this.orderRepository.findAll(OrderSpecification.orderByOrderDateDesc())
                 .stream()
@@ -106,6 +149,7 @@ public class OrderService {
                 .orderDate(order.getOrderDate())
                 .paymentType(order.getPaymentType())
                 .status(order.getStatus())
+                .paypalOrderId(order.getPaypalOrderId())
                 .items(order.getItems().stream()
                         .map(this.orderItemService::toDto)
                         .toList())
