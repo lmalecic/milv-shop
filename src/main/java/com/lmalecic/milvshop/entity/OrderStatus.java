@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum OrderStatus {
     PENDING("Pending", "bg-warning"),
     CANCELLED("Cancelled", "bg-danger"),
-    COMPLETE("Complete", "bg-success");
+    COMPLETED("Completed", "bg-success");
 
     private final String displayName;
     private final String badgeClass;

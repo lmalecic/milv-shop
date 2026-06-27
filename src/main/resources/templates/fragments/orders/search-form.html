@@ -8,17 +8,11 @@
       hx-target="#searchResults"
       th:object="${searchCriteria}">
     <div class="d-flex flex-column gap-2">
-        <div th:if="${T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN == viewContext.name()}">
-            <label class="form-check form-switch">
-                <input type="checkbox" class="form-check-input" th:field="*{showDeleted}">
-                <span class="from-check-label">Show deleted</span>
-            </label>
-            <label class="d-inline-flex flex-row gap-3">
-                <span hidden>Username or user id</span>
-                <input type="text" class="form-control" placeholder="Search by username or user id..." th:field="*{userQuery}">
-            </label>
-        </div>
-        <div>
+        <label class="form-check form-switch" th:if="${T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() == viewContext.name()}">
+            <input type="checkbox" class="form-check-input" th:field="*{showDeleted}">
+            <span class="from-check-label">Show deleted</span>
+        </label>
+        <div class="d-flex gap-3">
             <label>
                 <span class="input-group">
                     <span class="input-group-text">From</span>
@@ -26,6 +20,10 @@
                     <span class="input-group-text">To</span>
                     <input type="date" class="form-control" th:field="*{beforeDate}">
                 </span>
+            </label>
+            <label class="d-inline-flex flex-row flex-fill" th:if="${T(com.lmalecic.milvshop.viewmodel.ViewContext).ADMIN.name() == viewContext.name()}">
+                <span hidden>Username or user id</span>
+                <input type="text" class="form-control" placeholder="Search by username or user id..." th:field="*{userQuery}">
             </label>
         </div>
     </div>

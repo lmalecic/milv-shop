@@ -9,6 +9,7 @@ import com.lmalecic.milvshop.repository.OrderRepository;
 import com.lmalecic.milvshop.specification.OrderSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -66,7 +67,24 @@ public class OrderService {
                 .toList();
     }
 
+    public List<OrderDto> findAllOrdersByCriteria(OrderSearchCriteria criteria) {
+        if (!criteria.hasActiveFilters()) {
+            return this.findAllOrders();
+        }
+        return this.orderRepository.findAll(OrderSpecification.includeDeleted(false)
+                                .and(OrderSpecification.userIdEquals(criteria.userQuery())
+                                        .or(OrderSpecification.usernameLike(criteria.userQuery())))
+                                .and(OrderSpecification.orderDateBetween(criteria.beforeDate(), criteria.afterDate())),
+                        OrderSpecification.orderByOrderDateDesc())
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
     public List<OrderDto> findAllUserOrdersByCriteria(User user, OrderSearchCriteria criteria) {
+        if (!criteria.hasActiveFilters()) {
+            return this.findAllUserOrders(user);
+        }
         return this.orderRepository.findAll(OrderSpecification.includeDeleted(false)
                         .and(OrderSpecification.userIdEquals(user.getId()))
                         .and(OrderSpecification.orderDateBetween(criteria.beforeDate(), criteria.afterDate())),

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en"
+      th:with="searchPath=@{/admin/orders/search}">
+<head th:replace="~{fragments/layout :: head('Admin | Orders')}"></head>
+
+<h1 class="fw-bold">Orders Department</h1>
+<form th:replace="~{fragments/orders/search-form}"></form>
+
+<dialog th:replace="~{fragments/dialog-modal :: modalXl('detailsModal')}"></dialog>
+<dialog th:replace="~{fragments/dialog-modal :: modal('confirmDeleteModal')}"></dialog>
+
+</html>

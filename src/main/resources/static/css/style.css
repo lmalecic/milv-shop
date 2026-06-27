@@ -561,6 +561,7 @@ td .table-cell {
 
     .cart-item-img {
         background: rgba(255,255,255,4%) !important;
+        max-height: 128px !important;
     }
 }
 
