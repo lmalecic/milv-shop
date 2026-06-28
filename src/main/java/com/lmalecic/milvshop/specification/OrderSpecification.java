@@ -2,7 +2,6 @@ package com.lmalecic.milvshop.specification;
 
 import com.lmalecic.milvshop.entity.Order;
 import com.lmalecic.milvshop.entity.Order_;
-import com.lmalecic.milvshop.entity.User;
 import com.lmalecic.milvshop.entity.User_;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;

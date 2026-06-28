@@ -1,8 +1,6 @@
 package com.lmalecic.milvshop.cart;
 
 import com.lmalecic.milvshop.util.FormatUtils;
-import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.context.i18n.LocaleContextHolder;
 

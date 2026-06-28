@@ -1,8 +1,8 @@
 (() => {
-    if (window.milvShopSharedInitialized) {
+    if (globalThis.milvShopSharedInitialized) {
         return;
     }
-    window.milvShopSharedInitialized = true;
+    globalThis.milvShopSharedInitialized = true;
 
     const state = {
         paypalCheckoutWindow: null
@@ -17,7 +17,7 @@
         if (modal.hasClass('show') === false) return;
 
         dialog.removeClass('modal-pulse');
-        void dialog[0].offsetWidth; // force reflow so animation can replay
+        dialog[0].getBoundingClientRect();
         dialog.addClass('modal-pulse');
     });
 

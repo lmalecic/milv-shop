@@ -3,7 +3,6 @@ package com.lmalecic.milvshop.results;
 import com.lmalecic.milvshop.dto.NationDto;
 import com.lmalecic.milvshop.dto.TankDto;
 import com.lmalecic.milvshop.dto.TankRoleDto;
-import com.lmalecic.milvshop.entity.TankRole;
 import lombok.Builder;
 
 import java.util.List;

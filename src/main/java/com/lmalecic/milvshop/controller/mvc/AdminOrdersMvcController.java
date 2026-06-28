@@ -26,6 +26,8 @@ public class AdminOrdersMvcController {
     private static final String MODEL_LIST_FRAGMENT = "fragments/orders/list";
     private static final String ITEM_FRAGMENT = "fragments/orders/item";
 
+    private static final String ORDER_ATTRIBUTE = "order";
+
     private final OrderService orderService;
 
     @GetMapping
@@ -34,7 +36,7 @@ public class AdminOrdersMvcController {
         String sectionUrl = UrlUtils.urlWithParams(requestUri, criteria).toUriString();
 
         model.addAttribute("orders", this.orderService.findAllOrdersByCriteria(criteria));
-        model.addAttribute("viewContext", ViewContext.ADMIN);
+        model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
 
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(sectionUrl);
@@ -49,7 +51,7 @@ public class AdminOrdersMvcController {
     @GetMapping("search")
     public String search(Model model, @ModelAttribute("searchCriteria") OrderSearchCriteria criteria, HtmxResponse htmxResponse) {
         model.addAttribute("orders", this.orderService.findAllOrdersByCriteria(criteria));
-        model.addAttribute("viewContext", ViewContext.ADMIN);
+        model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
         htmxResponse.setPushUrl(UrlUtils.urlWithParams(INDEX_URI, criteria).toUriString());
         return MODEL_LIST_FRAGMENT;
     }
@@ -58,8 +60,8 @@ public class AdminOrdersMvcController {
     @PatchMapping("{id}/complete")
     public String completeOrder(Model model, @PathVariable Long id, HtmxResponse htmxResponse) {
         OrderDto order = this.orderService.setStatus(id, OrderStatus.COMPLETED);
-        model.addAttribute("order", order);
-        model.addAttribute("viewContext", ViewContext.ADMIN);
+        model.addAttribute(ORDER_ATTRIBUTE, order);
+        model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
         htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Order completed successfully"));
         return ITEM_FRAGMENT;
     }
@@ -68,8 +70,8 @@ public class AdminOrdersMvcController {
     @PatchMapping("{id}/cancel")
     public String cancelOrder(Model model, @PathVariable Long id, HtmxResponse htmxResponse) {
         OrderDto order = this.orderService.setStatus(id, OrderStatus.CANCELLED);
-        model.addAttribute("order", order);
-        model.addAttribute("viewContext", ViewContext.ADMIN);
+        model.addAttribute(ORDER_ATTRIBUTE, order);
+        model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
         htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Order cancelled successfully"));
         return ITEM_FRAGMENT;
     }
@@ -78,8 +80,8 @@ public class AdminOrdersMvcController {
     @PatchMapping("{id}/undo")
     public String undoOrder(Model model, @PathVariable Long id, HtmxResponse htmxResponse) {
         OrderDto order = this.orderService.setStatus(id, OrderStatus.PENDING);
-        model.addAttribute("order", order);
-        model.addAttribute("viewContext", ViewContext.ADMIN);
+        model.addAttribute(ORDER_ATTRIBUTE, order);
+        model.addAttribute(ViewContext.MODEL_ATTRIBUTE_NAME, ViewContext.ADMIN);
         htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Order undone successfully"));
         return ITEM_FRAGMENT;
     }

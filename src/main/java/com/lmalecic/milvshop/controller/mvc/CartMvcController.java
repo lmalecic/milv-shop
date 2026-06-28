@@ -1,10 +1,8 @@
 package com.lmalecic.milvshop.controller.mvc;
 
 import com.lmalecic.milvshop.cart.Cart;
-import com.lmalecic.milvshop.cart.PurchasableType;
 import com.lmalecic.milvshop.cart.resolver.PurchasableResolverRegistry;
 import com.lmalecic.milvshop.dto.CartItemDto;
-import com.lmalecic.milvshop.util.Constants;
 import com.lmalecic.milvshop.viewmodel.Toast;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
@@ -25,6 +23,9 @@ import org.springframework.web.bind.support.SessionStatus;
 @RequestMapping("cart")
 public class CartMvcController {
 
+    private static final String FRAGMENT_CART_FORM = "fragments/cart/form";
+    private static final String CART_SIZE_CHANGED_EVENT = "cart-size-changed";
+
     private final PurchasableResolverRegistry purchasableResolverRegistry;
 
     @ModelAttribute("cart")
@@ -35,7 +36,7 @@ public class CartMvcController {
     @GetMapping
     public String getIndex(Model model, HtmxRequest htmxRequest) {
         if (htmxRequest.isHtmxRequest()) {
-            return "fragments/cart/form";
+            return FRAGMENT_CART_FORM;
         }
 
         model.addAttribute("promptCart", true);
@@ -50,7 +51,7 @@ public class CartMvcController {
         var purchasable = resolver.resolve(itemDto.itemId());
 
         cart.addItem(purchasable, itemDto.quantity());
-        htmxResponse.addTrigger("cart-size-changed", cart.getTotalQuantity());
+        htmxResponse.addTrigger(CART_SIZE_CHANGED_EVENT, cart.getTotalQuantity());
         htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Added " + itemDto.quantity() + "x " + purchasable.getPurchasableName() + " to cart."));
     }
 
@@ -61,9 +62,9 @@ public class CartMvcController {
         var purchasable = resolver.resolve(itemDto.itemId());
 
         cart.removeItem(purchasable);
-        htmxResponse.addTrigger("cart-size-changed", cart.getTotalQuantity());
+        htmxResponse.addTrigger(CART_SIZE_CHANGED_EVENT, cart.getTotalQuantity());
         htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Removed " + purchasable.getPurchasableName() + " from cart."));
-        return "fragments/cart/form";
+        return FRAGMENT_CART_FORM;
     }
 
     @HxRequest
@@ -73,8 +74,8 @@ public class CartMvcController {
         var purchasable = resolver.resolve(itemDto.itemId());
 
         cart.setItemQuantity(purchasable, Math.clamp(itemDto.quantity().longValue(), CartItemDto.MIN_QUANTITY, CartItemDto.MAX_QUANTITY));
-        htmxResponse.addTrigger("cart-size-changed", cart.getTotalQuantity());
-        return "fragments/cart/form";
+        htmxResponse.addTrigger(CART_SIZE_CHANGED_EVENT, cart.getTotalQuantity());
+        return FRAGMENT_CART_FORM;
     }
 
     @HxRequest
@@ -85,8 +86,8 @@ public class CartMvcController {
 
         var quantity = Math.clamp(itemDto.quantity().longValue() + 1L, CartItemDto.MIN_QUANTITY, CartItemDto.MAX_QUANTITY);
         cart.setItemQuantity(purchasable, quantity);
-        htmxResponse.addTrigger("cart-size-changed", cart.getTotalQuantity());
-        return "fragments/cart/form";
+        htmxResponse.addTrigger(CART_SIZE_CHANGED_EVENT, cart.getTotalQuantity());
+        return FRAGMENT_CART_FORM;
     }
 
     @HxRequest
@@ -97,16 +98,16 @@ public class CartMvcController {
 
         var quantity = Math.clamp(itemDto.quantity().longValue() - 1L, CartItemDto.MIN_QUANTITY, CartItemDto.MAX_QUANTITY);
         cart.setItemQuantity(purchasable, quantity);
-        htmxResponse.addTrigger("cart-size-changed", cart.getTotalQuantity());
-        return "fragments/cart/form";
+        htmxResponse.addTrigger(CART_SIZE_CHANGED_EVENT, cart.getTotalQuantity());
+        return FRAGMENT_CART_FORM;
     }
 
     @HxRequest
     @DeleteMapping("all")
     public String removeAllFromCart(@ModelAttribute("cart") Cart cart, HtmxResponse htmxResponse, SessionStatus sessionStatus) {
         sessionStatus.setComplete();
-        htmxResponse.addTrigger("cart-size-changed", 0);
+        htmxResponse.addTrigger(CART_SIZE_CHANGED_EVENT, 0);
         htmxResponse.addTrigger(Toast.PUSH_TOAST_EVENT, Toast.success("Removed all items from cart."));
-        return "fragments/cart/form";
+        return FRAGMENT_CART_FORM;
     }
 }

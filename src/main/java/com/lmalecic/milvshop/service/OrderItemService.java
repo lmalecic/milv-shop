@@ -1,22 +1,14 @@
 package com.lmalecic.milvshop.service;
 
-import com.lmalecic.milvshop.cart.Cart;
 import com.lmalecic.milvshop.cart.Purchasable;
 import com.lmalecic.milvshop.cart.resolver.PurchasableResolver;
 import com.lmalecic.milvshop.cart.resolver.PurchasableResolverRegistry;
-import com.lmalecic.milvshop.criteria.OrderSearchCriteria;
-import com.lmalecic.milvshop.dto.OrderDto;
 import com.lmalecic.milvshop.dto.OrderItemDto;
 import com.lmalecic.milvshop.entity.*;
-import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.repository.OrderItemRepository;
-import com.lmalecic.milvshop.repository.OrderRepository;
-import com.lmalecic.milvshop.specification.OrderSpecification;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

@@ -3,6 +3,7 @@ package com.lmalecic.milvshop.service;
 import com.lmalecic.milvshop.criteria.UserSearchCriteria;
 import com.lmalecic.milvshop.dto.UserAuthDto;
 import com.lmalecic.milvshop.dto.UserDto;
+import com.lmalecic.milvshop.entity.User_;
 import com.lmalecic.milvshop.exception.NoContentException;
 import com.lmalecic.milvshop.exception.ResourceNotFoundException;
 import com.lmalecic.milvshop.entity.User;
@@ -19,6 +20,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "User with %s %s not found!";
 
     private final UserRoleService userRoleService;
     private final UserRepository userRepository;
@@ -39,7 +42,7 @@ public class UserService {
 
     public UserDto update(UserDto dto) {
         var user = this.userRepository.findByUsername(dto.username())
-                .orElseThrow(() -> new IllegalArgumentException("User with username " + dto.username() + " does not exist."));
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(User_.USERNAME, dto.username())));
 
         user.setUsername(dto.username());
         user.setRoles(dto.roles().stream()
@@ -60,7 +63,7 @@ public class UserService {
 
     public UserDto deleteById(Long id) {
         var entity = this.userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Nation with id " + id + " does not exist."));
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(User_.ID, id)));
         if (entity.isDeleted()) {
             throw new NoContentException("Nation with id " + id + " is already deleted.");
         }
@@ -70,7 +73,7 @@ public class UserService {
 
     public UserDto recoverById(Long id) {
         var entity = this.userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Nation with id " + id + " does not exist."));
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(User_.ID, id)));
         if (!entity.isDeleted()) {
             throw new NoContentException("Nation with id " + id + " isn't deleted.");
         }
@@ -105,10 +108,5 @@ public class UserService {
                         .toList())
                 .deleted(user.isDeleted())
                 .build();
-    }
-
-    public User toEntity(UserDto userDto) {
-        return this.userRepository.findById(userDto.id())
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userDto.id() + " does not exist."));
     }
 }

@@ -77,7 +77,7 @@ public class PayPalCheckoutService {
         }
     }
 
-    public void captureOrder(Long orderId, String paypalOrderId) {
+    public void captureOrder(String paypalOrderId) {
         this.assertConfigured();
 
         OrdersCaptureRequest request = new OrdersCaptureRequest(paypalOrderId)

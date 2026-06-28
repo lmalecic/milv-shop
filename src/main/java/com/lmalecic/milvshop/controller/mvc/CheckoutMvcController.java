@@ -77,7 +77,7 @@ public class CheckoutMvcController {
     @GetMapping("paypal/return")
     public String payPalReturn(Model model, @RequestParam Long orderId, @RequestParam("token") String paypalOrderId, @AuthenticationPrincipal User user, SessionStatus sessionStatus) {
         this.orderService.findPendingPayPalOrderForUser(orderId, user.getId(), paypalOrderId);
-        this.payPalCheckoutService.captureOrder(orderId, paypalOrderId);
+        this.payPalCheckoutService.captureOrder(paypalOrderId);
         this.orderService.completePayPalOrder(orderId, user.getId(), paypalOrderId);
         sessionStatus.setComplete();
         model.addAttribute("redirectUrl", "/orders");

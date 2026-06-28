@@ -2,10 +2,12 @@ package com.lmalecic.milvshop.service;
 
 import com.lmalecic.milvshop.entity.RefreshToken;
 import com.lmalecic.milvshop.exception.NoContentException;
+import com.lmalecic.milvshop.exception.TokenExpiredException;
 import com.lmalecic.milvshop.repository.RefreshTokenRepository;
 import com.lmalecic.milvshop.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,7 +19,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
-    private static final long REFRESH_TOKEN_EXPIRY = 600000; // 10 mins
+    @Value("${jwt.refresh-expiration}")
+    private long refreshTokenExpiry; // 10 mins
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
 
@@ -30,7 +33,7 @@ public class RefreshTokenService {
 
         RefreshToken refreshToken = RefreshToken.builder()
                 .token(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(REFRESH_TOKEN_EXPIRY))
+                .expiryDate(Instant.now().plusMillis(this.refreshTokenExpiry))
                 .user(this.userRepository.findByUsername(username)
                         .orElseThrow(() -> new RuntimeException("User not found!")))
                 .build();
@@ -52,7 +55,7 @@ public class RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken refreshToken) {
         if (refreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
             this.refreshTokenRepository.delete(refreshToken);
-            throw new RuntimeException("Refresh token expired, please log in again.");
+            throw new TokenExpiredException("Refresh token expired, please log in again.");
         }
         return refreshToken;
     }

@@ -52,18 +52,15 @@ public class AuthMvcController {
     @PostMapping("register")
     public String processRegister(Model model, @Valid @ModelAttribute UserAuthDto userAuthDto, BindingResult bindingResult, @RequestParam(required = false) String redirectUrl, HtmxResponse htmxResponse) {
         model.addAttribute("redirectUrl", redirectUrl);
-        if (bindingResult.hasErrors()) {
-            return FRAGMENT_AUTH_FORM;
+        if (!bindingResult.hasErrors()) {
+            if (this.userService.existsByUsername(userAuthDto.username())) {
+                bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
+            } else {
+                this.userService.register(userAuthDto);
+                htmxResponse.addTrigger("login");
+            }
         }
 
-        if (this.userService.existsByUsername(userAuthDto.username())) {
-            bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
-            return FRAGMENT_AUTH_FORM;
-        }
-
-        this.userService.register(userAuthDto);
-
-        htmxResponse.addTrigger("login");
         return FRAGMENT_AUTH_FORM;
     }
 }

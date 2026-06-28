@@ -9,7 +9,6 @@ import com.lmalecic.milvshop.repository.OrderRepository;
 import com.lmalecic.milvshop.specification.OrderSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderService {
 
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "Order with %s %s not found!";
     private static final String PAYPAL_CREATE_REQUEST_ID_PREFIX = "milv-shop-paypal-create-order-";
 
     private final OrderRepository orderRepository;
@@ -52,7 +52,7 @@ public class OrderService {
 
     public OrderDto setStatus(Long orderId, OrderStatus orderStatus) {
         Order order = this.orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order with Id " + orderId + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(Order_.ID, orderId)));
         order.setStatus(orderStatus);
         return this.toDto(this.orderRepository.save(order));
     }
@@ -78,7 +78,7 @@ public class OrderService {
     @Transactional
     public Order attachPayPalOrderId(Long orderId, String paypalOrderId) {
         Order order = this.orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order with Id " + orderId + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(Order_.ID, orderId)));
         order.setPaypalOrderId(paypalOrderId);
         return this.orderRepository.save(order);
     }
@@ -109,7 +109,7 @@ public class OrderService {
 
     private Order findPayPalOrderForUser(Long orderId, Long userId, String paypalOrderId) {
         Order order = this.orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order with Id " + orderId + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(Order_.ID, orderId)));
 
         if (order.getPaymentType() != PaymentType.PAYPAL || !paypalOrderId.equals(order.getPaypalOrderId())) {
             throw new ResourceNotFoundException("PayPal order " + paypalOrderId + " not found.");

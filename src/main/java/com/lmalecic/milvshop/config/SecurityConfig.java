@@ -3,7 +3,6 @@ package com.lmalecic.milvshop.config;
 import com.lmalecic.milvshop.filter.JwtAuthFilter;
 import com.lmalecic.milvshop.filter.RequestLogFilter;
 import io.github.wimdeblauwe.htmx.spring.boot.security.HxRefreshHeaderAuthenticationEntryPoint;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -56,7 +55,7 @@ public class SecurityConfig {
         var entryPoint = new HxRefreshHeaderAuthenticationEntryPoint();
         var requestMatcher = new RequestHeaderRequestMatcher("HX-Request");
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
+                        .requestMatchers("/css/**", "/img/**", "/js/**", "/fonts/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
