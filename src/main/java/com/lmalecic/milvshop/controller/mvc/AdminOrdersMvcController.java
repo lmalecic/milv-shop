@@ -38,7 +38,7 @@ public class AdminOrdersMvcController {
 
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(sectionUrl);
-            return "/fragments/admin/orders/index";
+            return "fragments/admin/orders/index";
         }
 
         model.addAttribute("sectionUrl", sectionUrl);

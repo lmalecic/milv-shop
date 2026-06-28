@@ -1,0 +1,27 @@
+services:
+  milv-shop:
+    build:
+      context: .
+    image: milv-shop:local
+    ports:
+      - "${APP_PORT:?Set APP_PORT in .env}:8080"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:?Set SPRING_DATASOURCE_URL in .env}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:?Set SPRING_DATASOURCE_USERNAME in .env}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD?Set SPRING_DATASOURCE_PASSWORD in .env}
+      APP_ADMIN_USERNAME: ${APP_ADMIN_USERNAME:?Set APP_ADMIN_USERNAME in .env}
+      APP_ADMIN_PASSWORD: ${APP_ADMIN_PASSWORD:?Set APP_ADMIN_PASSWORD in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:?Set JWT_EXPIRATION in .env}
+      PAYPAL_ENABLED: ${PAYPAL_ENABLED:-false}
+      PAYPAL_MODE: ${PAYPAL_MODE:-SANDBOX}
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID:-}
+      PAYPAL_CLIENT_SECRET: ${PAYPAL_CLIENT_SECRET:-}
+      PAYPAL_CURRENCY: ${PAYPAL_CURRENCY:-EUR}
+      PAYPAL_BRAND_NAME: ${PAYPAL_BRAND_NAME:-MilV Shop}
+    volumes:
+      - milv-shop-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  milv-shop-data:

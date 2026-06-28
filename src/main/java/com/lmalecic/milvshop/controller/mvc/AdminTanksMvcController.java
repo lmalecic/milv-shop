@@ -44,7 +44,7 @@ public class AdminTanksMvcController {
         String sectionUrl = UrlUtils.urlWithParams(requestUri, searchCriteria).toUriString();
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(sectionUrl);
-            return "/fragments/admin/tanks/index";
+            return "fragments/admin/tanks/index";
         }
 
         model.addAttribute("sectionUrl", sectionUrl);

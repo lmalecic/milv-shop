@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminUsersMvcController {
 
     private static final String INDEX_URI = "/admin/users";
-    private static final String MODEL_LIST_FRAGMENT = "/fragments/admin/users/list";
+    private static final String MODEL_LIST_FRAGMENT = "fragments/admin/users/list";
 
     private final UserService userService;
     private final UserRoleService userRoleService;
@@ -37,7 +37,7 @@ public class AdminUsersMvcController {
         String sectionUrl = UrlUtils.urlWithParams(requestUri, searchCriteria).toUriString();
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(sectionUrl);
-            return "/fragments/admin/users/index";
+            return "fragments/admin/users/index";
         }
 
         model.addAttribute("sectionUrl", sectionUrl);

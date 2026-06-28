@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminAuthLogsMvcController {
 
     private static final String INDEX_URI = "/admin/auth-logs";
-    private static final String MODEL_LIST_FRAGMENT = "/fragments/admin/auth-logs/list";
+    private static final String MODEL_LIST_FRAGMENT = "fragments/admin/auth-logs/list";
 
     private final AuthLogService authLogService;
 
@@ -27,7 +27,7 @@ public class AdminAuthLogsMvcController {
 
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(requestUri);
-            return "/fragments/admin/auth-logs/index";
+            return "fragments/admin/auth-logs/index";
         }
 
         model.addAttribute("sectionUrl", requestUri);

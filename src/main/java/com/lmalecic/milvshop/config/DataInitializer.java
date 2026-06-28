@@ -21,6 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     private final NationRepository nationRepository;
     private final TankRoleRepository tankRoleRepository;
     private final TankRepository tankRepository;
+    private final AdminProperties adminProperties;
 
     @Override
     public void run(String... args) throws Exception {
@@ -41,10 +42,18 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initAdminUser() {
-        if (!this.userRepository.existsByUsername("admin")) {
+        if (this.adminProperties.getUsername() == null || this.adminProperties.getUsername().isBlank()) {
+            throw new IllegalStateException("APP_ADMIN_USERNAME must be configured before seeding the admin user.");
+        }
+
+        if (!this.userRepository.existsByUsername(this.adminProperties.getUsername())) {
+            if (this.adminProperties.getPassword() == null || this.adminProperties.getPassword().isBlank()) {
+                throw new IllegalStateException("APP_ADMIN_PASSWORD must be configured before seeding the admin user.");
+            }
+
             this.userRepository.save(User.builder()
-                    .username("admin")
-                    .pwdHash(this.passwordEncoder.encode("password")) // TODO: Read this from application.properties
+                    .username(this.adminProperties.getUsername())
+                    .pwdHash(this.passwordEncoder.encode(this.adminProperties.getPassword()))
                     .roles(List.of(this.userRoleRepository.findByName("ROLE_ADMIN")
                                             .orElse(UserRole.builder()
                                                             .name("ROLE_ADMIN")

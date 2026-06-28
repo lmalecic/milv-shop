@@ -40,7 +40,7 @@ public class AdminNationsMvcController {
         String sectionUrl = UrlUtils.urlWithParams(requestUri, searchCriteria).toUriString();
         if (htmxRequest.isHtmxRequest()) {
             htmxResponse.setPushUrl(sectionUrl);
-            return "/fragments/admin/nations/index";
+            return "fragments/admin/nations/index";
         }
 
         model.addAttribute("sectionUrl", sectionUrl);
