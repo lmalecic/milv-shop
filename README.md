@@ -1,5 +1,5 @@
 # MilV Shop
-Java Spring Boot Web Shop Application
+Java Spring Boot Web Shop Application made for my university course.
 
 ## How to run
 In the project root directory, run docker compose:
