@@ -15,10 +15,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+
+    private static final String PAYPAL_CREATE_REQUEST_ID_PREFIX = "milv-shop-paypal-create-order-";
 
     private final OrderRepository orderRepository;
     private final OrderItemService orderItemService;
@@ -31,6 +34,7 @@ public class OrderService {
                 .orderDate(LocalDateTime.now())
                 .paymentType(paymentType)
                 .status(OrderStatus.PENDING)
+                .paypalCreateRequestId(this.paypalCreateRequestId(paymentType))
                 .build();
 
         List<OrderItem> items = cart.getItems().values().stream()
@@ -51,6 +55,12 @@ public class OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order with Id " + orderId + " not found."));
         order.setStatus(orderStatus);
         return this.toDto(this.orderRepository.save(order));
+    }
+
+    private String paypalCreateRequestId(PaymentType paymentType) {
+        return paymentType == PaymentType.PAYPAL
+                ? PAYPAL_CREATE_REQUEST_ID_PREFIX + UUID.randomUUID()
+                : null;
     }
 
     @Transactional

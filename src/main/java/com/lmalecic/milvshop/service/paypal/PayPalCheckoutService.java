@@ -16,21 +16,24 @@ import com.paypal.orders.OrdersCaptureRequest;
 import com.paypal.orders.OrdersCreateRequest;
 import com.paypal.orders.PurchaseUnitRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PayPalCheckoutService {
 
     private static final String CAPTURE_INTENT = "CAPTURE";
     private static final String APPROVE_LINK_REL = "approve";
     private static final String PAYPAL_REQUEST_ID_HEADER = "PayPal-Request-Id";
-    private static final String CREATE_REQUEST_ID_PREFIX = "milv-shop-paypal-create-order-";
     private static final String CAPTURE_REQUEST_ID_PREFIX = "milv-shop-paypal-capture-order-";
     private static final int PAYPAL_SCALE = 2;
 
@@ -42,6 +45,7 @@ public class PayPalCheckoutService {
 
     public PayPalCheckoutResult createOrder(Order order, Cart cart, URI returnUrl, URI cancelUrl) {
         this.assertConfigured();
+        this.assertCreateRequestIdConfigured(order);
 
         OrderRequest orderRequest = new OrderRequest()
                 .checkoutPaymentIntent(CAPTURE_INTENT)
@@ -62,7 +66,7 @@ public class PayPalCheckoutService {
         OrdersCreateRequest request = new OrdersCreateRequest()
                 .prefer("return=representation")
                 .requestBody(orderRequest);
-        request.header(PAYPAL_REQUEST_ID_HEADER, CREATE_REQUEST_ID_PREFIX + order.getId());
+        request.header(PAYPAL_REQUEST_ID_HEADER, order.getPaypalCreateRequestId());
 
         try {
             HttpResponse<com.paypal.orders.Order> response = this.client().execute(request);
@@ -77,7 +81,7 @@ public class PayPalCheckoutService {
         this.assertConfigured();
 
         OrdersCaptureRequest request = new OrdersCaptureRequest(paypalOrderId)
-                .payPalRequestId(CAPTURE_REQUEST_ID_PREFIX + orderId)
+                .payPalRequestId(CAPTURE_REQUEST_ID_PREFIX + paypalOrderId)
                 .requestBody(new OrderCaptureRequest());
 
         try {
@@ -100,16 +104,38 @@ public class PayPalCheckoutService {
     }
 
     private String getApprovalUrl(com.paypal.orders.Order paypalOrder) {
-        return paypalOrder.links().stream()
+        return this.paypalLinks(paypalOrder).stream()
                 .filter(link -> APPROVE_LINK_REL.equalsIgnoreCase(link.rel()))
                 .map(LinkDescription::href)
                 .findFirst()
-                .orElseThrow(() -> new PaymentException("PayPal did not return an approval URL."));
+                .orElseThrow(() -> {
+                    log.warn("PayPal order {} with status {} did not include an approval link. Returned links: {}",
+                            paypalOrder.id(),
+                            paypalOrder.status(),
+                            this.describeLinks(paypalOrder));
+                    return new PaymentException("PayPal did not return an approval URL.");
+                });
+    }
+
+    private List<LinkDescription> paypalLinks(com.paypal.orders.Order paypalOrder) {
+        return paypalOrder.links() != null ? paypalOrder.links() : Collections.emptyList();
+    }
+
+    private String describeLinks(com.paypal.orders.Order paypalOrder) {
+        return this.paypalLinks(paypalOrder).stream()
+                .map(link -> link.rel() + " -> " + link.href())
+                .collect(Collectors.joining(", "));
     }
 
     private void assertConfigured() {
         if (!this.properties.isConfigured()) {
             throw new PaymentException("PayPal checkout is not configured.");
+        }
+    }
+
+    private void assertCreateRequestIdConfigured(Order order) {
+        if (order.getPaypalCreateRequestId() == null || order.getPaypalCreateRequestId().isBlank()) {
+            throw new PaymentException("PayPal create request id is not configured for order " + order.getId() + ".");
         }
     }
 }
