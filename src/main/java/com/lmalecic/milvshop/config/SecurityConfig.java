@@ -1,6 +1,7 @@
 package com.lmalecic.milvshop.config;
 
 import com.lmalecic.milvshop.filter.JwtAuthFilter;
+import com.lmalecic.milvshop.filter.RequestLogFilter;
 import io.github.wimdeblauwe.htmx.spring.boot.security.HxRefreshHeaderAuthenticationEntryPoint;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password4j.Argon2Password4jPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -50,7 +52,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(3)
-    SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, RequestLogFilter requestLogFilter) {
         var entryPoint = new HxRefreshHeaderAuthenticationEntryPoint();
         var requestMatcher = new RequestHeaderRequestMatcher("HX-Request");
         http.authorizeHttpRequests(auth -> auth
@@ -81,7 +83,8 @@ public class SecurityConfig {
                                     .queryParam("auth")
                                     .queryParam("redirectUrl", requestURI).toUriString());
                         })
-                        .defaultAuthenticationEntryPointFor(entryPoint, requestMatcher));
+                        .defaultAuthenticationEntryPointFor(entryPoint, requestMatcher))
+                .addFilterBefore(requestLogFilter, SecurityContextHolderFilter.class);
 
         return http.build();
     }
