@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 
 <div class="modal-content" style="min-height: 60vh;" th:with="paypalPaymentType=${T(com.lmalecic.milvshop.entity.PaymentType).PAYPAL.name()}">
     <div class="modal-header">
@@ -43,10 +45,18 @@
                         <i class="bi bi-cash-coin"></i>
                         Check out
                     </button>
-                    <button type="button" class="btn btn-warning text-uppercase fw-semibold w-100"
+                    <button sec:authorize="isAuthenticated()"
+                            type="button" class="btn btn-warning text-uppercase fw-semibold w-100"
                             hx:post="@{/checkout}" hx-target="#cartModalContent"
                             hx:vals="${ { paymentType: paypalPaymentType } }"
                             data-paypal-checkout-launcher>
+                        <i class="bi bi-paypal"></i>
+                        Pay with PayPal
+                    </button>
+                    <button sec:authorize="isAnonymous()"
+                            type="button" class="btn btn-warning text-uppercase fw-semibold w-100"
+                            hx:post="@{/checkout}" hx-target="#cartModalContent"
+                            hx:vals="${ { paymentType: paypalPaymentType } }">
                         <i class="bi bi-paypal"></i>
                         Pay with PayPal
                     </button>
