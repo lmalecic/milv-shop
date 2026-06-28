@@ -54,6 +54,18 @@ public class OrderService {
     }
 
     @Transactional
+    public void cancelPendingPayPalOrdersForUser(User user) {
+        List<Order> pendingPayPalOrders = this.orderRepository.findAllByUserIdAndPaymentTypeAndStatus(
+                user.getId(),
+                PaymentType.PAYPAL,
+                OrderStatus.PENDING
+        );
+
+        pendingPayPalOrders.forEach(order -> order.setStatus(OrderStatus.CANCELLED));
+        this.orderRepository.saveAll(pendingPayPalOrders);
+    }
+
+    @Transactional
     public Order attachPayPalOrderId(Long orderId, String paypalOrderId) {
         Order order = this.orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order with Id " + orderId + " not found."));

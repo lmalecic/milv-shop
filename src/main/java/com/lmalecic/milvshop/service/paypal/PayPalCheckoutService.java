@@ -29,6 +29,9 @@ public class PayPalCheckoutService {
 
     private static final String CAPTURE_INTENT = "CAPTURE";
     private static final String APPROVE_LINK_REL = "approve";
+    private static final String PAYPAL_REQUEST_ID_HEADER = "PayPal-Request-Id";
+    private static final String CREATE_REQUEST_ID_PREFIX = "milv-shop-paypal-create-order-";
+    private static final String CAPTURE_REQUEST_ID_PREFIX = "milv-shop-paypal-capture-order-";
     private static final int PAYPAL_SCALE = 2;
 
     private final PayPalProperties properties;
@@ -59,6 +62,7 @@ public class PayPalCheckoutService {
         OrdersCreateRequest request = new OrdersCreateRequest()
                 .prefer("return=representation")
                 .requestBody(orderRequest);
+        request.header(PAYPAL_REQUEST_ID_HEADER, CREATE_REQUEST_ID_PREFIX + order.getId());
 
         try {
             HttpResponse<com.paypal.orders.Order> response = this.client().execute(request);
@@ -69,10 +73,11 @@ public class PayPalCheckoutService {
         }
     }
 
-    public void captureOrder(String paypalOrderId) {
+    public void captureOrder(Long orderId, String paypalOrderId) {
         this.assertConfigured();
 
         OrdersCaptureRequest request = new OrdersCaptureRequest(paypalOrderId)
+                .payPalRequestId(CAPTURE_REQUEST_ID_PREFIX + orderId)
                 .requestBody(new OrderCaptureRequest());
 
         try {

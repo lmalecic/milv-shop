@@ -41,6 +41,7 @@ public class CheckoutMvcController {
         }
 
         if (PaymentType.CASH == paymentType) {
+            this.orderService.cancelPendingPayPalOrdersForUser(user);
             this.orderService.create(user, cart, paymentType);
             sessionStatus.setComplete();
             return "redirect:htmx:/orders";
@@ -51,6 +52,7 @@ public class CheckoutMvcController {
                 return "fragments/cart/form";
             }
 
+            this.orderService.cancelPendingPayPalOrdersForUser(user);
             Order order = this.orderService.create(user, cart, paymentType);
             try {
                 URI returnUrl = this.payPalReturnUrl(order.getId());
@@ -75,7 +77,7 @@ public class CheckoutMvcController {
     @GetMapping("paypal/return")
     public String payPalReturn(Model model, @RequestParam Long orderId, @RequestParam("token") String paypalOrderId, @AuthenticationPrincipal User user, SessionStatus sessionStatus) {
         this.orderService.findPendingPayPalOrderForUser(orderId, user.getId(), paypalOrderId);
-        this.payPalCheckoutService.captureOrder(paypalOrderId);
+        this.payPalCheckoutService.captureOrder(orderId, paypalOrderId);
         this.orderService.completePayPalOrder(orderId, user.getId(), paypalOrderId);
         sessionStatus.setComplete();
         model.addAttribute("redirectUrl", "/orders");
