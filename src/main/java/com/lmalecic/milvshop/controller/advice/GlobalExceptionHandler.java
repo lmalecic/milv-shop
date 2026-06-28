@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
         model.addAttribute("status", ex.getBody().getStatus());
         model.addAttribute("error", ex.getBody().getTitle());
         model.addAttribute("message", ex.getBody().getDetail());
-        return resolveErrorView(htmxRequest);
+        return this.resolveErrorView(htmxRequest);
     }
 
     private String resolveErrorView(HtmxRequest htmxRequest) {

@@ -23,6 +23,5 @@ public final class AuthLog {
     @ManyToOne
     private User user;
 
-    @Column(nullable = false)
     private String ipAddress;
 }
