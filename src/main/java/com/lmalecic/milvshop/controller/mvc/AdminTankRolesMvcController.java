@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("admin/tank-roles")
 public class AdminTankRolesMvcController {
 
-    private static final String INDEX_URI = "/admin/tank-roleIds";
+    private static final String INDEX_URI = "/admin/tank-roles";
     private static final String REDIRECT_INDEX = "redirect:/admin/tank-roles/";
     private static final String MODEL_FORM_FRAGMENT = "fragments/admin/tank-roles/details-form";
     private static final String MODEL_LIST_FRAGMENT = "fragments/admin/tank-roles/list";
